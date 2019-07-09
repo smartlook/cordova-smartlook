@@ -1,0 +1,9 @@
+repositories {
+  maven {
+    url "https://sdk.smartlook.com/android/release"
+  }
+}
+
+dependencies {
+    compile 'com.smartlook.recording:app:0.9.0.2.5.7-beta'
+}
