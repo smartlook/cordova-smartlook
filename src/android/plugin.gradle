@@ -1,9 +1,13 @@
 repositories {
-  maven {
-    url "https://sdk.smartlook.com/android/release"
-  }
+    maven {
+        url "XXXX"
+        credentials {
+            username = "XXXX"
+            password = "XXXX"
+        }
+    }
 }
 
 dependencies {
-    compile 'com.smartlook.recording:app:0.9.0.2.5.7-beta'
+    compile 'com.smartlook.recording:app:1.0.0'
 }
