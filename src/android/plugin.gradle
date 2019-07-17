@@ -1,13 +1,9 @@
 repositories {
     maven {
-        url "XXXX"
-        credentials {
-            username = "XXXX"
-            password = "XXXX"
-        }
+      url "https://sdk.smartlook.com/android/release"
     }
-}
+  }
 
 dependencies {
-    compile 'com.smartlook.recording:app:1.0.0'
+    compile 'com.smartlook.recording:app:1.0.0-cordova'
 }
