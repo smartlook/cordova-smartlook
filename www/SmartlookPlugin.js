@@ -27,7 +27,6 @@ exports.setupAndStartRecording = function (params) {
         if (params["fps"] != undefined) {
             exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, SETUP_AND_START_RECORDING, [params["smartlookAPIKey"], params["fps"]]);
         } else {
-            alert("Setup and start")
             exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, SETUP_AND_START_RECORDING, [params["smartlookAPIKey"]]);
         }
     }
