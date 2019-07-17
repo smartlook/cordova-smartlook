@@ -1,7 +1,7 @@
 {
   "name": "cordova-plugin-smartlook",
-  "version": "0.0.1",
-  "description": "Cool plugin",
+  "version": "1.0.0",
+  "description": "Official Smartlook Cordova android plugin",
   "cordova": {
     "id": "cordova-plugin-smartlook",
     "platforms": [
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SenNeonoveNoci/cordova-plugin.git"
+    "url": "git+https://github.com/smartlook/cordova-smartlook-plugin"
   },
   "keywords": [
     "ecosystem:cordova",
@@ -19,7 +19,7 @@
   "author": "Frantisek Spurny",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/SenNeonoveNoci/cordova-plugin/issues"
+    "url": "https://github.com/smartlook/cordova-smartlook-plugin"
   },
-  "homepage": "https://github.com/SenNeonoveNoci/cordova-plugin#readme"
+  "homepage": "https://www.smartlook.com"
 }

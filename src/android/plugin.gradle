@@ -1,8 +1,8 @@
 repositories {
-    maven {
-      url "https://sdk.smartlook.com/android/release"
-    }
+  maven {
+    url "https://sdk.smartlook.com/android/release"
   }
+}
 
 dependencies {
     compile 'com.smartlook.recording:app:1.0.0-cordova'

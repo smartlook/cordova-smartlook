@@ -48,35 +48,38 @@ public class SmartlookPlugin extends CordovaPlugin {
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        if (action == SETUP_AND_START_RECORDING) {
+
+        Log.d("xxxxx", "execute action: " + action + " args: " + args);
+
+        if (action.equals(SETUP_AND_START_RECORDING)) {
             setupAndStartRecording(args, callbackContext);
-        } else if (action == SETUP) {
+        } else if (action.equals(SETUP)) {
             setup(args, callbackContext);
-        } else if (action == START_RECORDING) {
+        } else if (action.equals(START_RECORDING)) {
             startRecording(callbackContext);
-        } else if (action == STOP_RECORDING) {
+        } else if (action.equals(STOP_RECORDING)) {
             stopRecording(callbackContext);
-        } else if (action == IS_RECORING) {
+        } else if (action.equals(IS_RECORING)) {
             isRecording(callbackContext);
-        } else if (action == START_FULLSCREEN_SENSITIVE_MODE) {
+        } else if (action.equals(START_FULLSCREEN_SENSITIVE_MODE)) {
             startFullscreenSensitiveMode(callbackContext);
-        } else if (action == STOP_FULLSCREEN_SENSITIVE_MODE) {
+        } else if (action.equals(STOP_FULLSCREEN_SENSITIVE_MODE)) {
             stopFullscreenSensitiveMode(callbackContext);
-        } else if (action == IS_FULLSCREEN_SENSITIVE_MODE_ACTIVE) {
+        } else if (action.equals(IS_FULLSCREEN_SENSITIVE_MODE_ACTIVE)) {
             isFullscreenSensitiveModeActive(callbackContext);
-        } else if (action == SET_USER_IDENTIFIER) {
+        } else if (action.equals(SET_USER_IDENTIFIER)) {
             setUserIdentifier(args, callbackContext);
-        } else if (action == START_TIMED_CUSTOM_EVENT) {
+        } else if (action.equals(START_TIMED_CUSTOM_EVENT)) {
             startTimedCustomEvent(args, callbackContext);
-        } else if (action == TRACK_CUSTOM_EVENT) {
+        } else if (action.equals(TRACK_CUSTOM_EVENT)) {
             trackCustomEvent(args, callbackContext);
-        } else if (action == SET_GLOBAL_EVENT_PROPERTIES) {
+        } else if (action.equals(SET_GLOBAL_EVENT_PROPERTIES)) {
             setGlobalEventProperties(args, callbackContext);
-        } else if (action == SET_GLOBAL_EVENT_PROPERTY) {
+        } else if (action.equals(SET_GLOBAL_EVENT_PROPERTY)) {
             setGlobalEventProperty(args, callbackContext);
-        } else if (action == REMOVE_GLOBAL_EVENT_PROPERTY) {
+        } else if (action.equals(REMOVE_GLOBAL_EVENT_PROPERTY)) {
             removeGlobalEventProperty(args, callbackContext);
-        } else if (action == REMOVE_ALL_GLOBAL_EVENT_PROPERTIES) {
+        } else if (action.equals(REMOVE_ALL_GLOBAL_EVENT_PROPERTIES)) {
             removeAllGlobalEventProperties(callbackContext);
         } else {
             callbackContext.error("Unknow action");
@@ -95,6 +98,8 @@ public class SmartlookPlugin extends CordovaPlugin {
             callbackContext.success();
             return;
         } else if (!args.isNull(SMARTLOOK_API_KEY)) {
+            Log.d("xxxxx", "setupAndStartRecording: " + cordova.getActivity());
+
             Smartlook.setup(args.getString(SMARTLOOK_API_KEY), cordova.getActivity());
             Smartlook.unregisterBlacklistedClass(WebView.class);
             Smartlook.startRecording();
