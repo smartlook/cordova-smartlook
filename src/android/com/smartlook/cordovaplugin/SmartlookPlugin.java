@@ -48,56 +48,42 @@ public class SmartlookPlugin extends CordovaPlugin {
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        switch (action) {
-            case SETUP_AND_START_RECORDING:
-                setupAndStartRecording(args, callbackContext);
-                return true;
-            case SETUP:
-                setup(args, callbackContext);
-                return true;
-            case START_RECORDING:
-                startRecording(callbackContext);
-                return true;
-            case STOP_RECORDING:
-                stopRecording(callbackContext);
-                return true;
-            case IS_RECORING:
-                isRecording(callbackContext);
-                return true;
-            case START_FULLSCREEN_SENSITIVE_MODE:
-                startFullscreenSensitiveMode(callbackContext);
-                return true;
-            case STOP_FULLSCREEN_SENSITIVE_MODE:
-                stopFullscreenSensitiveMode(callbackContext);
-                return true;
-            case IS_FULLSCREEN_SENSITIVE_MODE_ACTIVE:
-                isFullscreenSensitiveModeActive(callbackContext);
-                return true;
-            case SET_USER_IDENTIFIER:
-                setUserIdentifier(args, callbackContext);
-                return true;
-            case START_TIMED_CUSTOM_EVENT:
-                startTimedCustomEvent(args, callbackContext);
-                return true;
-            case TRACK_CUSTOM_EVENT:
-                trackCustomEvent(args, callbackContext);
-                return true;
-            case SET_GLOBAL_EVENT_PROPERTIES:
-                setGlobalEventProperties(args, callbackContext);
-                return true;
-            case SET_GLOBAL_EVENT_PROPERTY:
-                setGlobalEventProperty(args, callbackContext);
-                return true;
-            case REMOVE_GLOBAL_EVENT_PROPERTY:
-                removeGlobalEventProperty(args, callbackContext);
-                return true;
-            case REMOVE_ALL_GLOBAL_EVENT_PROPERTIES:
-                removeAllGlobalEventProperties(callbackContext);
-                return true;
-            default:
-                callbackContext.error("Unknow action");
-                return false;
+        if (action == SETUP_AND_START_RECORDING) {
+            setupAndStartRecording(args, callbackContext);
+        } else if (action == SETUP) {
+            setup(args, callbackContext);
+        } else if (action == START_RECORDING) {
+            startRecording(callbackContext);
+        } else if (action == STOP_RECORDING) {
+            stopRecording(callbackContext);
+        } else if (action == IS_RECORING) {
+            isRecording(callbackContext);
+        } else if (action == START_FULLSCREEN_SENSITIVE_MODE) {
+            startFullscreenSensitiveMode(callbackContext);
+        } else if (action == STOP_FULLSCREEN_SENSITIVE_MODE) {
+            stopFullscreenSensitiveMode(callbackContext);
+        } else if (action == IS_FULLSCREEN_SENSITIVE_MODE_ACTIVE) {
+            isFullscreenSensitiveModeActive(callbackContext);
+        } else if (action == SET_USER_IDENTIFIER) {
+            setUserIdentifier(args, callbackContext);
+        } else if (action == START_TIMED_CUSTOM_EVENT) {
+            startTimedCustomEvent(args, callbackContext);
+        } else if (action == TRACK_CUSTOM_EVENT) {
+            trackCustomEvent(args, callbackContext);
+        } else if (action == SET_GLOBAL_EVENT_PROPERTIES) {
+            setGlobalEventProperties(args, callbackContext);
+        } else if (action == SET_GLOBAL_EVENT_PROPERTY) {
+            setGlobalEventProperty(args, callbackContext);
+        } else if (action == REMOVE_GLOBAL_EVENT_PROPERTY) {
+            removeGlobalEventProperty(args, callbackContext);
+        } else if (action == REMOVE_ALL_GLOBAL_EVENT_PROPERTIES) {
+            removeAllGlobalEventProperties(callbackContext);
+        } else {
+            callbackContext.error("Unknow action");
+            return false;
         }
+
+        return true;
     }
 
     private void setupAndStartRecording(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
