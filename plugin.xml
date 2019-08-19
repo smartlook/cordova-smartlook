@@ -14,4 +14,14 @@
       <source-file src="src/android/com/smartlook/cordovaplugin/SmartlookPlugin.java" target-dir="src/com/smartlook/cordovaplugin/SmartlookPlugin" />
       <framework src="src/android/plugin.gradle" custom="true" type="gradleReference" />
    </platform>
+   <platform name="ios">
+      <config-file parent="/*" target="*/config.xml">
+         <feature name="SmartlookPlugin">
+            <param name="ios-package" value="SmartlookPlugin" />
+        </feature>
+      </config-file>
+      <source-file src="src/ios/SmartlookPlugin.h" />
+      <source-file src="src/ios/SmartlookPlugin.m" />
+      <framework src="src/ios/Smartlook.framework" custom="true" /> 
+</platform>
 </plugin>
