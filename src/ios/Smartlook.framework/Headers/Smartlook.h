@@ -42,6 +42,7 @@ NS_SWIFT_NAME(Smartlook.SetupOptionKey)
 typedef NSString * SLSetupOptionKey NS_TYPED_ENUM;
 extern SLSetupOptionKey const _Nonnull SLSetupOptionFramerateKey NS_SWIFT_NAME(framerate);
 extern SLSetupOptionKey const _Nonnull SLSetupOptionEnableCrashyticsKey NS_SWIFT_NAME(enableCrashytics);
+extern SLSetupOptionKey const _Nonnull SLSetupOptionUseAdaptiveFramerateKey NS_SWIFT_NAME(useAdaptiveFramerate);
 
 
 /**
