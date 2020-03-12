@@ -5,5 +5,5 @@ repositories {
 }
 
 dependencies {
-    compile 'com.smartlook.recording:app:1.1.1-cordova'
+    compile 'com.smartlook.recording:app:1.3.0-cordova'
 }
