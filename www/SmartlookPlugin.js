@@ -37,72 +37,251 @@ const REMOVE_ALL_GLOBAL_EVENT_PROPERTIES = "removeAllGlobalEventProperties";
 const SET_REFERRER = "setReferrer"
 const GET_DASHBOARD_SESSION_URL = "getDashboardSessionUrl";
 
-
 var emptyCallback = function() { return; };
 
+// Check functions
+
+function checkStringOption(method, option, options, errorCallback, isMandatory) {
+    var toCheck = options[option]
+
+    if (toCheck == undefined || toCheck == null) {
+        if (isMandatory != undefined && isMandatory === true) {
+            logError(errorCallback, method + "(): must be called with" + option + " option!");
+        }
+
+        return false;
+    }
+
+    if (typeof toCheck !== 'string' || toCheck.length < 1) {
+        logError(errorCallback, method + "(): " + option + "must be non-empty string!");
+        return false
+    }
+
+    return true;
+}
+
+function checkBooleanOption(method, option, options, errorCallback, isMandatory) {
+    var toCheck = options[option]
+
+    if (toCheck == undefined || toCheck == null) {
+        if (isMandatory != undefined && isMandatory === true) {
+            logError(errorCallback, method + "(): must be called with" + option + " option!");
+        }
+
+        return false;
+    }
+
+    if (typeof toCheck !== 'boolean') {
+        logError(errorCallback, method + "(): " + option + "must be boolean!");
+        return false
+    }
+
+    return true;
+}
+
+function checkProperties(method, option, options, errorCallback, isMandatory) {
+    var toCheck = options[option]
+
+    if (toCheck == undefined || toCheck == null) {
+        if (isMandatory != undefined && isMandatory === true) {
+            logError(errorCallback, method + "(): must be called with " + option + " option!");     
+        }
+
+        return false;
+    }
+
+    if (toCheck === Object(toCheck)) {
+        logError(errorCallback, method + "(): " + option + "must be a object!");
+        return false
+    }
+
+    return true;
+}
+
+function checkKeyValueOptions(method, options, errorCallback, isMandatory) {
+    var key = options["key"];
+    var value = options["value"];
+
+    if (key == undefined || key == null || value == undefined || value == null) {
+        if (isMandatory != undefined && isMandatory === true) {
+            logError(errorCallback, method + "(): must be called with key value options!");     
+        }
+        
+        return false
+    }
+
+    if (typeof key !== 'string' || key.length < 1 || typeof value !== 'string') {
+        logError(errorCallback, method + "(): key must be non-empty string and value be strings!");
+        return false;
+    }
+
+    return true;
+}
+
+function checkFpsOption(method, options, errorCallback, isMandatory) {
+    var fps = options["fps"];
+
+    if (fps == undefined || fps == null) {
+        if (isMandatory != undefined && isMandatory === true) {
+            logError(errorCallback, method + "(): must be called with fps option!");     
+        }
+
+        return false;
+    }
+
+    if (typeof fps !== 'number') {
+        logError(errorCallback, method + "(): fps not set, must be a number!"); 
+        return false;  
+    }
+
+    if (fps < 1 || fps > 10) {
+        logError(errorCallback, method + "(): fps not set, must be between 1 and 10 fps!");
+        return false;
+    }
+
+    return true;
+}
+
+function checkColorOption(method, options, errorCallback, isMandatory) {
+    var color = options["color"];
+
+    if (color == undefined || color == null) {
+        if (isMandatory != undefined && isMandatory === true) {
+            logError(errorCallback, method + "(): must be called with color option!");     
+        }
+
+        return false;
+    }
+
+    if (typeof color !== 'string' || !isHexColor(color)) {
+        logError(errorCallback, method + "(): color must be hex color string!");
+        return false;
+    }
+
+    return true;
+}
+
+function checkViewStateOption(method, options, errorCallback, isMandatory) {
+    var viewState = options["viewState"];
+
+    if (viewState == undefined || viewState == null) {
+        if (isMandatory != undefined && isMandatory === true) {
+            logError(errorCallback, method + "(): must be called with viewState option!");
+        }
+
+        return false;
+    }
+
+    if (typeof viewState !== 'string' || viewState !== "start" && viewState !== "stop") {
+        logError(errorCallback, method + "(): viewState must be one of \"start\", \"stop\"!");
+        return false;
+    }
+
+    return true;
+}
+
+// Utility methods
+
+function execWithCallbacks(successCallback, errorCallback, method, arguments) {
+    var implementedSucessCallback = successCallback;
+    var implementedErrorCallback = errorCallback;
+
+    if (successCallback == undefined) {
+        implementedSucessCallback = emptyCallback;
+    }
+
+    if (errorCallback == undefined) {
+        implementedErrorCallback = emptyCallback;
+    }
+
+    exec(implementedSucessCallback, implementedErrorCallback, SMARTLOOK_PLUGIN, method, arguments);
+}
+
+function logError(errorCallback, message) {
+    if (errorCallback != undefined) {
+        errorCallback.call(message); 
+    }
+}
+
+function isHexColor(color) {
+    return /^#([0-9A-F]{3}){1,2}$/i.test(color)
+}
 
 // Setup and lifecycle
 
 // setupAndStart(smartlookAPIKey)
 // setupAndStart(smartlookAPIKey, fps)
-exports.setupAndStartRecording = function (params) {
-    if (params["smartlookAPIKey"] != undefined) {
-        if (params["fps"] != undefined) {
-            exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, SETUP_AND_START_RECORDING, [params["smartlookAPIKey"], params["fps"]]);
-        } else {
-            exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, SETUP_AND_START_RECORDING, [params["smartlookAPIKey"]]);
-        }
+exports.setupAndStartRecording = function (options, successCallback, errorCallback) {
+    var arguments = [];
+    
+    if (checkStringOption("setupAndStartRecording", "smartlookAPIKey", options, errorCallback, true)) {
+        arguments.push(options["smartlookAPIKey"]);
+    } else {
+        return;
     }
+
+    if (checkFpsOption("setupAndStartRecording", options, errorCallback, false)) {
+        arguments.push(options["fps"]);
+    }
+
+    execWithCallbacks(successCallback, errorCallback, SETUP_AND_START_RECORDING, arguments);
 };
 
 // setup(smartlookAPIKey)
 // setup(smartlookAPIKey, fps)
-exports.setup = function (params) {
-    if (params["smartlookAPIKey"] != undefined) {
-        if (params["fps"] != undefined) {
-            exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, SETUP, [params["smartlookAPIKey"], params["fps"]]);
-        } else {
-            exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, SETUP, [params["smartlookAPIKey"]]);
-        }
+exports.setup = function (options, successCallback, errorCallback) {
+    var arguments = [];
+    
+    if (checkStringOption("setup", "smartlookAPIKey", options, errorCallback, true)) {
+        arguments.push(options["smartlookAPIKey"]);
+    } else {
+        return;
     }
+
+    if (checkFpsOption("setup", options, errorCallback, false)) {
+        arguments.push(options["fps"]);
+    }
+
+    execWithCallbacks(successCallback, errorCallback, SETUP, arguments);
 };
 
 // startRecording()
-exports.startRecording = function () {
-    exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, START_RECORDING, []);
+exports.startRecording = function (successCallback, errorCallback) {
+    execWithCallbacks(successCallback, errorCallback, START_RECORDING, []);
 };
 
 // stopRecording()
-exports.stopRecording = function () {
-    exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, STOP_RECORDING, []);
+exports.stopRecording = function (successCallback, errorCallback) {
+    execWithCallbacks(successCallback, errorCallback, STOP_RECORDING, []);
 };
 
 // isRecording()
-exports.isRecording = function (result) {
-    exec(result, emptyCallback, SMARTLOOK_PLUGIN, IS_RECORING, []);
+exports.isRecording = function (successCallback, errorCallback) {
+    execWithCallbacks(successCallback, errorCallback, IS_RECORING, []);
 };
-
 
 // Fullscreen sensitive mode
 
 // startFullScreenSenstiveMode()
 // startFullScreenSenstiveMode(color)
-exports.startFullscreenSensitiveMode = function (params) {
-    if (params["color"] != undefined) {
-        exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, START_FULLSCREEN_SENSITIVE_MODE, [params["color"]]);
-    } else {
-        exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, START_FULLSCREEN_SENSITIVE_MODE, []);
+exports.startFullscreenSensitiveMode = function (options, successCallback, errorCallback) {
+    var arguments = [];
+    
+    if (checkColorOption("startFullscreenSensitiveMode", options, errorCallback, false)) {
+        arguments.push(options["color"]);
     }
+
+    execWithCallbacks(successCallback, errorCallback, START_FULLSCREEN_SENSITIVE_MODE, arguments);
 };
 
 // stopFullScreenSenstiveMode()
-exports.stopFullscreenSensitiveMode = function () {
-    exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, STOP_FULLSCREEN_SENSITIVE_MODE, []);
+exports.stopFullscreenSensitiveMode = function (successCallback, errorCallback) {
+    execWithCallbacks(successCallback, errorCallback, STOP_FULLSCREEN_SENSITIVE_MODE, []);
 };
 
 // isFullscreenModeActive(result)
-exports.isFullscreenSensitiveModeActive = function (result) {
-    exec(result, emptyCallback, SMARTLOOK_PLUGIN, IS_FULLSCREEN_SENSITIVE_MODE_ACTIVE, []);
+exports.isFullscreenSensitiveModeActive = function (successCallback, errorCallback) {
+    execWithCallbacks(successCallback, errorCallback, IS_FULLSCREEN_SENSITIVE_MODE_ACTIVE, []);
 };
 
 
@@ -110,14 +289,20 @@ exports.isFullscreenSensitiveModeActive = function (result) {
 
 // setUserIdentifier(identifier)
 // setUserIdentifier(identifier, sessionProperties)
-exports.setUserIdentifier = function (params) {
-    if (params["identifier"] != undefined) {
-        if (params["sessionProperties"] != undefined) {
-            exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, SET_USER_IDENTIFIER, [params["identifier"], params["sessionProperties"]]);
-        } else {
-            exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, SET_USER_IDENTIFIER, [params["identifier"]]);
-        }
+exports.setUserIdentifier = function (options, successCallback, errorCallback) {
+    var arguments = [];
+    
+    if (checkStringOption("setUserIdentifier", "identifier", options, errorCallback, true)) {
+        arguments.push(options["identifier"]);
+    } else {
+        return;
     }
+
+    if (checkProperties("setUserIdentifier", "sessionProperties", options, errorCallback, false)) {
+        arguments.push(options["sessionProperties"]);
+    }
+
+    execWithCallbacks(successCallback, errorCallback, SET_USER_IDENTIFIER, arguments);
 };
 
 
@@ -125,101 +310,188 @@ exports.setUserIdentifier = function (params) {
 
 // todo viewstate constant 
 // trackNavigationEvent(name, viewState)
-exports.trackNavigationEvent = function (params) {
-    if (params["name"] != undefined && params["viewState"] != undefined) {
-        exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, TRACK_NAVIGATION_EVENT, [params["name"], params["viewState"]]);
+exports.trackNavigationEvent = function (options, successCallback, errorCallback) {
+    var arguments = [];
+    
+    if (checkStringOption("trackNavigationEvent", "name", options, errorCallback, true)) {
+        arguments.push(options["name"]);
+    } else {
+        return;
     }
+
+    if (checkViewStateOption("trackNavigationEvent", options, errorCallback, true)) {
+        arguments.push(options["viewState"]);
+    } else {
+        return
+    }
+
+    execWithCallbacks(successCallback, errorCallback, TRACK_NAVIGATION_EVENT, arguments);
 };
 
 // startTimedCustomEvent(name): String
 // startTimedCustomEvent(name, eventProperties): String
-exports.startTimedCustomEvent = function (result, params) {
-    if (params["name"] != undefined) {
-        if (params["eventProperties"] != undefined) {
-            exec(result, emptyCallback, SMARTLOOK_PLUGIN, START_TIMED_CUSTOM_EVENT, [params["name"], params["eventProperties"]]);
-        } else {
-            exec(result, emptyCallback, SMARTLOOK_PLUGIN, START_TIMED_CUSTOM_EVENT, [params["name"]]);
-        }
+exports.startTimedCustomEvent = function (options, successCallback, errorCallback) {
+    var arguments = [];
+    
+    if (checkStringOption("startTimedCustomEvent", "name", options, errorCallback, true)) {
+        arguments.push(options["name"]);
+    } else {
+        return;
     }
+
+    if (checkProperties("startTimedCustomEvent", "eventProperties", options, errorCallback, false)) {
+        arguments.push(options["eventProperties"]);
+    }
+
+    execWithCallbacks(successCallback, errorCallback, START_TIMED_CUSTOM_EVENT, arguments);
 };
 
 // stopTimedCustomEvent(eventId)
 // stopTimedCustomEvent(eventId, eventProperties)
-exports.stopTimedCustomEvent = function (result, params) {
-    if (params["eventId"] != undefined) {
-        if (params["eventProperties"] != undefined) {
-            exec(result, emptyCallback, SMARTLOOK_PLUGIN, STOP_TIMED_CUSTOM_EVENT, [params["eventId"], params["eventProperties"]]);
-        } else {
-            exec(result, emptyCallback, SMARTLOOK_PLUGIN, STOP_TIMED_CUSTOM_EVENT, [params["eventId"]]);
-        }
+exports.stopTimedCustomEvent = function (options, successCallback, errorCallback) {
+    var arguments = [];
+    
+    if (checkStringOption("stopTimedCustomEvent", "eventId", options, errorCallback, true)) {
+        arguments.push(options["eventId"]);
+    } else {
+        return;
     }
+
+    if (checkProperties("stopTimedCustomEvent", "eventProperties", options, errorCallback, false)) {
+        arguments.push(options["eventProperties"]);
+    }
+
+    execWithCallbacks(successCallback, errorCallback, STOP_TIMED_CUSTOM_EVENT, arguments);
 };
 
 // cancelTimedCustomEvent(eventId, reason)
 // cancelTimedCustomEvent(eventId, reason, eventProperties)
-exports.cancelTimedCustomEvent = function (result, params) {
-    if (params["name"] != undefined && params["reason"]) {
-        if (params["eventProperties"] != undefined) {
-            exec(result, emptyCallback, SMARTLOOK_PLUGIN, CANCEL_TIMED_CUSTOM_EVENT, [params["name"], params["reason"], params["eventProperties"]]);
-        } else {
-            exec(result, emptyCallback, SMARTLOOK_PLUGIN, CANCEL_TIMED_CUSTOM_EVENT, [params["name"], params["reason"]]);
-        }
+exports.cancelTimedCustomEvent = function (options, successCallback, errorCallback) {
+    var arguments = [];
+    
+    if (checkStringOption("cancelTimedCustomEvent", "eventId", options, errorCallback, true)) {
+        arguments.push(options["eventId"]);
+    } else {
+        return;
     }
+
+    if (checkStringOption("cancelTimedCustomEvent", "reason", options, errorCallback, true)) {
+        arguments.push(options["reason"]);
+    } else {
+        return;
+    }
+
+    if (checkProperties("cancelTimedCustomEvent", "eventProperties", options, errorCallback, false)) {
+        arguments.push(options["eventProperties"]);
+    }
+
+    execWithCallbacks(successCallback, errorCallback, CANCEL_TIMED_CUSTOM_EVENT, arguments);
 };
 
 // trackCustomEvent(name)
 // trackCustomEvent(name, eventProperties)
 // trackCustomEvent(name, key, value)
-exports.trackCustomEvent = function (params) {
-    if (params["name"] != undefined) {
-        if (params["eventProperties"] != undefined) {
-            exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, TRACK_CUSTOM_EVENT, [params["name"], params["eventProperties"]]);
-        } else if (params["key"] != undefined && params["value"] != undefined) {
-            exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, TRACK_CUSTOM_EVENT, [params["name"], params["key"], params["value"]]);
-        } else {
-            exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, TRACK_CUSTOM_EVENT, [params["name"]]);
-        }
+exports.trackCustomEvent = function (options, successCallback, errorCallback) {
+    var arguments = [];
+    
+    if (checkStringOption("trackCustomEvent", "name", options, errorCallback, true)) {
+        arguments.push(options["name"]);
+    } else {
+        return;
     }
+
+    if (checkProperties("trackCustomEvent", "eventProperties", options, errorCallback, false)) {
+        arguments.push(options["eventProperties"]);
+    } else if (checkKeyValueOptions("trackCustomEvent", options, errorCallback, false)) {
+        arguments.push(options["key"]);
+        arguments.push(options["value"]);
+    }
+
+    execWithCallbacks(successCallback, errorCallback, TRACK_CUSTOM_EVENT, arguments);
 };
 
 // Event properties
 
 // setGlobalEventProperties(globalEventProperties, immutable)
-exports.setGlobalEventProperties = function (params) {
-    if (params["globalEventProperties"] != undefined && params["immutable"] != undefined) {
-        exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, SET_GLOBAL_EVENT_PROPERTIES, [params["globalEventProperties"], params["immutable"]]);
+exports.setGlobalEventProperties = function (options, successCallback, errorCallback) {
+    var arguments = [];
+    
+    if (checkProperties("setGlobalEventProperties", "globalEventProperties", options, errorCallback, true)) {
+        arguments.push(options["globalEventProperties"]);
+    } else {
+        return;
     }
+
+    if (checkBooleanOption("setGlobalEventProperties", "immutable", options, errorCallback, true)) {
+        arguments.push(options["immutable"]);
+    } else {
+        return
+    }
+
+    execWithCallbacks(successCallback, errorCallback, SET_GLOBAL_EVENT_PROPERTIES, arguments);
 };
 
 // setGlobalEventProperty(key, value, immutable)
-exports.setGlobalEventProperty = function (params) {
-    if (params["key"] != undefined && params["value"] != undefined && params["immutable"] != undefined) {
-        exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, SET_GLOBAL_EVENT_PROPERTY, [params["key"], params["value"], params["immutable"]]);
+exports.setGlobalEventProperty = function (options, successCallback, errorCallback) {
+    var arguments = [];
+    
+    if (checkKeyValueOptions("setGlobalEventProperty", options, errorCallback, true)) {
+        arguments.push(options["key"]);
+        arguments.push(options["value"]);
+    } else {
+        return;
     }
+
+    if (checkBooleanOption("setGlobalEventProperty", "immutable", options, errorCallback, true)) {
+        arguments.push(options["immutable"]);
+    } else {
+        return
+    }
+
+    execWithCallbacks(successCallback, errorCallback, SET_GLOBAL_EVENT_PROPERTY, arguments);
 };
 
 // removeGlobalEventProperty(key)
-exports.removeGlobalEventProperty = function (params) {
-    if (params["key"] != undefined) {
-        exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, REMOVE_GLOBAL_EVENT_PROPERTY, [params["key"]]);
+exports.removeGlobalEventProperty = function (options, successCallback, errorCallback) {
+    var arguments = [];
+    
+    if (checkStringOption("removeGlobalEventProperty", "key", options, errorCallback, true)) {
+        arguments.push(options["key"]);
+    } else {
+        return
     }
+
+    execWithCallbacks(successCallback, errorCallback, REMOVE_GLOBAL_EVENT_PROPERTY, arguments);
 };
 
 // removeAllGlobalEventProperties()
-exports.removeAllGlobalEventProperties = function () {
-    exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, REMOVE_ALL_GLOBAL_EVENT_PROPERTIES, []);
+exports.removeAllGlobalEventProperties = function (successCallback, errorCallback) {
+    execWithCallbacks(successCallback, errorCallback, REMOVE_ALL_GLOBAL_EVENT_PROPERTIES, []);
 };
+
 
 // Utilities
 
 // setReferrer(referrer, source)
-exports.setReferrer = function (params) {
-    if (params["referrer"] != undefined && params["source"] != undefined) {
-        exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, SET_REFERRER, [params["referrer"], params["source"]]);
+exports.setReferrer = function (options, successCallback, errorCallback) {
+    var arguments = [];
+    
+    if (checkStringOption("setReferrer", "referrer", options, errorCallback, true)) {
+        arguments.push(options["referrer"]);
+    } else {
+        return;
     }
-}
+
+    if (checkStringOption("setReferrer", "source", options, errorCallback, true)) {
+        arguments.push(options["source"]);
+    } else {
+        return;
+    }
+
+    execWithCallbacks(successCallback, errorCallback, SET_REFERRER, arguments);
+};
 
 // getDashboardSessionUrl(): String
-exports.getDashboardSessionUrl = function (result) {
-    exec(result, emptyCallback, SMARTLOOK_PLUGIN, GET_DASHBOARD_SESSION_URL, []);
+exports.getDashboardSessionUrl = function (successCallback, errorCallback) {
+    execWithCallbacks(successCallback, errorCallback, GET_DASHBOARD_SESSION_URL, []);
 };
