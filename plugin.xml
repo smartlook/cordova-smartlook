@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="cordova-plugin-smartlook" version="1.4.0">
-   <name>SmartlookPlugin</name>
+
+   <!--Plugin info-->
+   <name>Smartlook</name>
+
+   <!--Modules-->
    <js-module name="SmartlookPlugin" src="www/SmartlookPlugin.js">
-      <clobbers target="cordova.plugins.SmartlookPlugin" />
+      <clobbers target="cordova.plugins.SmartlookPlugin" /> <!--Legacy targed-->
+      <clobbers target="Smartlook" />
    </js-module>
+
+   <!--Android-->
    <platform name="android">
       <config-file parent="/*" target="res/xml/config.xml">
          <feature name="SmartlookPlugin">
@@ -14,6 +21,8 @@
       <source-file src="src/android/com/smartlook/cordovaplugin/SmartlookPlugin.java" target-dir="src/com/smartlook/cordovaplugin/SmartlookPlugin" />
       <framework src="src/android/plugin.gradle" custom="true" type="gradleReference" />
    </platform>
+
+   <!--iOS-->
    <platform name="ios">
       <config-file parent="/*" target="config.xml">
           <feature name="SmartlookPlugin">

@@ -234,11 +234,11 @@ public class SmartlookPlugin extends CordovaPlugin {
 
     private void stopTimedCustomEvent(JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (!args.isNull(EVENT_ID) && !args.isNull(EVENT_PROPERTIES)) {
-            String eventId = Smartlook.stopTimedCustomEvent(args.getString(EVENT_NAME), args.getJSONObject(EVENT_PROPERTIES));
+            Smartlook.stopTimedCustomEvent(args.getString(EVENT_ID), args.getJSONObject(EVENT_PROPERTIES));
             callbackContext.success();
             return;
         } else if (!args.isNull(EVENT_ID)) {
-            String eventId = Smartlook.stopTimedCustomEvent(args.getString(EVENT_NAME));
+            Smartlook.stopTimedCustomEvent(args.getString(EVENT_ID));
             callbackContext.success();
             return;
         }
@@ -248,14 +248,14 @@ public class SmartlookPlugin extends CordovaPlugin {
 
     private void cancelTimedCustomEvent(JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (!args.isNull(EVENT_ID) && !args.isNull(REASON) && !args.isNull(CANCEL_TIMED_EVENT_PROPERTIES)) {
-            String eventId = Smartlook.cancelTimedCustomEvent(
+            Smartlook.cancelTimedCustomEvent(
                 args.getString(EVENT_NAME),
                 args.getString(REASON),
                 args.getJSONObject(CANCEL_TIMED_EVENT_PROPERTIES));
             callbackContext.success();
             return;
         } else if (!args.isNull(EVENT_ID) && !args.isNull(REASON)) {
-            String eventId = Smartlook.cancelTimedCustomEvent(args.getString(EVENT_NAME), args.getString(REASON));
+            Smartlook.cancelTimedCustomEvent(args.getString(EVENT_NAME), args.getString(REASON));
             callbackContext.success();
             return;
         }
@@ -331,7 +331,7 @@ public class SmartlookPlugin extends CordovaPlugin {
     }
 
     private void getDashboardSessionUrl(CallbackContext callbackContext) throws JSONException {
-        callbackContext.success(Smartlook.getDashboardSessionUrl);
+        callbackContext.success(Smartlook.getDashboardSessionUrl());
     }
 
 }

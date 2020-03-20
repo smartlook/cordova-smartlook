@@ -39,6 +39,439 @@ const GET_DASHBOARD_SESSION_URL = "getDashboardSessionUrl";
 
 var emptyCallback = function() { return; };
 
+////////////////////////////////////////////////////////////////////////////////
+// SDK API constants
+
+exports.ViewState = {
+    START: "start",
+    STOP: "stop",
+};
+
+////////////////////////////////////////////////////////////////////////////////
+// SDK API methods
+
+/**
+ * All methods have two callbacks @callback successCallback and @callback errorCallback. These can be
+ * used to retrieve return value or detect if something went wrong.
+ * 
+ * @example
+ * Smartlook.exampleCall(successCallback, errorCallback);
+ *
+ * function successCallback(value) {
+ *     alert('Returned: ' + value);
+ * }
+ *
+ * function errorCallback(message) {
+ *     alert('Failed because: ' + message);
+ * }
+ */
+
+
+// Setup and lifecycle
+
+/**
+ * @description Setup and start Smartlook SDK recording.
+ *
+ * @param options.smartlookAPIKey Unique 40 character key identifying your app. You can find in your
+ *                                dashboard. If invalid key is set SDK will not work properly.
+ * @param options.fps             (Optional) Desired FPS for the recording, that must be in range from 1 to 10.
+ */
+exports.setupAndStartRecording = function (options, successCallback, errorCallback) {
+    var arguments = [];
+    
+    if (checkStringOption("setupAndStartRecording", "smartlookAPIKey", options, errorCallback, true)) {
+        arguments.push(options["smartlookAPIKey"]);
+    } else {
+        return;
+    }
+
+    if (checkFpsOption("setupAndStartRecording", options, errorCallback, false)) {
+        arguments.push(options["fps"]);
+    }
+
+    execWithCallbacks(successCallback, errorCallback, SETUP_AND_START_RECORDING, arguments);
+};
+
+/**
+ * @description Setup/initialize Smartlook SDK. This method DOESN'T start the recording (@see Smartlook.startRecording())
+ *
+ * @param options.smartlookAPIKey Unique 40 character key identifying your app. You can find in your
+ *                                dashboard. If invalid key is set SDK will not work properly.
+ * @param options.fps             (Optional) Desired FPS for the recording, that must be in range from 1 to 10.
+ */
+exports.setup = function (options, successCallback, errorCallback) {
+    var arguments = [];
+    
+    if (checkStringOption("setup", "smartlookAPIKey", options, errorCallback, true)) {
+        arguments.push(options["smartlookAPIKey"]);
+    } else {
+        return;
+    }
+
+    if (checkFpsOption("setup", options, errorCallback, false)) {
+        arguments.push(options["fps"]);
+    }
+
+    execWithCallbacks(successCallback, errorCallback, SETUP, arguments);
+};
+
+/**
+ * @description Start SDK recording.
+ */
+exports.startRecording = function (successCallback, errorCallback) {
+    execWithCallbacks(successCallback, errorCallback, START_RECORDING, []);
+};
+
+/**
+ * @description Stop SDK recording.
+ */
+exports.stopRecording = function (successCallback, errorCallback) {
+    execWithCallbacks(successCallback, errorCallback, STOP_RECORDING, []);
+};
+
+/**
+ * @description Check if SDK is currently recording.
+ * 
+ * @callback successCallback Callback value set to true if SDK is currently recording.
+ * 
+ * @example
+ * Smartlook.isRecording(successCallback, ...);
+ *
+ * function successCallback(value) {
+ *     alert('Is smartlook recording: ' + value);
+ * }
+ */
+exports.isRecording = function (successCallback, errorCallback) {
+    execWithCallbacks(successCallback, errorCallback, IS_RECORING, []);
+};
+
+// Fullscreen sensitive mode
+
+/**
+ * @description When you start sensitive mode SDK records blank videos (single color) but SDK still 
+ *              sends Analytic events.
+ * 
+ * @param options.color (Optional) Hexadecimal string color value.
+ */
+exports.startFullscreenSensitiveMode = function (options, successCallback, errorCallback) {
+    var arguments = [];
+    
+    if (checkColorOption("startFullscreenSensitiveMode", options, errorCallback, false)) {
+        arguments.push(options["color"]);
+    }
+
+    execWithCallbacks(successCallback, errorCallback, START_FULLSCREEN_SENSITIVE_MODE, arguments);
+};
+
+/**
+ * @description Stop sensitive mode -> SDK records video.
+ */
+exports.stopFullscreenSensitiveMode = function (successCallback, errorCallback) {
+    execWithCallbacks(successCallback, errorCallback, STOP_FULLSCREEN_SENSITIVE_MODE, []);
+};
+
+/**
+ * @description Check if SDK is running in fullscreen sensitive mode.
+ * 
+ * @callback successCallback Callback value set to true if SDK is currently in fullscreen sensitive mode.
+ * 
+ * @example
+ * Smartlook.isFullscreenSensitiveModeActive(successCallback, ...);
+ *
+ * function successCallback(value) {
+ *     alert('Is smartlook in fullscreen sensitive mode: ' + value);
+ * }
+ */
+exports.isFullscreenSensitiveModeActive = function (successCallback, errorCallback) {
+    execWithCallbacks(successCallback, errorCallback, IS_FULLSCREEN_SENSITIVE_MODE_ACTIVE, []);
+};
+
+
+// User identification
+
+/**
+ * @description Identify user with identifier and optional properties.
+ * 
+ * @param options.identifier        String Id that can be used to identify user and his records. You will see this
+ *                                  Id in Smartlook dashboard so you can pair records with concrete user.
+ * @param options.sessionProperties (Optional) Additional properties object that will be paired with every session and can
+ *                                  be viewed in Smartlook dashboard.
+ */
+exports.setUserIdentifier = function (options, successCallback, errorCallback) {
+    var arguments = [];
+    
+    if (checkStringOption("setUserIdentifier", "identifier", options, errorCallback, true)) {
+        arguments.push(options["identifier"]);
+    } else {
+        return;
+    }
+
+    if (checkProperties("setUserIdentifier", "sessionProperties", options, errorCallback, false)) {
+        arguments.push(options["sessionProperties"]);
+    }
+
+    execWithCallbacks(successCallback, errorCallback, SET_USER_IDENTIFIER, arguments);
+};
+
+
+// Tracking
+
+/**
+ * @description Track custom navigation event.
+ * 
+ * @param options.name      Controler/Activity/Page name.
+ * @param options.viewState One of Smartlook.ViewState.START or Smartlook.ViewState.STOP.
+ */
+exports.trackNavigationEvent = function (options, successCallback, errorCallback) {
+    var arguments = [];
+    
+    if (checkStringOption("trackNavigationEvent", "name", options, errorCallback, true)) {
+        arguments.push(options["name"]);
+    } else {
+        return;
+    }
+
+    if (checkViewStateOption("trackNavigationEvent", options, errorCallback, true)) {
+        arguments.push(options["viewState"]);
+    } else {
+        return
+    }
+
+    execWithCallbacks(successCallback, errorCallback, TRACK_NAVIGATION_EVENT, arguments);
+};
+
+/**
+ * @description Starts timed event. Timed event can be used to record duration (between the start and stop/cancel).
+ * 
+ * @param options.name            String used to identify event in dashboard.
+ * @param options.eventProperties (Optional) Event data stored in object. These are going to be merged with
+ *                                data passed in stop/cancel.
+ * 
+ * @callback successCallback Callback value set to eventId if event was started successfully.
+ * 
+ * @example
+ * Smartlook.startTimedCustomEvent({identifier: "random_identifier"}, successCallback, ...);
+ *
+ * function successCallback(value) {
+ *     alert('Timed event eventId: ' + value);
+ * }
+ */
+exports.startTimedCustomEvent = function (options, successCallback, errorCallback) {
+    var arguments = [];
+    
+    if (checkStringOption("startTimedCustomEvent", "name", options, errorCallback, true)) {
+        arguments.push(options["name"]);
+    } else {
+        return;
+    }
+
+    if (checkProperties("startTimedCustomEvent", "eventProperties", options, errorCallback, false)) {
+        arguments.push(options["eventProperties"]);
+    }
+
+    execWithCallbacks(successCallback, errorCallback, START_TIMED_CUSTOM_EVENT, arguments);
+};
+
+/**
+ * @description Stops timed event. Duration from according start is calculated and send with the event.
+ * 
+ * @param options.eventId         Unique event id that is used to identify this event. 
+ * @param options.eventProperties (Optional) Event data stored in object. These are going to be merged with
+ *                                data passed in start.
+ */
+exports.stopTimedCustomEvent = function (options, successCallback, errorCallback) {
+    var arguments = [];
+    
+    if (checkStringOption("stopTimedCustomEvent", "eventId", options, errorCallback, true)) {
+        arguments.push(options["eventId"]);
+    } else {
+        return;
+    }
+
+    if (checkProperties("stopTimedCustomEvent", "eventProperties", options, errorCallback, false)) {
+        arguments.push(options["eventProperties"]);
+    }
+
+    execWithCallbacks(successCallback, errorCallback, STOP_TIMED_CUSTOM_EVENT, arguments);
+};
+
+/**
+ * @description Cancels timed event. It calculates event duration and notes that this event has failed.
+ * 
+ * @param options.eventId         Unique event id that is used to identify this event. 
+ * @param options.reason          Short string description explaining why the event was canceled.
+ * @param options.eventProperties (Optional) Event data stored in object. These are going to be merged with
+ *                                data passed in start.
+ */
+exports.cancelTimedCustomEvent = function (options, successCallback, errorCallback) {
+    var arguments = [];
+    
+    if (checkStringOption("cancelTimedCustomEvent", "eventId", options, errorCallback, true)) {
+        arguments.push(options["eventId"]);
+    } else {
+        return;
+    }
+
+    if (checkStringOption("cancelTimedCustomEvent", "reason", options, errorCallback, true)) {
+        arguments.push(options["reason"]);
+    } else {
+        return;
+    }
+
+    if (checkProperties("cancelTimedCustomEvent", "eventProperties", options, errorCallback, false)) {
+        arguments.push(options["eventProperties"]);
+    }
+
+    execWithCallbacks(successCallback, errorCallback, CANCEL_TIMED_CUSTOM_EVENT, arguments);
+};
+
+/**
+ * @description Track custom event.
+ * 
+ * @param options.name            String used to identify event. 
+ * @param options.eventProperties (Optional) Event data stored in object.
+ */
+exports.trackCustomEvent = function (options, successCallback, errorCallback) {
+    var arguments = [];
+    
+    if (checkStringOption("trackCustomEvent", "name", options, errorCallback, true)) {
+        arguments.push(options["name"]);
+    } else {
+        return;
+    }
+
+    if (checkProperties("trackCustomEvent", "eventProperties", options, errorCallback, false)) {
+        arguments.push(options["eventProperties"]);
+    }
+
+    execWithCallbacks(successCallback, errorCallback, TRACK_CUSTOM_EVENT, arguments);
+};
+
+// Event properties
+
+/**
+ * @description Set global event properties that will be added to every tracked event.
+ * 
+ * @param options.globalEventProperties Global event properties stored in object. 
+ * @param options.immutable             If set to TRUE these properties have higher priority than mutable ones
+ *                                      and also they cannot be changed (only removed).
+ */
+exports.setGlobalEventProperties = function (options, successCallback, errorCallback) {
+    var arguments = [];
+    
+    if (checkProperties("setGlobalEventProperties", "globalEventProperties", options, errorCallback, true)) {
+        arguments.push(options["globalEventProperties"]);
+    } else {
+        return;
+    }
+
+    if (checkBooleanOption("setGlobalEventProperties", "immutable", options, errorCallback, true)) {
+        arguments.push(options["immutable"]);
+    } else {
+        return
+    }
+
+    execWithCallbacks(successCallback, errorCallback, SET_GLOBAL_EVENT_PROPERTIES, arguments);
+};
+
+/**
+ * @description Set global event property that will be added to every tracked event.
+ * 
+ * @param options.key        Global event property key.
+ * @param options.value      Global event property value.
+ * @param options.immutable  If set to TRUE this property has higher priority than mutable ones and also it 
+ *                           cannot be changed (only removed).
+ */
+exports.setGlobalEventProperty = function (options, successCallback, errorCallback) {
+    var arguments = [];
+    
+    if (checkKeyValueOptions("setGlobalEventProperty", options, errorCallback, true)) {
+        arguments.push(options["key"]);
+        arguments.push(options["value"]);
+    } else {
+        return;
+    }
+
+    if (checkBooleanOption("setGlobalEventProperty", "immutable", options, errorCallback, true)) {
+        arguments.push(options["immutable"]);
+    } else {
+        return
+    }
+
+    execWithCallbacks(successCallback, errorCallback, SET_GLOBAL_EVENT_PROPERTY, arguments);
+};
+
+/**
+ * @description Remove property from global event properties.
+ * 
+ * @param options.key Key of global event property that needs to be removed.
+ */
+exports.removeGlobalEventProperty = function (options, successCallback, errorCallback) {
+    var arguments = [];
+    
+    if (checkStringOption("removeGlobalEventProperty", "key", options, errorCallback, true)) {
+        arguments.push(options["key"]);
+    } else {
+        return
+    }
+
+    execWithCallbacks(successCallback, errorCallback, REMOVE_GLOBAL_EVENT_PROPERTY, arguments);
+};
+
+/**
+ * @description Remove all properties from global event properties.
+ */
+exports.removeAllGlobalEventProperties = function (successCallback, errorCallback) {
+    execWithCallbacks(successCallback, errorCallback, REMOVE_ALL_GLOBAL_EVENT_PROPERTIES, []);
+};
+
+
+// Utilities
+
+/**
+ * @description Possibility to manually set referrer and source of the installation visible in dashboard 
+ *              and accessible via filters
+ * 
+ * @param referrer Desired referrer value
+ * @param source   Desired source, i.e. com.android.vending or com.amazon.venezia
+ */
+exports.setReferrer = function (options, successCallback, errorCallback) {
+    var arguments = [];
+    
+    if (checkStringOption("setReferrer", "referrer", options, errorCallback, true)) {
+        arguments.push(options["referrer"]);
+    } else {
+        return;
+    }
+
+    if (checkStringOption("setReferrer", "source", options, errorCallback, true)) {
+        arguments.push(options["source"]);
+    } else {
+        return;
+    }
+
+    execWithCallbacks(successCallback, errorCallback, SET_REFERRER, arguments);
+};
+
+/**
+ * @description Obtain sharable url to user's session leading to our dashboard.
+ * 
+ * @callback successCallback Callback value set to dashboard sessionURL.
+ * 
+ * @example
+ * Smartlook.getDashboardSessionUrl(successCallback, ...);
+ *
+ * function successCallback(value) {
+ *     alert('Shareable dashboard session URL: ' + value);
+ * }
+ */
+exports.getDashboardSessionUrl = function (successCallback, errorCallback) {
+    execWithCallbacks(successCallback, errorCallback, GET_DASHBOARD_SESSION_URL, []);
+};
+
+////////////////////////////////////////////////////////////////////////////////
+// Check and Utility methods
+
 // Check functions
 
 function checkStringOption(method, option, options, errorCallback, isMandatory) {
@@ -46,14 +479,14 @@ function checkStringOption(method, option, options, errorCallback, isMandatory) 
 
     if (toCheck == undefined || toCheck == null) {
         if (isMandatory != undefined && isMandatory === true) {
-            logError(errorCallback, method + "(): must be called with" + option + " option!");
+            logError(errorCallback, method + "(): must be called with " + option + " option!");
         }
 
         return false;
     }
 
     if (typeof toCheck !== 'string' || toCheck.length < 1) {
-        logError(errorCallback, method + "(): " + option + "must be non-empty string!");
+        logError(errorCallback, method + "(): " + option + " must be non-empty string!");
         return false
     }
 
@@ -65,14 +498,14 @@ function checkBooleanOption(method, option, options, errorCallback, isMandatory)
 
     if (toCheck == undefined || toCheck == null) {
         if (isMandatory != undefined && isMandatory === true) {
-            logError(errorCallback, method + "(): must be called with" + option + " option!");
+            logError(errorCallback, method + "(): must be called with " + option + " option!");
         }
 
         return false;
     }
 
     if (typeof toCheck !== 'boolean') {
-        logError(errorCallback, method + "(): " + option + "must be boolean!");
+        logError(errorCallback, method + "(): " + option + " must be boolean!");
         return false
     }
 
@@ -91,7 +524,7 @@ function checkProperties(method, option, options, errorCallback, isMandatory) {
     }
 
     if (toCheck === Object(toCheck)) {
-        logError(errorCallback, method + "(): " + option + "must be a object!");
+        logError(errorCallback, method + "(): " + option + " must be a object!");
         return false
     }
 
@@ -199,299 +632,10 @@ function execWithCallbacks(successCallback, errorCallback, method, arguments) {
 
 function logError(errorCallback, message) {
     if (errorCallback != undefined) {
-        errorCallback.call(message); 
+        errorCallback(message);
     }
 }
 
 function isHexColor(color) {
     return /^#([0-9A-F]{3}){1,2}$/i.test(color)
 }
-
-// Setup and lifecycle
-
-// setupAndStart(smartlookAPIKey)
-// setupAndStart(smartlookAPIKey, fps)
-exports.setupAndStartRecording = function (options, successCallback, errorCallback) {
-    var arguments = [];
-    
-    if (checkStringOption("setupAndStartRecording", "smartlookAPIKey", options, errorCallback, true)) {
-        arguments.push(options["smartlookAPIKey"]);
-    } else {
-        return;
-    }
-
-    if (checkFpsOption("setupAndStartRecording", options, errorCallback, false)) {
-        arguments.push(options["fps"]);
-    }
-
-    execWithCallbacks(successCallback, errorCallback, SETUP_AND_START_RECORDING, arguments);
-};
-
-// setup(smartlookAPIKey)
-// setup(smartlookAPIKey, fps)
-exports.setup = function (options, successCallback, errorCallback) {
-    var arguments = [];
-    
-    if (checkStringOption("setup", "smartlookAPIKey", options, errorCallback, true)) {
-        arguments.push(options["smartlookAPIKey"]);
-    } else {
-        return;
-    }
-
-    if (checkFpsOption("setup", options, errorCallback, false)) {
-        arguments.push(options["fps"]);
-    }
-
-    execWithCallbacks(successCallback, errorCallback, SETUP, arguments);
-};
-
-// startRecording()
-exports.startRecording = function (successCallback, errorCallback) {
-    execWithCallbacks(successCallback, errorCallback, START_RECORDING, []);
-};
-
-// stopRecording()
-exports.stopRecording = function (successCallback, errorCallback) {
-    execWithCallbacks(successCallback, errorCallback, STOP_RECORDING, []);
-};
-
-// isRecording()
-exports.isRecording = function (successCallback, errorCallback) {
-    execWithCallbacks(successCallback, errorCallback, IS_RECORING, []);
-};
-
-// Fullscreen sensitive mode
-
-// startFullScreenSenstiveMode()
-// startFullScreenSenstiveMode(color)
-exports.startFullscreenSensitiveMode = function (options, successCallback, errorCallback) {
-    var arguments = [];
-    
-    if (checkColorOption("startFullscreenSensitiveMode", options, errorCallback, false)) {
-        arguments.push(options["color"]);
-    }
-
-    execWithCallbacks(successCallback, errorCallback, START_FULLSCREEN_SENSITIVE_MODE, arguments);
-};
-
-// stopFullScreenSenstiveMode()
-exports.stopFullscreenSensitiveMode = function (successCallback, errorCallback) {
-    execWithCallbacks(successCallback, errorCallback, STOP_FULLSCREEN_SENSITIVE_MODE, []);
-};
-
-// isFullscreenModeActive(result)
-exports.isFullscreenSensitiveModeActive = function (successCallback, errorCallback) {
-    execWithCallbacks(successCallback, errorCallback, IS_FULLSCREEN_SENSITIVE_MODE_ACTIVE, []);
-};
-
-
-// User identification
-
-// setUserIdentifier(identifier)
-// setUserIdentifier(identifier, sessionProperties)
-exports.setUserIdentifier = function (options, successCallback, errorCallback) {
-    var arguments = [];
-    
-    if (checkStringOption("setUserIdentifier", "identifier", options, errorCallback, true)) {
-        arguments.push(options["identifier"]);
-    } else {
-        return;
-    }
-
-    if (checkProperties("setUserIdentifier", "sessionProperties", options, errorCallback, false)) {
-        arguments.push(options["sessionProperties"]);
-    }
-
-    execWithCallbacks(successCallback, errorCallback, SET_USER_IDENTIFIER, arguments);
-};
-
-
-// Tracking
-
-// todo viewstate constant 
-// trackNavigationEvent(name, viewState)
-exports.trackNavigationEvent = function (options, successCallback, errorCallback) {
-    var arguments = [];
-    
-    if (checkStringOption("trackNavigationEvent", "name", options, errorCallback, true)) {
-        arguments.push(options["name"]);
-    } else {
-        return;
-    }
-
-    if (checkViewStateOption("trackNavigationEvent", options, errorCallback, true)) {
-        arguments.push(options["viewState"]);
-    } else {
-        return
-    }
-
-    execWithCallbacks(successCallback, errorCallback, TRACK_NAVIGATION_EVENT, arguments);
-};
-
-// startTimedCustomEvent(name): String
-// startTimedCustomEvent(name, eventProperties): String
-exports.startTimedCustomEvent = function (options, successCallback, errorCallback) {
-    var arguments = [];
-    
-    if (checkStringOption("startTimedCustomEvent", "name", options, errorCallback, true)) {
-        arguments.push(options["name"]);
-    } else {
-        return;
-    }
-
-    if (checkProperties("startTimedCustomEvent", "eventProperties", options, errorCallback, false)) {
-        arguments.push(options["eventProperties"]);
-    }
-
-    execWithCallbacks(successCallback, errorCallback, START_TIMED_CUSTOM_EVENT, arguments);
-};
-
-// stopTimedCustomEvent(eventId)
-// stopTimedCustomEvent(eventId, eventProperties)
-exports.stopTimedCustomEvent = function (options, successCallback, errorCallback) {
-    var arguments = [];
-    
-    if (checkStringOption("stopTimedCustomEvent", "eventId", options, errorCallback, true)) {
-        arguments.push(options["eventId"]);
-    } else {
-        return;
-    }
-
-    if (checkProperties("stopTimedCustomEvent", "eventProperties", options, errorCallback, false)) {
-        arguments.push(options["eventProperties"]);
-    }
-
-    execWithCallbacks(successCallback, errorCallback, STOP_TIMED_CUSTOM_EVENT, arguments);
-};
-
-// cancelTimedCustomEvent(eventId, reason)
-// cancelTimedCustomEvent(eventId, reason, eventProperties)
-exports.cancelTimedCustomEvent = function (options, successCallback, errorCallback) {
-    var arguments = [];
-    
-    if (checkStringOption("cancelTimedCustomEvent", "eventId", options, errorCallback, true)) {
-        arguments.push(options["eventId"]);
-    } else {
-        return;
-    }
-
-    if (checkStringOption("cancelTimedCustomEvent", "reason", options, errorCallback, true)) {
-        arguments.push(options["reason"]);
-    } else {
-        return;
-    }
-
-    if (checkProperties("cancelTimedCustomEvent", "eventProperties", options, errorCallback, false)) {
-        arguments.push(options["eventProperties"]);
-    }
-
-    execWithCallbacks(successCallback, errorCallback, CANCEL_TIMED_CUSTOM_EVENT, arguments);
-};
-
-// trackCustomEvent(name)
-// trackCustomEvent(name, eventProperties)
-// trackCustomEvent(name, key, value)
-exports.trackCustomEvent = function (options, successCallback, errorCallback) {
-    var arguments = [];
-    
-    if (checkStringOption("trackCustomEvent", "name", options, errorCallback, true)) {
-        arguments.push(options["name"]);
-    } else {
-        return;
-    }
-
-    if (checkProperties("trackCustomEvent", "eventProperties", options, errorCallback, false)) {
-        arguments.push(options["eventProperties"]);
-    } else if (checkKeyValueOptions("trackCustomEvent", options, errorCallback, false)) {
-        arguments.push(options["key"]);
-        arguments.push(options["value"]);
-    }
-
-    execWithCallbacks(successCallback, errorCallback, TRACK_CUSTOM_EVENT, arguments);
-};
-
-// Event properties
-
-// setGlobalEventProperties(globalEventProperties, immutable)
-exports.setGlobalEventProperties = function (options, successCallback, errorCallback) {
-    var arguments = [];
-    
-    if (checkProperties("setGlobalEventProperties", "globalEventProperties", options, errorCallback, true)) {
-        arguments.push(options["globalEventProperties"]);
-    } else {
-        return;
-    }
-
-    if (checkBooleanOption("setGlobalEventProperties", "immutable", options, errorCallback, true)) {
-        arguments.push(options["immutable"]);
-    } else {
-        return
-    }
-
-    execWithCallbacks(successCallback, errorCallback, SET_GLOBAL_EVENT_PROPERTIES, arguments);
-};
-
-// setGlobalEventProperty(key, value, immutable)
-exports.setGlobalEventProperty = function (options, successCallback, errorCallback) {
-    var arguments = [];
-    
-    if (checkKeyValueOptions("setGlobalEventProperty", options, errorCallback, true)) {
-        arguments.push(options["key"]);
-        arguments.push(options["value"]);
-    } else {
-        return;
-    }
-
-    if (checkBooleanOption("setGlobalEventProperty", "immutable", options, errorCallback, true)) {
-        arguments.push(options["immutable"]);
-    } else {
-        return
-    }
-
-    execWithCallbacks(successCallback, errorCallback, SET_GLOBAL_EVENT_PROPERTY, arguments);
-};
-
-// removeGlobalEventProperty(key)
-exports.removeGlobalEventProperty = function (options, successCallback, errorCallback) {
-    var arguments = [];
-    
-    if (checkStringOption("removeGlobalEventProperty", "key", options, errorCallback, true)) {
-        arguments.push(options["key"]);
-    } else {
-        return
-    }
-
-    execWithCallbacks(successCallback, errorCallback, REMOVE_GLOBAL_EVENT_PROPERTY, arguments);
-};
-
-// removeAllGlobalEventProperties()
-exports.removeAllGlobalEventProperties = function (successCallback, errorCallback) {
-    execWithCallbacks(successCallback, errorCallback, REMOVE_ALL_GLOBAL_EVENT_PROPERTIES, []);
-};
-
-
-// Utilities
-
-// setReferrer(referrer, source)
-exports.setReferrer = function (options, successCallback, errorCallback) {
-    var arguments = [];
-    
-    if (checkStringOption("setReferrer", "referrer", options, errorCallback, true)) {
-        arguments.push(options["referrer"]);
-    } else {
-        return;
-    }
-
-    if (checkStringOption("setReferrer", "source", options, errorCallback, true)) {
-        arguments.push(options["source"]);
-    } else {
-        return;
-    }
-
-    execWithCallbacks(successCallback, errorCallback, SET_REFERRER, arguments);
-};
-
-// getDashboardSessionUrl(): String
-exports.getDashboardSessionUrl = function (successCallback, errorCallback) {
-    execWithCallbacks(successCallback, errorCallback, GET_DASHBOARD_SESSION_URL, []);
-};
