@@ -39,7 +39,10 @@ static NSString *firstArgumentAsNonullString(SmartlookPlugin *object, CDVInvoked
     
     [Smartlook setupWithKey:key options:options];
     
-    [Smartlook registerWhitelistedObject:[UIWebView class]];
+    #if !WK_WEB_VIEW_ONLY
+        [Smartlook registerWhitelistedObject:[UIWebView class]];
+    #endif
+
     [Smartlook registerWhitelistedObject:[WKWebView class]];
     
     [Smartlook setSessionPropertyValue:@"cordova" forName:@"sdk_build_flavor"];
