@@ -1,9 +1,13 @@
 repositories {
   maven {
-    url "https://sdk.smartlook.com/android/release"
-  }
+            url "http://artifactory.smartlook.com:8081/artifactory/libs-release-local"
+            credentials {
+                username = ""
+                password = ""
+            }
+        }
 }
 
 dependencies {
-    compile 'com.smartlook.recording:app:1.4.1-cordova'
+    compile 'com.smartlook.recording:app:1.4.0-cordova-api-test-1'
 }

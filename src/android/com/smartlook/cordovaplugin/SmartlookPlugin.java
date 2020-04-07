@@ -3,6 +3,7 @@ package com.smartlook.cordovaplugin;
 import android.app.Activity;
 
 import com.smartlook.sdk.smartlook.Smartlook;
+import com.smartlook.sdk.smartlook.LogListener;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -34,6 +35,7 @@ public class SmartlookPlugin extends CordovaPlugin {
     private static final String SET_USER_IDENTIFIER = "setUserIdentifier";
 
     // Tracking
+    private static final String SET_EVENT_TRACKING_MODE = "setEventTrackingMode";
     private static final String TRACK_NAVIGATION_EVENT = "trackNavigationEvent";
     private static final String START_TIMED_CUSTOM_EVENT = "startTimedCustomEvent";
     private static final String STOP_TIMED_CUSTOM_EVENT = "stopTimedCustomEvent";
@@ -49,7 +51,8 @@ public class SmartlookPlugin extends CordovaPlugin {
     // Utilities
     private static final String SET_REFERRER = "setReferrer";
     private static final String GET_DASHBOARD_SESSION_URL = "getDashboardSessionUrl";
-
+    private static final String REGISTER_LOG_LISTENER = "registerLogListener";
+    private static final String UNREGISTER_LOG_LISTENER = "unregisterLogListener";
 
     // Arguments
     private static final int SMARTLOOK_API_KEY = 0;
@@ -71,6 +74,7 @@ public class SmartlookPlugin extends CordovaPlugin {
     private static final int CANCEL_TIMED_EVENT_PROPERTIES = 2;
     private static final int REFERRER = 0;
     private static final int SOURCE = 1;
+    private static final int EVENT_TRACKING_MODE = 0;
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -92,6 +96,8 @@ public class SmartlookPlugin extends CordovaPlugin {
             isFullscreenSensitiveModeActive(callbackContext);
         } else if (action.equals(SET_USER_IDENTIFIER)) {
             setUserIdentifier(args, callbackContext);
+        } else if (action.equals(SET_EVENT_TRACKING_MODE)) {        
+           setEventTrackingMode(args, callbackContext); 
         } else if (action.equals(TRACK_NAVIGATION_EVENT)) {
             trackNavigationEvent(args, callbackContext);
         } else if (action.equals(START_TIMED_CUSTOM_EVENT)) {
@@ -114,6 +120,10 @@ public class SmartlookPlugin extends CordovaPlugin {
             setReferrer(args, callbackContext);
         } else if (action.equals(GET_DASHBOARD_SESSION_URL)) {
             getDashboardSessionUrl(callbackContext);
+        } else if (action.equals(REGISTER_LOG_LISTENER)) {
+            registerLogListener(callbackContext);
+        } else if (action.equals(UNREGISTER_LOG_LISTENER)){
+            unregisterLogListener(callbackContext);    
         } else {
             callbackContext.error("Unknow action");
             return false;
@@ -207,6 +217,16 @@ public class SmartlookPlugin extends CordovaPlugin {
     }
 
     // Tracking
+
+    private void setEventTrackingMode(JSONArray args, CallbackContext callbackContext) throws JSONException {
+        if (!args.isNull(EVENT_TRACKING_MODE)) {
+            Smartlook.setEventTrackingMode(args.getString(EVENT_TRACKING_MODE));
+            callbackContext.success();
+            return;
+        }
+
+        callbackContext.error("Invalid setEventTrackingMode parameters!");
+    }
 
     private void trackNavigationEvent(JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (!args.isNull(EVENT_NAME) && !args.isNull(VIEW_STATE)) {
@@ -332,6 +352,20 @@ public class SmartlookPlugin extends CordovaPlugin {
 
     private void getDashboardSessionUrl(CallbackContext callbackContext) throws JSONException {
         callbackContext.success(Smartlook.getDashboardSessionUrl());
+    }
+
+    private void registerLogListener(final CallbackContext callbackContext) throws JSONException {
+        Smartlook.registerLogListener(new LogListener() {
+            @Override
+            public void onLog(String logSeverity, String tag, String message) {
+                callbackContext.success(tag + "[" + logSeverity + "]: " + message);
+            }
+        });
+    }
+
+    private void unregisterLogListener(CallbackContext callbackContext) throws JSONException {
+        Smartlook.unregisterLogListener();
+        callbackContext.success();
     }
 
 }

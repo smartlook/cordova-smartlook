@@ -21,7 +21,8 @@ const IS_FULLSCREEN_SENSITIVE_MODE_ACTIVE = "isFullscreenSensitiveModeActive";
 const SET_USER_IDENTIFIER = "setUserIdentifier";
 
 //Tracking
-const TRACK_NAVIGATION_EVENT = "trackNavigationEvent"
+const SET_EVENT_TRACKING_MODE = "setEventTrackingMode";
+const TRACK_NAVIGATION_EVENT = "trackNavigationEvent";
 const START_TIMED_CUSTOM_EVENT = "startTimedCustomEvent";
 const STOP_TIMED_CUSTOM_EVENT = "stopTimedCustomEvent";
 const CANCEL_TIMED_CUSTOM_EVENT = "cancelTimedCustomEvent";
@@ -36,6 +37,8 @@ const REMOVE_ALL_GLOBAL_EVENT_PROPERTIES = "removeAllGlobalEventProperties";
 // Utilities
 const SET_REFERRER = "setReferrer"
 const GET_DASHBOARD_SESSION_URL = "getDashboardSessionUrl";
+const REGISTER_LOG_LISTENER = "registerLogListener";
+const UNREGISTER_LOG_LISTENER = "unregisterLogListener";
 
 var emptyCallback = function() { return; };
 
@@ -44,8 +47,14 @@ var emptyCallback = function() { return; };
 
 exports.ViewState = {
     START: "start",
-    STOP: "stop",
+    STOP: "stop"
 };
+
+exports.EventTrackingMode = {
+    FULL_TRACKING: "full_tracking",
+    IGNORE_USER_INTERACTION: "ignore_user_interaction",
+    NO_TRACKING: "no_tracking"
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // SDK API methods
@@ -150,17 +159,9 @@ exports.isRecording = function (successCallback, errorCallback) {
 /**
  * @description When you start sensitive mode SDK records blank videos (single color) but SDK still 
  *              sends Analytic events.
- * 
- * @param options.color (Optional) Hexadecimal string color value.
  */
-exports.startFullscreenSensitiveMode = function (options, successCallback, errorCallback) {
-    var arguments = [];
-    
-    if (checkColorOption("startFullscreenSensitiveMode", options, errorCallback, false)) {
-        arguments.push(options["color"]);
-    }
-
-    execWithCallbacks(successCallback, errorCallback, START_FULLSCREEN_SENSITIVE_MODE, arguments);
+exports.startFullscreenSensitiveMode = function (successCallback, errorCallback) {
+    execWithCallbacks(successCallback, errorCallback, START_FULLSCREEN_SENSITIVE_MODE, []);
 };
 
 /**
@@ -215,6 +216,26 @@ exports.setUserIdentifier = function (options, successCallback, errorCallback) {
 
 
 // Tracking
+
+/**
+ * @description You can configure which events are being tracked by setting eventTrackingMode.
+ * 
+ * @param options.eventTrackingMode Can be on of:
+ *                                  - EventTrackingMode.FULL_TRACKING ... track everything
+ *                                  - EventTrackingMode.IGNORE_USER_INTERACTION ... will not track touches, focus, keyboard, selector events
+ *                                  - EventTrackingMode.NO_TRACKING ... not gonna track any events 
+ */
+exports.setEventTrackingMode = function (options, successCallback, errorCallback) {
+    var arguments = [];
+
+    if (checkEventTrackingModeOption("setEventTrackingMode", options, errorCallback, true)) {
+        arguments.push(options["eventTrackingMode"])
+    } else {
+        return
+    }
+
+    execWithCallbacks(successCallback, errorCallback, SET_EVENT_TRACKING_MODE, arguments);
+}
 
 /**
  * @description Track custom navigation event.
@@ -469,6 +490,30 @@ exports.getDashboardSessionUrl = function (successCallback, errorCallback) {
     execWithCallbacks(successCallback, errorCallback, GET_DASHBOARD_SESSION_URL, []);
 };
 
+/**
+ * You can register callback to all public SDK logs.
+ * 
+ * @callback successCallback Callback value contains log mesage in given format: `TAG[severity]: message`
+ * 
+ * @example
+ * Smartlook.registerLogListener(successCallback, ...);
+ *
+ * function successCallback(value) {
+ *     alert('SDK logged: ' + value);
+ * }
+ */
+exports.registerLogListener = function (successCallback, errorCallback) {
+    execWithCallbacks(successCallback, errorCallback, REGISTER_LOG_LISTENER, [])
+}
+
+/**
+ * You can unregister allback to all public SDK logs if registered before.
+ */
+exports.unregisterLogListener = function(successCallback, errorCallback) {
+    execWithCallbacks(successCallback, errorCallback, UNREGISTER_LOG_LISTENER, [])
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // Check and Utility methods
 
@@ -575,25 +620,6 @@ function checkFpsOption(method, options, errorCallback, isMandatory) {
     return true;
 }
 
-function checkColorOption(method, options, errorCallback, isMandatory) {
-    var color = options["color"];
-
-    if (color == undefined || color == null) {
-        if (isMandatory != undefined && isMandatory === true) {
-            logError(errorCallback, method + "(): must be called with color option!");     
-        }
-
-        return false;
-    }
-
-    if (typeof color !== 'string' || !isHexColor(color)) {
-        logError(errorCallback, method + "(): color must be hex color string!");
-        return false;
-    }
-
-    return true;
-}
-
 function checkViewStateOption(method, options, errorCallback, isMandatory) {
     var viewState = options["viewState"];
 
@@ -605,9 +631,29 @@ function checkViewStateOption(method, options, errorCallback, isMandatory) {
         return false;
     }
 
-    if (typeof viewState !== 'string' || viewState !== "start" && viewState !== "stop") {
+    if (typeof viewState !== 'string' || (viewState !== "start" && viewState !== "stop")) {
         logError(errorCallback, method + "(): viewState must be one of \"start\", \"stop\"!");
         return false;
+    }
+
+    return true;
+}
+
+function checkEventTrackingModeOption(method, options, errorCallback, isMandatory) {
+    var eventTrackingMode = options["eventTrackingMode"];
+
+    if (eventTrackingMode == undefined || eventTrackingMode == null) {
+        if (isMandatory != undefined && isMandatory === true) {
+            logError(errorCallback, method + "(): must be called with viewState option!");
+        }
+
+        return false;
+    } 
+
+    if (eventTrackingMode !== 'string' 
+        || (eventTrackingMode !== "full_tracking" && eventTrackingMode !== "ignore_user_interaction" && eventTrackingMode !== "no_tracking")) {
+                logError(errorCallback, method + "(): eventTrackingMode must be one of \"full_tracking\", \"ignore_user_interaction\" and \"no_tracking\"!");
+                return false;
     }
 
     return true;
@@ -634,8 +680,4 @@ function logError(errorCallback, message) {
     if (errorCallback != undefined) {
         errorCallback(message);
     }
-}
-
-function isHexColor(color) {
-    return /^#([0-9A-F]{3}){1,2}$/i.test(color)
 }
