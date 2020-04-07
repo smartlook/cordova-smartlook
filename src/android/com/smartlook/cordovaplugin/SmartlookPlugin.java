@@ -53,6 +53,7 @@ public class SmartlookPlugin extends CordovaPlugin {
     private static final String GET_DASHBOARD_SESSION_URL = "getDashboardSessionUrl";
     private static final String REGISTER_LOG_LISTENER = "registerLogListener";
     private static final String UNREGISTER_LOG_LISTENER = "unregisterLogListener";
+    private static final String SET_RENDERING_MODE = "setRenderingMode";
 
     // Arguments
     private static final int SMARTLOOK_API_KEY = 0;
@@ -75,6 +76,7 @@ public class SmartlookPlugin extends CordovaPlugin {
     private static final int REFERRER = 0;
     private static final int SOURCE = 1;
     private static final int EVENT_TRACKING_MODE = 0;
+    private static final int RENDERING_MODE = 0;
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -124,6 +126,8 @@ public class SmartlookPlugin extends CordovaPlugin {
             registerLogListener(callbackContext);
         } else if (action.equals(UNREGISTER_LOG_LISTENER)){
             unregisterLogListener(callbackContext);    
+        } else if (action.equals(SET_RENDERING_MODE)) {
+            setRenderingMode(args, callbackContext);
         } else {
             callbackContext.error("Unknow action");
             return false;
@@ -366,6 +370,16 @@ public class SmartlookPlugin extends CordovaPlugin {
     private void unregisterLogListener(CallbackContext callbackContext) throws JSONException {
         Smartlook.unregisterLogListener();
         callbackContext.success();
+    }
+
+    private void setRenderingMode(JSONArray args, CallbackContext callbackContext) throws JSONException {
+        if (!args.isNull(RENDERING_MODE)) {
+            Smartlook.setRenderingMode(args.getString(RENDERING_MODE));
+            callbackContext.success();
+            return;
+        }
+
+        callbackContext.error("Invalid setReferrer parameters!");
     }
 
 }

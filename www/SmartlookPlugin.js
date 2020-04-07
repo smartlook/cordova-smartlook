@@ -39,6 +39,7 @@ const SET_REFERRER = "setReferrer"
 const GET_DASHBOARD_SESSION_URL = "getDashboardSessionUrl";
 const REGISTER_LOG_LISTENER = "registerLogListener";
 const UNREGISTER_LOG_LISTENER = "unregisterLogListener";
+const SET_RENDERING_MODE = "setRenderingMode";
 
 var emptyCallback = function() { return; };
 
@@ -54,6 +55,11 @@ exports.EventTrackingMode = {
     FULL_TRACKING: "full_tracking",
     IGNORE_USER_INTERACTION: "ignore_user_interaction",
     NO_TRACKING: "no_tracking"
+}
+
+exports.RenderingMode = {
+    NO_RENDERING: "no_rendering",
+    NATIVE: "native"
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -227,8 +233,12 @@ exports.setUserIdentifier = function (options, successCallback, errorCallback) {
  */
 exports.setEventTrackingMode = function (options, successCallback, errorCallback) {
     var arguments = [];
+    var allowedValues = [
+        exports.EventTrackingMode.FULL_TRACKING,
+        exports.EventTrackingMode.IGNORE_USER_INTERACTION,
+        exports.EventTrackingMode.NO_TRACKING];
 
-    if (checkEventTrackingModeOption("setEventTrackingMode", options, errorCallback, true)) {
+    if (checkStringArrayOption("setEventTrackingMode", "eventTrackingMode", options, allowedValues, errorCallback, true)) {
         arguments.push(options["eventTrackingMode"])
     } else {
         return
@@ -245,6 +255,9 @@ exports.setEventTrackingMode = function (options, successCallback, errorCallback
  */
 exports.trackNavigationEvent = function (options, successCallback, errorCallback) {
     var arguments = [];
+    var allowedValues = [
+        exports.ViewState.START,
+        exports.ViewState.STOP];
     
     if (checkStringOption("trackNavigationEvent", "name", options, errorCallback, true)) {
         arguments.push(options["name"]);
@@ -252,7 +265,7 @@ exports.trackNavigationEvent = function (options, successCallback, errorCallback
         return;
     }
 
-    if (checkViewStateOption("trackNavigationEvent", options, errorCallback, true)) {
+    if (checkStringArrayOption("trackNavigationEvent", "viewState", options, allowedValues, errorCallback, true)) {
         arguments.push(options["viewState"]);
     } else {
         return
@@ -513,6 +526,28 @@ exports.unregisterLogListener = function(successCallback, errorCallback) {
     execWithCallbacks(successCallback, errorCallback, UNREGISTER_LOG_LISTENER, [])
 }
 
+/**
+ * By changing rendering method you can adjust the way we render the application for recordings.
+ * 
+ * @param options.renderingMode       Mode defining the video output of recording. Curently only
+ *                                    RenderingMode.NO_RENDERING and RenderingMode.NATIVE available.
+ * @param options.renderingModeOption [NOT IMPLEMENTED]  
+ */
+exports.setRenderingMode = function(options, successCallback, errorCallback) {
+    var arguments = [];
+    
+    var allowedValues = [
+        exports.RenderingMode.NO_RENDERING,
+        exports.RenderingMode.NATIVE];
+
+    if (checkStringArrayOption("setRenderingMode", "renderingMode", options, allowedValues, errorCallback, true)) {
+        arguments.push(options["renderingMode"])
+    } else {
+        return
+    }
+
+    execWithCallbacks(successCallback, errorCallback, SET_RENDERING_MODE, arguments);    
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Check and Utility methods
@@ -533,6 +568,37 @@ function checkStringOption(method, option, options, errorCallback, isMandatory) 
     if (typeof toCheck !== 'string' || toCheck.length < 1) {
         logError(errorCallback, method + "(): " + option + " must be non-empty string!");
         return false
+    }
+
+    return true;
+}
+
+function checkStringArrayOption(method, option, options, possibleValueArray, errorCallback, isMandatory) {
+    var toCheck = options[option];
+
+    if (toCheck == undefined || toCheck == null) {
+        if (isMandatory != undefined && isMandatory === true) {
+            logError(errorCallback, method + "(): must be called with " + option + " option!");
+        }
+
+        return false;
+    }
+
+    if (eventTrackingMode !== 'string') {
+        var found = false;
+        var errorMessagePossibilities = "";
+        for (var i = 0; i < possibleValueArray.length; i++) {
+            if (possibleValueArray[i] === toCheck) {
+                found = true;
+                errorMessagePossibilities += possibleValueArray[i] + " "
+            }
+        }
+        errorMessagePossibilities.trim()
+
+        if (!found) {
+            logError(errorCallback, method + "(): " + option + " must be one of: " + errorMessagePossibilities);
+            return false;
+        }
     }
 
     return true;
@@ -615,45 +681,6 @@ function checkFpsOption(method, options, errorCallback, isMandatory) {
     if (fps < 1 || fps > 10) {
         logError(errorCallback, method + "(): fps not set, must be between 1 and 10 fps!");
         return false;
-    }
-
-    return true;
-}
-
-function checkViewStateOption(method, options, errorCallback, isMandatory) {
-    var viewState = options["viewState"];
-
-    if (viewState == undefined || viewState == null) {
-        if (isMandatory != undefined && isMandatory === true) {
-            logError(errorCallback, method + "(): must be called with viewState option!");
-        }
-
-        return false;
-    }
-
-    if (typeof viewState !== 'string' || (viewState !== "start" && viewState !== "stop")) {
-        logError(errorCallback, method + "(): viewState must be one of \"start\", \"stop\"!");
-        return false;
-    }
-
-    return true;
-}
-
-function checkEventTrackingModeOption(method, options, errorCallback, isMandatory) {
-    var eventTrackingMode = options["eventTrackingMode"];
-
-    if (eventTrackingMode == undefined || eventTrackingMode == null) {
-        if (isMandatory != undefined && isMandatory === true) {
-            logError(errorCallback, method + "(): must be called with viewState option!");
-        }
-
-        return false;
-    } 
-
-    if (eventTrackingMode !== 'string' 
-        || (eventTrackingMode !== "full_tracking" && eventTrackingMode !== "ignore_user_interaction" && eventTrackingMode !== "no_tracking")) {
-                logError(errorCallback, method + "(): eventTrackingMode must be one of \"full_tracking\", \"ignore_user_interaction\" and \"no_tracking\"!");
-                return false;
     }
 
     return true;
