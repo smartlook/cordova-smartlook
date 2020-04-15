@@ -2,29 +2,51 @@
 #import <Smartlook/Smartlook.h>
 
 #ifdef DEBUG
-//#   define DLog(fmt, ...) NSLog((@"Smartlook: %s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
-#   define DLog(fmt, ...) NSLog((@"Smartlook: " fmt), ##__VA_ARGS__);
+#   define DLog(fmt, ...) NSLog((@"Smartlook: %s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
+//#   define DLog(fmt, ...) NSLog((@"Smartlook: " fmt), ##__VA_ARGS__);
 #else
 #   define DLog(...)
 #endif
 
+// declare methods that will be implemented in future SDK versions
+@interface Smartlook (ForwardDeclarations)
++(void)setEventTrackingModeTo:(NSString *)aux;
+@end
+
 @implementation SmartlookPlugin
 
-static NSString *firstArgumentAsNonullString(SmartlookPlugin *object, CDVInvokedUrlCommand *command, NSString *argName) {
+- (void)reportOKResultForCallbackID:(NSString *)callbackID {
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackID];
+}
+
+- (void)reportErrorMessage:(NSString *)errorMessage forCallbackID:(NSString *)callbackID {
+    NSLog(@"SmartlookPlugin error: %@", errorMessage);
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errorMessage];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackID];
+}
+
+- (void)reportException:(NSException *)exception forCallbackID:(NSString *)callbackID {
+    NSLog(@"SmartlookPlugin exception: %@", exception);
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:exception.description];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackID];
+}
+
+- (NSString *)checkFirstArgumentInCommand:(CDVInvokedUrlCommand *)command argName:(NSString *)argName {
     NSString *value = [command argumentAtIndex:0];
     if (value == nil) {
         NSString *errorMessage = [NSString stringWithFormat:@"Smartlook: '%@' must not be null.", argName];
-        DLog(@"%@", errorMessage);
-        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errorMessage];
-        [object.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        [self reportErrorMessage:errorMessage forCallbackID:command.callbackId];
         return nil;
     }
     return [NSString stringWithFormat:@"%@", value];
 }
 
+// MARK: - Lifecycle
+
 - (BOOL)internalSetup:(CDVInvokedUrlCommand*)command {
     
-    NSString *key = firstArgumentAsNonullString(self, command, @"API key");
+    NSString *key = [self checkFirstArgumentInCommand:command argName:@"API key"];
     if (key == nil) {
         return NO;
     }
@@ -53,10 +75,10 @@ static NSString *firstArgumentAsNonullString(SmartlookPlugin *object, CDVInvoked
         @try {
             if ([self internalSetup:command]) {
                 [Smartlook startRecording];
-                [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+                [self reportOKResultForCallbackID:command.callbackId];
             }
         } @catch (NSException *exception) {
-            NSLog(@"Smartlook error: %@", exception);
+            [self reportException:exception forCallbackID:command.callbackId];
         }
     });
 }
@@ -67,10 +89,10 @@ static NSString *firstArgumentAsNonullString(SmartlookPlugin *object, CDVInvoked
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {
             if ([self internalSetup:command]) {
-                [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+                [self reportOKResultForCallbackID:command.callbackId];
             }
         } @catch (NSException *exception) {
-            NSLog(@"Smartlook error: %@", exception);
+            [self reportException:exception forCallbackID:command.callbackId];
         }
     });
     
@@ -83,9 +105,9 @@ static NSString *firstArgumentAsNonullString(SmartlookPlugin *object, CDVInvoked
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {
             [Smartlook startRecording];
-            [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+            [self reportOKResultForCallbackID:command.callbackId];
         } @catch (NSException *exception) {
-            NSLog(@"Smartlook error: %@", exception);
+            [self reportException:exception forCallbackID:command.callbackId];
         }
     });
     
@@ -98,9 +120,9 @@ static NSString *firstArgumentAsNonullString(SmartlookPlugin *object, CDVInvoked
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {
             [Smartlook stopRecording];
-            [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+            [self reportOKResultForCallbackID:command.callbackId];
         } @catch (NSException *exception) {
-            NSLog(@"Smartlook error: %@", exception);
+            [self reportException:exception forCallbackID:command.callbackId];
         }
     });
 }
@@ -115,11 +137,12 @@ static NSString *firstArgumentAsNonullString(SmartlookPlugin *object, CDVInvoked
             CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:isRecording];
             [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         } @catch (NSException *exception) {
-            NSLog(@"Smartlook error: %@", exception);
+            [self reportException:exception forCallbackID:command.callbackId];
         }
     });
 }
 
+// MARK: - Full Screen Sensitive Mode
 
 - (void)startFullscreenSensitiveMode:(CDVInvokedUrlCommand*)command
 {
@@ -127,9 +150,9 @@ static NSString *firstArgumentAsNonullString(SmartlookPlugin *object, CDVInvoked
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {
             [Smartlook beginFullscreenSensitiveMode];
-            [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+            [self reportOKResultForCallbackID:command.callbackId];
         } @catch (NSException *exception) {
-            NSLog(@"Smartlook error: %@", exception);
+            [self reportException:exception forCallbackID:command.callbackId];
         }
     });
 }
@@ -141,9 +164,9 @@ static NSString *firstArgumentAsNonullString(SmartlookPlugin *object, CDVInvoked
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {
             [Smartlook endFullscreenSensitiveMode];
-            [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+            [self reportOKResultForCallbackID:command.callbackId];
         } @catch (NSException *exception) {
-            NSLog(@"Smartlook error: %@", exception);
+            [self reportException:exception forCallbackID:command.callbackId];
         }
     });
 }
@@ -158,18 +181,19 @@ static NSString *firstArgumentAsNonullString(SmartlookPlugin *object, CDVInvoked
             CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:isActive];
             [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         } @catch (NSException *exception) {
-            NSLog(@"Smartlook error: %@", exception);
+            [self reportException:exception forCallbackID:command.callbackId];
         }
     });
 }
 
+// MARK: - User identifier
 
 - (void)setUserIdentifier:(CDVInvokedUrlCommand*)command
 {
     DLog(@"entering `setUserIdentifier`");
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {
-            NSString *identifier = firstArgumentAsNonullString(self, command, @"User identifier");
+            NSString *identifier = [self checkFirstArgumentInCommand:command argName:@"User identifier"];
             if (identifier == nil) {
                 return;
             }
@@ -182,27 +206,80 @@ static NSString *firstArgumentAsNonullString(SmartlookPlugin *object, CDVInvoked
                 [Smartlook setSessionPropertyValue:valueString forName:nameString];
             }
             
-            [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+            [self reportOKResultForCallbackID:command.callbackId];
         } @catch (NSException *exception) {
-            NSLog(@"Smartlook error: %@", exception);
+            [self reportException:exception forCallbackID:command.callbackId];
         }
     });
 }
 
+// MARK: - Tracking
+- (void)setEventTrackingMode:(CDVInvokedUrlCommand*)command
+{
+    DLog(@"entering `setEventTrackingMode`");
+    dispatch_async(dispatch_get_main_queue(), ^{
+        @try {
+            if (![Smartlook respondsToSelector:@selector(setEventTrackingModeTo:)]) {
+                [self reportErrorMessage:@"`setEventTracking` not implemented on iOS yet." forCallbackID:command.callbackId];
+                return;
+            }
+            NSString *trackingMode = [self checkFirstArgumentInCommand:command argName:@"Tracking Mode"];
+            if (trackingMode == nil) {
+                return;
+            }
+            NSString *smartlookTrackingMode;
+            if ([trackingMode isEqualToString:@"full_tracking"]) {
+                smartlookTrackingMode = @"event-tracking-mode-full";
+            } else if ([trackingMode isEqualToString:@"ignore_user_interaction"]) {
+                smartlookTrackingMode = @"event-tracking-mode-ignore-user-interaction";
+            } else if ([trackingMode isEqualToString:@"no_tracking"]) {
+                smartlookTrackingMode = @"event-tracking-mode-no-tracking";
+            } else {
+                [self reportErrorMessage:[NSString stringWithFormat:@"'%@' is not a recognized event tracking mode", trackingMode] forCallbackID:command.callbackId];
+                return;
+            };
+            [Smartlook setEventTrackingModeTo:smartlookTrackingMode];
+            [self reportOKResultForCallbackID:command.callbackId];
+        } @catch (NSException *exception) {
+            [self reportException:exception forCallbackID:command.callbackId];
+        }
+    });
+}
+
+-(void)trackNavigationEvent:(CDVInvokedUrlCommand *)command {
+    DLog(@"entering `trackNavigationEvent`, arguments: %@", [command arguments]);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        @try {
+            NSString *identifier = [self checkFirstArgumentInCommand:command argName:@"Controller id"];
+            if (identifier == nil) {
+                return;
+            }
+            SLNavigationType navigationType = SLNavigationTypeEnter;
+            NSString *eventTypeString = [[NSString stringWithFormat:@"%@", [command argumentAtIndex:1]] lowercaseString];
+            if ([eventTypeString isEqualToString:@"stop"] || [eventTypeString isEqualToString:@"exit"] ) {
+                navigationType = SLNavigationTypeExit;
+            }
+            [Smartlook trackNavigationEventWithControllerId:identifier type:navigationType];
+            [self reportOKResultForCallbackID:command.callbackId];
+        } @catch (NSException *exception) {
+            [self reportException:exception forCallbackID:command.callbackId];
+        }
+    });
+}
 
 - (void)startTimedCustomEvent:(CDVInvokedUrlCommand*)command
 {
     DLog(@"entering `startTimedCustomEvent`");
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {
-            NSString *eventName = firstArgumentAsNonullString(self, command, @"Event name");
+            NSString *eventName = [self checkFirstArgumentInCommand:command argName:@"Event name"];
             if (eventName == nil) {
                 return;
             }
             [Smartlook startTimedCustomEventWithName:eventName props:[command argumentAtIndex:1]];
-            [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+            [self reportOKResultForCallbackID:command.callbackId];
         } @catch (NSException *exception) {
-            NSLog(@"Smartlook error: %@", exception);
+            [self reportException:exception forCallbackID:command.callbackId];
         }
     });
 }
@@ -213,18 +290,22 @@ static NSString *firstArgumentAsNonullString(SmartlookPlugin *object, CDVInvoked
     DLog(@"entering `trackCustomEvent`");
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {
-            NSString *eventName = firstArgumentAsNonullString(self, command, @"Event name");
+            NSString *eventName = [self checkFirstArgumentInCommand:command argName:@"Event name"];
             if (eventName == nil) {
                 return;
             }
             [Smartlook trackCustomEventWithName:eventName props:[command argumentAtIndex:1]];
-            [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+            [self reportOKResultForCallbackID:command.callbackId];
         } @catch (NSException *exception) {
-            NSLog(@"Smartlook error: %@", exception);
+            [self reportException:exception forCallbackID:command.callbackId];
         }
     });
 }
 
+
+
+
+// MARK: - Event Properties
 
 - (void)setGlobalEventProperties:(CDVInvokedUrlCommand*)command
 {
@@ -242,9 +323,9 @@ static NSString *firstArgumentAsNonullString(SmartlookPlugin *object, CDVInvoked
                 NSString *valueString = [NSString stringWithFormat:@"%@", properties[key]];
                 [Smartlook setGlobalEventPropertyValue:valueString forName:nameString withOptions:options];
             }
-            [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+            [self reportOKResultForCallbackID:command.callbackId];
         } @catch (NSException *exception) {
-            NSLog(@"Smartlook error: %@", exception);
+            [self reportException:exception forCallbackID:command.callbackId];
         }
     });
 }
@@ -263,9 +344,9 @@ static NSString *firstArgumentAsNonullString(SmartlookPlugin *object, CDVInvoked
             NSString *nameString = [NSString stringWithFormat:@"%@", [command argumentAtIndex:0]];
             NSString *valueString = [NSString stringWithFormat:@"%@", [command argumentAtIndex:1]];
             [Smartlook setGlobalEventPropertyValue:valueString forName:nameString withOptions:options];
-            [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+            [self reportOKResultForCallbackID:command.callbackId];
         } @catch (NSException *exception) {
-            NSLog(@"Smartlook error: %@", exception);
+            [self reportException:exception forCallbackID:command.callbackId];
         }
     });
 }
@@ -278,9 +359,9 @@ static NSString *firstArgumentAsNonullString(SmartlookPlugin *object, CDVInvoked
         @try {
             NSString *nameString = [NSString stringWithFormat:@"%@", [command argumentAtIndex:0]];
             [Smartlook removeGlobalEventPropertyForName:nameString];
-            [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+            [self reportOKResultForCallbackID:command.callbackId];
         } @catch (NSException *exception) {
-            NSLog(@"Smartlook error: %@", exception);
+            [self reportException:exception forCallbackID:command.callbackId];
         }
     });
 }
@@ -292,32 +373,14 @@ static NSString *firstArgumentAsNonullString(SmartlookPlugin *object, CDVInvoked
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {
             [Smartlook clearGlobalEventProperties];
-            [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
+            [self reportOKResultForCallbackID:command.callbackId];
         } @catch (NSException *exception) {
-            NSLog(@"Smartlook error: %@", exception);
+            [self reportException:exception forCallbackID:command.callbackId];
         }
     });
 }
 
--(void)trackNavigationEvent:(CDVInvokedUrlCommand *)command {
-    DLog(@"entering `trackNavigationEvent`");
-    dispatch_async(dispatch_get_main_queue(), ^{
-        @try {
-            NSString *identifier = firstArgumentAsNonullString(self, command, @"Controller id");
-            if (identifier == nil) {
-                return;
-            }
-            SLNavigationType navigationType = SLNavigationTypeEnter;
-            NSString *eventTypeString = [[NSString stringWithFormat:@"%@", [command argumentAtIndex:1]] lowercaseString];
-            if ([eventTypeString isEqualToString:@"stop"] || [eventTypeString isEqualToString:@"exit"] ) {
-                navigationType = SLNavigationTypeExit;
-            }
-            [Smartlook trackNavigationEventWithControllerId:identifier type:navigationType];
-            [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
-        } @catch (NSException *exception) {
-            NSLog(@"Smartlook error: %@", exception);
-        }
-    });
-}
+// MARK: - Utilities
+
 
 @end
