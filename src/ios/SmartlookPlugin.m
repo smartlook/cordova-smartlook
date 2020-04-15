@@ -20,10 +20,9 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackID];
 }
 
-- (void)reportErrorMessage:(NSString *)errorMessage forCallbackID:(NSString *)callbackID {
-    NSLog(@"SmartlookPlugin error: %@", errorMessage);
-    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errorMessage];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackID];
+- (void)raiseExceptionWithMessage:(NSString *)errorMessage forCallbackID:(NSString *)callbackID {
+    NSException *exception = [NSException exceptionWithName:@"SmartlookException" reason:errorMessage userInfo:nil];
+    @throw exception;
 }
 
 - (void)reportException:(NSException *)exception forCallbackID:(NSString *)callbackID {
@@ -36,7 +35,7 @@
     NSString *value = [command argumentAtIndex:0];
     if (value == nil) {
         NSString *errorMessage = [NSString stringWithFormat:@"Smartlook: '%@' must not be null.", argName];
-        [self reportErrorMessage:errorMessage forCallbackID:command.callbackId];
+        [self raiseExceptionWithMessage:errorMessage forCallbackID:command.callbackId];
         return nil;
     }
     return [NSString stringWithFormat:@"%@", value];
@@ -194,9 +193,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {
             NSString *identifier = [self checkFirstArgumentInCommand:command argName:@"User identifier"];
-            if (identifier == nil) {
-                return;
-            }
             [Smartlook setUserIdentifier:identifier];
             
             id sessionProperties = [command argumentAtIndex:1];
@@ -220,13 +216,9 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {
             if (![Smartlook respondsToSelector:@selector(setEventTrackingModeTo:)]) {
-                [self reportErrorMessage:@"`setEventTracking` not implemented on iOS yet." forCallbackID:command.callbackId];
-                return;
+                [self raiseExceptionWithMessage:@"`setEventTracking` not implemented on iOS yet." forCallbackID:command.callbackId];
             }
             NSString *trackingMode = [self checkFirstArgumentInCommand:command argName:@"Tracking Mode"];
-            if (trackingMode == nil) {
-                return;
-            }
             NSString *smartlookTrackingMode;
             if ([trackingMode isEqualToString:@"full_tracking"]) {
                 smartlookTrackingMode = @"event-tracking-mode-full";
@@ -235,8 +227,7 @@
             } else if ([trackingMode isEqualToString:@"no_tracking"]) {
                 smartlookTrackingMode = @"event-tracking-mode-no-tracking";
             } else {
-                [self reportErrorMessage:[NSString stringWithFormat:@"'%@' is not a recognized event tracking mode", trackingMode] forCallbackID:command.callbackId];
-                return;
+                [self raiseExceptionWithMessage:[NSString stringWithFormat:@"'%@' is not a recognized event tracking mode", trackingMode] forCallbackID:command.callbackId];
             };
             [Smartlook setEventTrackingModeTo:smartlookTrackingMode];
             [self reportOKResultForCallbackID:command.callbackId];
@@ -251,9 +242,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {
             NSString *identifier = [self checkFirstArgumentInCommand:command argName:@"Controller id"];
-            if (identifier == nil) {
-                return;
-            }
             SLNavigationType navigationType = SLNavigationTypeEnter;
             NSString *eventTypeString = [[NSString stringWithFormat:@"%@", [command argumentAtIndex:1]] lowercaseString];
             if ([eventTypeString isEqualToString:@"stop"] || [eventTypeString isEqualToString:@"exit"] ) {
@@ -269,14 +257,30 @@
 
 - (void)startTimedCustomEvent:(CDVInvokedUrlCommand*)command
 {
-    DLog(@"entering `startTimedCustomEvent`");
+    DLog(@"entering `startTimedCustomEvent` arguments:%@", command.arguments);
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {
             NSString *eventName = [self checkFirstArgumentInCommand:command argName:@"Event name"];
-            if (eventName == nil) {
-                return;
+            NSString *eventId = [NSString stringWithFormat:@"%@", [Smartlook startTimedCustomEventWithName:eventName props:[command argumentAtIndex:1]]];;
+            CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:eventId];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        } @catch (NSException *exception) {
+            [self reportException:exception forCallbackID:command.callbackId];
+        }
+    });
+}
+
+- (void)stopTimedCustomEvent:(CDVInvokedUrlCommand*)command
+{
+    DLog(@"entering `stopTimedCustomEvent` arguments:%@", command.arguments);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        @try {
+            NSString *eventIdString = [self checkFirstArgumentInCommand:command argName:@"Event id"];
+            NSUUID *eventId = [[NSUUID alloc] initWithUUIDString:eventIdString];
+            if (eventId == nil) {
+                [self raiseExceptionWithMessage:[NSString stringWithFormat:@"'%@' is not a valid event id", eventIdString] forCallbackID:command.callbackId];
             }
-            [Smartlook startTimedCustomEventWithName:eventName props:[command argumentAtIndex:1]];
+            [Smartlook trackTimedCustomEventWithEventId:eventId props:[command argumentAtIndex:1]];
             [self reportOKResultForCallbackID:command.callbackId];
         } @catch (NSException *exception) {
             [self reportException:exception forCallbackID:command.callbackId];
@@ -287,13 +291,10 @@
 
 - (void)trackCustomEvent:(CDVInvokedUrlCommand*)command
 {
-    DLog(@"entering `trackCustomEvent`");
+    DLog(@"entering `trackCustomEvent` arguments:%@", command.arguments);
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {
             NSString *eventName = [self checkFirstArgumentInCommand:command argName:@"Event name"];
-            if (eventName == nil) {
-                return;
-            }
             [Smartlook trackCustomEventWithName:eventName props:[command argumentAtIndex:1]];
             [self reportOKResultForCallbackID:command.callbackId];
         } @catch (NSException *exception) {

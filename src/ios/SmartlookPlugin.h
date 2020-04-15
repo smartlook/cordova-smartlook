@@ -19,8 +19,12 @@
 
 // Tracking
 - (void)setEventTrackingMode:(CDVInvokedUrlCommand*)command;
+
 - (void)trackNavigationEvent:(CDVInvokedUrlCommand*)command;
+
 - (void)startTimedCustomEvent:(CDVInvokedUrlCommand*)command;
+- (void)stopTimedCustomEvent:(CDVInvokedUrlCommand*)command;
+
 - (void)trackCustomEvent:(CDVInvokedUrlCommand*)command;
 
 // Event properties
