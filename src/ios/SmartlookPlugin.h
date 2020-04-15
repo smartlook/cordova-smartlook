@@ -3,6 +3,8 @@
 @interface SmartlookPlugin : CDVPlugin
 
 // Setup and life cycle
+- (void)setPluginVersion:(CDVInvokedUrlCommand*)command;
+
 - (void)setupAndStartRecording:(CDVInvokedUrlCommand*)command;
 - (void)setup:(CDVInvokedUrlCommand*)command;
 - (void)startRecording:(CDVInvokedUrlCommand*)command;

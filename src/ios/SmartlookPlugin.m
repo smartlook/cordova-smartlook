@@ -44,6 +44,13 @@
 
 // MARK: - Lifecycle
 
+static NSString *__smartlookPluginVersion = @"unknown";
+
+- (void)setPluginVersion:(CDVInvokedUrlCommand*)command {
+    DLog(@"setPluginVersion: %@", [command arguments]);
+    __smartlookPluginVersion = [command argumentAtIndex:0];
+}
+
 - (BOOL)internalSetup:(CDVInvokedUrlCommand*)command {
     
     NSString *key = [self checkFirstArgumentInCommand:command argName:@"API key"];
@@ -59,11 +66,15 @@
         options[SLSetupOptionFramerateKey] = fps;
     }
     
+    options[@"__sdk_framework"] = @"cordova";
+    options[@"__sdk_framework_version"] = CDV_VERSION;
+    options[@"__sdk_framework_plugin_version"] = __smartlookPluginVersion;
+    
+    DLog(@"STARTUP OPTIONS %@", options);
+
     [Smartlook setupWithKey:key options:options];
     
     [Smartlook registerWhitelistedObject:[WKWebView class]];
-    
-    [Smartlook setSessionPropertyValue:@"cordova" forName:@"sdk_build_flavor"];
     
     return YES;
 }
