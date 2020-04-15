@@ -26,7 +26,7 @@
 }
 
 - (void)reportException:(NSException *)exception forCallbackID:(NSString *)callbackID {
-    NSLog(@"SmartlookPlugin exception: %@", exception);
+    DLog(@"exception: %@", exception);
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:exception.description];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackID];
 }
@@ -288,6 +288,22 @@
     });
 }
 
+- (void)cancelTimedCustomEvent:(CDVInvokedUrlCommand*)command {
+    DLog(@"entering `cancelTimedCustomEvent` arguments:%@", command.arguments);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        @try {
+            NSString *eventIdString = [self checkFirstArgumentInCommand:command argName:@"Event id"];
+            NSUUID *eventId = [[NSUUID alloc] initWithUUIDString:eventIdString];
+            if (eventId == nil) {
+                [self raiseExceptionWithMessage:[NSString stringWithFormat:@"'%@' is not a valid event id", eventIdString] forCallbackID:command.callbackId];
+            }
+            [Smartlook trackTimedCustomEventCancelWithEventId:eventId reason:[command argumentAtIndex:1] props:[command argumentAtIndex:2]];
+            [self reportOKResultForCallbackID:command.callbackId];
+        } @catch (NSException *exception) {
+            [self reportException:exception forCallbackID:command.callbackId];
+        }
+    });
+}
 
 - (void)trackCustomEvent:(CDVInvokedUrlCommand*)command
 {

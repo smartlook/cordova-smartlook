@@ -24,6 +24,7 @@
 
 - (void)startTimedCustomEvent:(CDVInvokedUrlCommand*)command;
 - (void)stopTimedCustomEvent:(CDVInvokedUrlCommand*)command;
+- (void)cancelTimedCustomEvent:(CDVInvokedUrlCommand*)command;
 
 - (void)trackCustomEvent:(CDVInvokedUrlCommand*)command;
 
