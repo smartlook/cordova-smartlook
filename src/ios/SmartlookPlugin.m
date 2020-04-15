@@ -399,5 +399,28 @@
 
 // MARK: - Utilities
 
+- (void)setReferrer:(CDVInvokedUrlCommand*)command {
+    DLog(@"entering `setReferrer`");
+    dispatch_async(dispatch_get_main_queue(), ^{
+        @try {
+            [self raiseExceptionWithMessage:@"`setReferrer` not available on iOS" forCallbackID:command.callbackId];
+        } @catch (NSException *exception) {
+            [self reportException:exception forCallbackID:command.callbackId];
+        }
+    });
+}
+
+- (void)getDashboardSessionUrl:(CDVInvokedUrlCommand*)command {
+    DLog(@"entering `getDashboardSessionUrl`");
+    dispatch_async(dispatch_get_main_queue(), ^{
+        @try {
+            NSURL *dashboardURL = [Smartlook getDashboardSessionURL];
+            CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[dashboardURL absoluteString]];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        } @catch (NSException *exception) {
+            [self reportException:exception forCallbackID:command.callbackId];
+        }
+    });
+}
 
 @end

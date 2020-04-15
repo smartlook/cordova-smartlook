@@ -36,5 +36,8 @@
 
 // Utilities
 
+- (void)setReferrer:(CDVInvokedUrlCommand*)command;
+- (void)getDashboardSessionUrl:(CDVInvokedUrlCommand*)command;
+
 @end
 
