@@ -37,7 +37,13 @@
 // Utilities
 
 - (void)setReferrer:(CDVInvokedUrlCommand*)command;
+
 - (void)getDashboardSessionUrl:(CDVInvokedUrlCommand*)command;
+
+- (void)registerLogListener:(CDVInvokedUrlCommand*)command;
+- (void)unregisterLogListener:(CDVInvokedUrlCommand*)command;
+
+- (void)setRenderingMode:(CDVInvokedUrlCommand*)command;
 
 @end
 

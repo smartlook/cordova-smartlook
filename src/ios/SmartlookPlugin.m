@@ -10,7 +10,8 @@
 
 // declare methods that will be implemented in future SDK versions
 @interface Smartlook (ForwardDeclarations)
-+(void)setEventTrackingModeTo:(NSString *)aux;
++ (void)setEventTrackingModeTo:(NSString *)eventTractingMode;
++ (void)setRenderingModeTo:(nonnull SLRenderingMode)renderingMode;
 @end
 
 @implementation SmartlookPlugin
@@ -400,7 +401,7 @@
 // MARK: - Utilities
 
 - (void)setReferrer:(CDVInvokedUrlCommand*)command {
-    DLog(@"entering `setReferrer`");
+    DLog(@"entering `setReferrer` arguments: %@", command.arguments);
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {
             [self raiseExceptionWithMessage:@"`setReferrer` not available on iOS" forCallbackID:command.callbackId];
@@ -422,5 +423,59 @@
         }
     });
 }
+
+- (void)registerLogListener:(CDVInvokedUrlCommand*)command {
+    DLog(@"entering `registerLogListener` arguments: %@", command.arguments);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        @try {
+            [self raiseExceptionWithMessage:@"`registerLogListener` not available on iOS" forCallbackID:command.callbackId];
+        } @catch (NSException *exception) {
+            [self reportException:exception forCallbackID:command.callbackId];
+        }
+    });
+}
+
+- (void)unregisterLogListener:(CDVInvokedUrlCommand*)command {
+    DLog(@"entering `unregisterLogListener` arguments: %@", command.arguments);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        @try {
+            [self raiseExceptionWithMessage:@"`unregisterLogListener` not available on iOS" forCallbackID:command.callbackId];
+        } @catch (NSException *exception) {
+            [self reportException:exception forCallbackID:command.callbackId];
+        }
+    });
+}
+
+- (void)setRenderingMode:(CDVInvokedUrlCommand *)command {
+    DLog(@"entering `setRenderingMode` arguments: %@", command.arguments);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        @try {
+            NSString *renderingMode = [self checkFirstArgumentInCommand:command argName:@"renderingMode"];
+            if ([Smartlook respondsToSelector:@selector(setRenderingModeTo:)]) {
+                NSString *smartlookRenderingMode;
+                if ([renderingMode isEqualToString:@"no_rendering"]) {
+                    smartlookRenderingMode = @"no-rendering";
+                } else if ([renderingMode isEqualToString:@"native"]) {
+                    smartlookRenderingMode = SLRenderingModeNative;
+                } else {
+                    [self raiseExceptionWithMessage:[NSString stringWithFormat:@"`%@` is not a valid rendering mode.", renderingMode] forCallbackID:command.callbackId];
+                }
+                [Smartlook setRenderingModeTo:smartlookRenderingMode];
+            } else {
+                if ([renderingMode isEqualToString:@"no_rendering"]) {
+                    [Smartlook beginFullscreenSensitiveMode];
+                } else if ([renderingMode isEqualToString:@"native"]) {
+                    [Smartlook endFullscreenSensitiveMode];
+                } else {
+                    [self raiseExceptionWithMessage:[NSString stringWithFormat:@"`%@` is not a valid rendering mode.", renderingMode] forCallbackID:command.callbackId];
+                }
+            }
+            [self reportOKResultForCallbackID:command.callbackId];
+        } @catch (NSException *exception) {
+            [self reportException:exception forCallbackID:command.callbackId];
+        }
+    });
+}
+
 
 @end
