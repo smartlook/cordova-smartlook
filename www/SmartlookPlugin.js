@@ -584,21 +584,26 @@ function checkStringArrayOption(method, option, options, possibleValueArray, err
         return false;
     }
 
-    if (eventTrackingMode !== 'string') {
+    if (typeof toCheck === 'string') {
         var found = false;
         var errorMessagePossibilities = "";
         for (var i = 0; i < possibleValueArray.length; i++) {
             if (possibleValueArray[i] === toCheck) {
                 found = true;
-                errorMessagePossibilities += possibleValueArray[i] + " "
             }
+
+            errorMessagePossibilities += possibleValueArray[i] + " "
         }
+        
         errorMessagePossibilities.trim()
 
         if (!found) {
             logError(errorCallback, method + "(): " + option + " must be one of: " + errorMessagePossibilities);
             return false;
         }
+    } else {
+        logError(errorCallback, method + "(): " + option + " must be one of: " + errorMessagePossibilities);
+        return false;
     }
 
     return true;
