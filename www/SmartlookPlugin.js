@@ -3,6 +3,9 @@ var exec = require('cordova/exec');
 // Plugin name
 const SMARTLOOK_PLUGIN = "SmartlookPlugin"
 
+// Plugin version
+const SMARTLOOK_PLUGIN_VERSION = "1.4.0"
+
 // API methods names
 
 // Setup and lifecycle
@@ -40,6 +43,9 @@ const GET_DASHBOARD_SESSION_URL = "getDashboardSessionUrl";
 const REGISTER_LOG_LISTENER = "registerLogListener";
 const UNREGISTER_LOG_LISTENER = "unregisterLogListener";
 const SET_RENDERING_MODE = "setRenderingMode";
+
+const SET_PLUGIN_VERISION = "setPluginVersion";
+
 
 var emptyCallback = function() { return; };
 
@@ -92,6 +98,9 @@ exports.RenderingMode = {
  * @param options.fps             (Optional) Desired FPS for the recording, that must be in range from 1 to 10.
  */
 exports.setupAndStartRecording = function (options, successCallback, errorCallback) {
+
+    setPluginVersion();
+
     var arguments = [];
     
     if (checkStringOption("setupAndStartRecording", "smartlookAPIKey", options, errorCallback, true)) {
@@ -115,6 +124,9 @@ exports.setupAndStartRecording = function (options, successCallback, errorCallba
  * @param options.fps             (Optional) Desired FPS for the recording, that must be in range from 1 to 10.
  */
 exports.setup = function (options, successCallback, errorCallback) {
+
+    setPluginVersion();
+
     var arguments = [];
     
     if (checkStringOption("setup", "smartlookAPIKey", options, errorCallback, true)) {
@@ -707,4 +719,9 @@ function logError(errorCallback, message) {
     if (errorCallback != undefined) {
         errorCallback(message);
     }
+}
+
+
+function setPluginVersion() {
+    exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, SET_PLUGIN_VERISION, [SMARTLOOK_PLUGIN_VERSION]);
 }
