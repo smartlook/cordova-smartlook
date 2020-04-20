@@ -35,11 +35,15 @@ const REMOVE_GLOBAL_EVENT_PROPERTY = "removeGlobalEventProperty";
 const REMOVE_ALL_GLOBAL_EVENT_PROPERTIES = "removeAllGlobalEventProperties";
 
 // Utilities
-const SET_REFERRER = "setReferrer"
+const SET_REFERRER = "setReferrer";
 const GET_DASHBOARD_SESSION_URL = "getDashboardSessionUrl";
 const REGISTER_LOG_LISTENER = "registerLogListener";
 const UNREGISTER_LOG_LISTENER = "unregisterLogListener";
 const SET_RENDERING_MODE = "setRenderingMode";
+
+// Undefined
+const UNDEFINED_FPS = -1;
+const UNDEFINED_RENDERING_MODE = "";
 
 var emptyCallback = function() { return; };
 
@@ -93,6 +97,9 @@ exports.RenderingMode = {
  */
 exports.setupAndStartRecording = function (options, successCallback, errorCallback) {
     var arguments = [];
+    var renderingModeAllowedValues = [
+        exports.RenderingMode.NO_RENDERING,
+        exports.RenderingMode.NATIVE];
     
     if (checkStringOption("setupAndStartRecording", "smartlookAPIKey", options, errorCallback, true)) {
         arguments.push(options["smartlookAPIKey"]);
@@ -102,6 +109,14 @@ exports.setupAndStartRecording = function (options, successCallback, errorCallba
 
     if (checkFpsOption("setupAndStartRecording", options, errorCallback, false)) {
         arguments.push(options["fps"]);
+    } else {
+        arguments.push(UNDEFINED_FPS)
+    }
+
+    if (checkStringArrayOption("setupAndStartRecording", "renderingMode", options, renderingModeAllowedValues, errorCallback, false)) {
+        arguments.push(options["renderingMode"])
+    } else {
+        arguments.push(UNDEFINED_RENDERING_MODE)
     }
 
     execWithCallbacks(successCallback, errorCallback, SETUP_AND_START_RECORDING, arguments);
@@ -116,6 +131,9 @@ exports.setupAndStartRecording = function (options, successCallback, errorCallba
  */
 exports.setup = function (options, successCallback, errorCallback) {
     var arguments = [];
+    var renderingModeAllowedValues = [
+        exports.RenderingMode.NO_RENDERING,
+        exports.RenderingMode.NATIVE];
     
     if (checkStringOption("setup", "smartlookAPIKey", options, errorCallback, true)) {
         arguments.push(options["smartlookAPIKey"]);
@@ -125,6 +143,14 @@ exports.setup = function (options, successCallback, errorCallback) {
 
     if (checkFpsOption("setup", options, errorCallback, false)) {
         arguments.push(options["fps"]);
+    } else {
+        arguments.push(UNDEFINED_FPS)
+    }
+
+    if (checkStringArrayOption("setupAndStartRecording", "renderingMode", options, renderingModeAllowedValues, errorCallback, false)) {
+        arguments.push(options["renderingMode"])
+    } else {
+        arguments.push(UNDEFINED_RENDERING_MODE)
     }
 
     execWithCallbacks(successCallback, errorCallback, SETUP, arguments);
@@ -637,11 +663,6 @@ function checkProperties(method, option, options, errorCallback, isMandatory) {
         }
 
         return false;
-    }
-
-    if (toCheck === Object(toCheck)) {
-        logError(errorCallback, method + "(): " + option + " must be a object!");
-        return false
     }
 
     return true;
