@@ -44,6 +44,9 @@ const REGISTER_LOG_LISTENER = "registerLogListener";
 const UNREGISTER_LOG_LISTENER = "unregisterLogListener";
 const SET_RENDERING_MODE = "setRenderingMode";
 
+// Internal logic
+const SET_PLUGIN_VERISION = "setPluginVersion";
+
 // Undefined
 const UNDEFINED_FPS = -1;
 const UNDEFINED_RENDERING_MODE = "";
@@ -584,6 +587,12 @@ exports.setRenderingMode = function(options, successCallback, errorCallback) {
     execWithCallbacks(successCallback, errorCallback, SET_RENDERING_MODE, arguments);    
 }
 
+// Internal logic
+
+function setPluginVersion() {
+    exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, SET_PLUGIN_VERISION, [SMARTLOOK_PLUGIN_VERSION]);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // Check and Utility methods
 
@@ -742,10 +751,4 @@ function logError(errorCallback, message) {
     if (errorCallback != undefined) {
         errorCallback(message);
     }
-}
-
-const SET_PLUGIN_VERISION = "setPluginVersion";
-
-function setPluginVersion() {
-    exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, SET_PLUGIN_VERISION, [SMARTLOOK_PLUGIN_VERSION]);
 }

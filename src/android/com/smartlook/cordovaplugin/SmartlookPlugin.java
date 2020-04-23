@@ -55,6 +55,9 @@ public class SmartlookPlugin extends CordovaPlugin {
     private static final String UNREGISTER_LOG_LISTENER = "unregisterLogListener";
     private static final String SET_RENDERING_MODE = "setRenderingMode";
 
+    // Internal logic
+    private static final String SET_PLUGIN_VERISION = "setPluginVersion";
+
     // Arguments
     private static final int SMARTLOOK_API_KEY = 0;
     private static final int FPS = 1;
@@ -135,6 +138,8 @@ public class SmartlookPlugin extends CordovaPlugin {
                 unregisterLogListener(callbackContext);    
             } else if (action.equals(SET_RENDERING_MODE)) {
                 setRenderingMode(args, callbackContext);
+            } else if (action.equals(SET_PLUGIN_VERISION)) {
+                setPluginVersion(args, callbackContext);
             } else {
                 callbackContext.error("Unknow action");
                 return false;
@@ -407,6 +412,13 @@ public class SmartlookPlugin extends CordovaPlugin {
         }
 
         callbackContext.error("Invalid setReferrer parameters!");
+    }
+
+    // Internal logic
+
+    private void setPluginVersion(JSONArray args, CallbackContext callbackContext) throws JSONException {
+        //todo not implemented
+        callbackContext.success();
     }
 
 }
