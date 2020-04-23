@@ -218,7 +218,7 @@ static NSString *__smartlookPluginVersion = @"unknown";
 // MARK: - Tracking
 - (void)setEventTrackingMode:(CDVInvokedUrlCommand*)command
 {
-    DLog(@"entering `setEventTrackingMode`");
+    DLog(@"entering `setEventTrackingMode` %@", [command arguments]);
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {
             NSString *trackingMode = [self checkFirstArgumentInCommand:command argName:@"Tracking Mode"];
@@ -232,6 +232,7 @@ static NSString *__smartlookPluginVersion = @"unknown";
             } else {
                 [self raiseExceptionWithMessage:[NSString stringWithFormat:@"'%@' is not a recognized event tracking mode", trackingMode] forCallbackID:command.callbackId];
             };
+            DLog(@"tracking mode: %@", smartlookTrackingMode);
             [Smartlook setEventTrackingModeTo:smartlookTrackingMode];
             [self reportOKResultForCallbackID:command.callbackId];
         } @catch (NSException *exception) {
