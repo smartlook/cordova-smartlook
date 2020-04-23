@@ -323,6 +323,7 @@ static NSString *__smartlookPluginVersion = @"unknown";
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {
             NSString *eventName = [self checkFirstArgumentInCommand:command argName:@"Event name"];
+            DLog(@"properties: %@", [command argumentAtIndex:1]);
             [Smartlook trackCustomEventWithName:eventName props:[command argumentAtIndex:1]];
             [self reportOKResultForCallbackID:command.callbackId];
         } @catch (NSException *exception) {
