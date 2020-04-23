@@ -58,6 +58,7 @@ public class SmartlookPlugin extends CordovaPlugin {
     // Arguments
     private static final int SMARTLOOK_API_KEY = 0;
     private static final int FPS = 1;
+    private static final int SETUP_RENDERING_MODE = 2;
     private static final int IDENTIFIER = 0;
     private static final int SESSION_PROPERTIES = 1;
     private static final int EVENT_NAME = 0;
@@ -78,60 +79,69 @@ public class SmartlookPlugin extends CordovaPlugin {
     private static final int EVENT_TRACKING_MODE = 0;
     private static final int RENDERING_MODE = 0;
 
+    // Undefined
+    private static final int UNDEFINED_FPS = -1;
+    private static final String UNDEFINED_RENDERING_MODE = "";
+
     @Override
-    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        if (action.equals(SETUP_AND_START_RECORDING)) {
-            setupAndStartRecording(args, callbackContext);
-        } else if (action.equals(SETUP)) {
-            setup(args, callbackContext);
-        } else if (action.equals(START_RECORDING)) {
-            startRecording(callbackContext);
-        } else if (action.equals(STOP_RECORDING)) {
-            stopRecording(callbackContext);
-        } else if (action.equals(IS_RECORING)) {
-            isRecording(callbackContext);
-        } else if (action.equals(START_FULLSCREEN_SENSITIVE_MODE)) {
-            startFullscreenSensitiveMode(callbackContext);
-        } else if (action.equals(STOP_FULLSCREEN_SENSITIVE_MODE)) {
-            stopFullscreenSensitiveMode(callbackContext);
-        } else if (action.equals(IS_FULLSCREEN_SENSITIVE_MODE_ACTIVE)) {
-            isFullscreenSensitiveModeActive(callbackContext);
-        } else if (action.equals(SET_USER_IDENTIFIER)) {
-            setUserIdentifier(args, callbackContext);
-        } else if (action.equals(SET_EVENT_TRACKING_MODE)) {        
-           setEventTrackingMode(args, callbackContext); 
-        } else if (action.equals(TRACK_NAVIGATION_EVENT)) {
-            trackNavigationEvent(args, callbackContext);
-        } else if (action.equals(START_TIMED_CUSTOM_EVENT)) {
-            startTimedCustomEvent(args, callbackContext);
-        } else if (action.equals(STOP_TIMED_CUSTOM_EVENT)) {
-            stopTimedCustomEvent(args, callbackContext);
-        } else if (action.equals(CANCEL_TIMED_CUSTOM_EVENT)) {
-            cancelTimedCustomEvent(args, callbackContext);
-        } else if (action.equals(TRACK_CUSTOM_EVENT)) {
-            trackCustomEvent(args, callbackContext);
-        } else if (action.equals(SET_GLOBAL_EVENT_PROPERTIES)) {
-            setGlobalEventProperties(args, callbackContext);
-        } else if (action.equals(SET_GLOBAL_EVENT_PROPERTY)) {
-            setGlobalEventProperty(args, callbackContext);
-        } else if (action.equals(REMOVE_GLOBAL_EVENT_PROPERTY)) {
-            removeGlobalEventProperty(args, callbackContext);
-        } else if (action.equals(REMOVE_ALL_GLOBAL_EVENT_PROPERTIES)) {
-            removeAllGlobalEventProperties(callbackContext);
-        } else if (action.equals(SET_REFERRER)) {
-            setReferrer(args, callbackContext);
-        } else if (action.equals(GET_DASHBOARD_SESSION_URL)) {
-            getDashboardSessionUrl(callbackContext);
-        } else if (action.equals(REGISTER_LOG_LISTENER)) {
-            registerLogListener(callbackContext);
-        } else if (action.equals(UNREGISTER_LOG_LISTENER)){
-            unregisterLogListener(callbackContext);    
-        } else if (action.equals(SET_RENDERING_MODE)) {
-            setRenderingMode(args, callbackContext);
-        } else {
-            callbackContext.error("Unknow action");
-            return false;
-        }
+    public boolean execute(String action, JSONArray args, CallbackContext callbackContext) {
+
+        try {
+            if (action.equals(SETUP_AND_START_RECORDING)) {
+                setupAndStartRecording(args, callbackContext);
+            } else if (action.equals(SETUP)) {
+                setup(args, callbackContext);
+            } else if (action.equals(START_RECORDING)) {
+                startRecording(callbackContext);
+            } else if (action.equals(STOP_RECORDING)) {
+                stopRecording(callbackContext);
+            } else if (action.equals(IS_RECORING)) {
+                isRecording(callbackContext);
+            } else if (action.equals(START_FULLSCREEN_SENSITIVE_MODE)) {
+                startFullscreenSensitiveMode(callbackContext);
+            } else if (action.equals(STOP_FULLSCREEN_SENSITIVE_MODE)) {
+                stopFullscreenSensitiveMode(callbackContext);
+            } else if (action.equals(IS_FULLSCREEN_SENSITIVE_MODE_ACTIVE)) {
+                isFullscreenSensitiveModeActive(callbackContext);
+            } else if (action.equals(SET_USER_IDENTIFIER)) {
+                setUserIdentifier(args, callbackContext);
+            } else if (action.equals(SET_EVENT_TRACKING_MODE)) {        
+                setEventTrackingMode(args, callbackContext); 
+            } else if (action.equals(TRACK_NAVIGATION_EVENT)) {
+                trackNavigationEvent(args, callbackContext);
+            } else if (action.equals(START_TIMED_CUSTOM_EVENT)) {
+                startTimedCustomEvent(args, callbackContext);
+            } else if (action.equals(STOP_TIMED_CUSTOM_EVENT)) {
+                stopTimedCustomEvent(args, callbackContext);
+            } else if (action.equals(CANCEL_TIMED_CUSTOM_EVENT)) {
+                cancelTimedCustomEvent(args, callbackContext);
+            } else if (action.equals(TRACK_CUSTOM_EVENT)) {
+                trackCustomEvent(args, callbackContext);
+            } else if (action.equals(SET_GLOBAL_EVENT_PROPERTIES)) {
+                setGlobalEventProperties(args, callbackContext);
+            } else if (action.equals(SET_GLOBAL_EVENT_PROPERTY)) {
+                setGlobalEventProperty(args, callbackContext);
+            } else if (action.equals(REMOVE_GLOBAL_EVENT_PROPERTY)) {
+                removeGlobalEventProperty(args, callbackContext);
+            } else if (action.equals(REMOVE_ALL_GLOBAL_EVENT_PROPERTIES)) {
+                removeAllGlobalEventProperties(callbackContext);
+            } else if (action.equals(SET_REFERRER)) {
+                setReferrer(args, callbackContext);
+            } else if (action.equals(GET_DASHBOARD_SESSION_URL)) {
+                getDashboardSessionUrl(callbackContext);
+            } else if (action.equals(REGISTER_LOG_LISTENER)) {
+                registerLogListener(callbackContext);
+            } else if (action.equals(UNREGISTER_LOG_LISTENER)){
+                unregisterLogListener(callbackContext);    
+            } else if (action.equals(SET_RENDERING_MODE)) {
+                setRenderingMode(args, callbackContext);
+            } else {
+                callbackContext.error("Unknow action");
+                return false;
+            }
+        } catch (JSONException e) {
+            callbackContext.error("JsonException: " + e.getMessage());
+        }  
 
         return true;
     }
@@ -140,18 +150,26 @@ public class SmartlookPlugin extends CordovaPlugin {
 
     private void setupAndStartRecording(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
 
-        if (!args.isNull(SMARTLOOK_API_KEY) && !args.isNull(FPS)) {
-            Smartlook.setup(args.getString(SMARTLOOK_API_KEY), cordova.getActivity(), args.getInt(FPS));
+        if (!args.isNull(SMARTLOOK_API_KEY)) {
+            Smartlook.SetupOptionsBuilder builder = new Smartlook.SetupOptionsBuilder(args.getString(SMARTLOOK_API_KEY));
+            builder.setActivity(cordova.getActivity());
+
+            if (!args.isNull(FPS) && args.getInt(FPS) != UNDEFINED_FPS) {
+                builder.setFps(args.getInt(FPS));
+            }
+
+            if (!args.isNull(FPS) && args.getInt(FPS) != UNDEFINED_FPS) {
+                builder.setFps(args.getInt(FPS));
+            }
+
+            if (!args.isNull(SETUP_RENDERING_MODE) && !args.getString(SETUP_RENDERING_MODE).equals(UNDEFINED_RENDERING_MODE)) {
+                builder.setRenderingMode(args.getString(SETUP_RENDERING_MODE));
+            }
+
+            Smartlook.setup(builder.build());
             Smartlook.unregisterBlacklistedClass(WebView.class);
             Smartlook.startRecording();
             callbackContext.success();
-            return;
-        } else if (!args.isNull(SMARTLOOK_API_KEY)) {
-            Smartlook.setup(args.getString(SMARTLOOK_API_KEY), cordova.getActivity());
-            Smartlook.unregisterBlacklistedClass(WebView.class);
-            Smartlook.startRecording();
-            callbackContext.success();
-            return;
         }
 
         callbackContext.error("Invalid setupAndStartRecording parameters!");
@@ -159,19 +177,28 @@ public class SmartlookPlugin extends CordovaPlugin {
 
     private void setup(JSONArray args, CallbackContext callbackContext) throws JSONException {
 
-        if (!args.isNull(SMARTLOOK_API_KEY) && !args.isNull(FPS)) {
-            Smartlook.setup(args.getString(SMARTLOOK_API_KEY), cordova.getActivity(), args.getInt(FPS));
+        if (!args.isNull(SMARTLOOK_API_KEY)) {
+            Smartlook.SetupOptionsBuilder builder = new Smartlook.SetupOptionsBuilder(args.getString(SMARTLOOK_API_KEY));
+            builder.setActivity(cordova.getActivity());
+
+            if (!args.isNull(FPS) && args.getInt(FPS) != -1) {
+                builder.setFps(args.getInt(FPS));
+            }
+
+            if (!args.isNull(FPS) && args.getInt(FPS) != -1) {
+                builder.setFps(args.getInt(FPS));
+            }
+
+            if (!args.isNull(SETUP_RENDERING_MODE) && !args.getString(SETUP_RENDERING_MODE).equals(UNDEFINED_RENDERING_MODE)) {
+                builder.setRenderingMode(args.getString(SETUP_RENDERING_MODE));
+            }
+
+            Smartlook.setup(builder.build());
             Smartlook.unregisterBlacklistedClass(WebView.class);
             callbackContext.success();
-            return;
-        } else if (!args.isNull(SMARTLOOK_API_KEY)) {
-            Smartlook.setup(args.getString(SMARTLOOK_API_KEY), cordova.getActivity());
-            Smartlook.unregisterBlacklistedClass(WebView.class);
-            callbackContext.success();
-            return;
         }
 
-        callbackContext.error("Invalid setupAndStartRecording parameters!");
+        callbackContext.error("Invalid setup parameters!");
     }
 
     private void startRecording(CallbackContext callbackContext) throws JSONException {
