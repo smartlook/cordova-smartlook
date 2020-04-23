@@ -744,6 +744,7 @@ function logError(errorCallback, message) {
     }
 }
 
+const SET_PLUGIN_VERISION = "setPluginVersion";
 
 function setPluginVersion() {
     exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, SET_PLUGIN_VERISION, [SMARTLOOK_PLUGIN_VERSION]);
