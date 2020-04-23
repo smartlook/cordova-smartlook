@@ -163,10 +163,6 @@ public class SmartlookPlugin extends CordovaPlugin {
                 builder.setFps(args.getInt(FPS));
             }
 
-            if (!args.isNull(FPS) && args.getInt(FPS) != UNDEFINED_FPS) {
-                builder.setFps(args.getInt(FPS));
-            }
-
             if (!args.isNull(SETUP_RENDERING_MODE) && !args.getString(SETUP_RENDERING_MODE).equals(UNDEFINED_RENDERING_MODE)) {
                 builder.setRenderingMode(args.getString(SETUP_RENDERING_MODE));
             }
@@ -185,10 +181,6 @@ public class SmartlookPlugin extends CordovaPlugin {
         if (!args.isNull(SMARTLOOK_API_KEY)) {
             Smartlook.SetupOptionsBuilder builder = new Smartlook.SetupOptionsBuilder(args.getString(SMARTLOOK_API_KEY));
             builder.setActivity(cordova.getActivity());
-
-            if (!args.isNull(FPS) && args.getInt(FPS) != -1) {
-                builder.setFps(args.getInt(FPS));
-            }
 
             if (!args.isNull(FPS) && args.getInt(FPS) != -1) {
                 builder.setFps(args.getInt(FPS));
