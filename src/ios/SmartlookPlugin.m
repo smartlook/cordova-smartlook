@@ -8,12 +8,6 @@
 #   define DLog(...)
 #endif
 
-// declare methods that will be implemented in future SDK versions
-@interface Smartlook (ForwardDeclarations)
-+ (void)setEventTrackingModeTo:(NSString *)eventTractingMode;
-+ (void)setRenderingModeTo:(nonnull SLRenderingMode)renderingMode;
-@end
-
 @implementation SmartlookPlugin
 
 - (void)reportOKResultForCallbackID:(NSString *)callbackID {
@@ -227,9 +221,6 @@ static NSString *__smartlookPluginVersion = @"unknown";
     DLog(@"entering `setEventTrackingMode`");
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {
-            if (![Smartlook respondsToSelector:@selector(setEventTrackingModeTo:)]) {
-                [self raiseExceptionWithMessage:@"`setEventTracking` not implemented on iOS yet." forCallbackID:command.callbackId];
-            }
             NSString *trackingMode = [self checkFirstArgumentInCommand:command argName:@"Tracking Mode"];
             NSString *smartlookTrackingMode;
             if ([trackingMode isEqualToString:@"full_tracking"]) {
@@ -463,25 +454,15 @@ static NSString *__smartlookPluginVersion = @"unknown";
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {
             NSString *renderingMode = [self checkFirstArgumentInCommand:command argName:@"renderingMode"];
-            if ([Smartlook respondsToSelector:@selector(setRenderingModeTo:)]) {
-                NSString *smartlookRenderingMode;
-                if ([renderingMode isEqualToString:@"no_rendering"]) {
-                    smartlookRenderingMode = @"no-rendering";
-                } else if ([renderingMode isEqualToString:@"native"]) {
-                    smartlookRenderingMode = SLRenderingModeNative;
-                } else {
-                    [self raiseExceptionWithMessage:[NSString stringWithFormat:@"`%@` is not a valid rendering mode.", renderingMode] forCallbackID:command.callbackId];
-                }
-                [Smartlook setRenderingModeTo:smartlookRenderingMode];
+            NSString *smartlookRenderingMode;
+            if ([renderingMode isEqualToString:@"no_rendering"]) {
+                smartlookRenderingMode = @"no-rendering";
+            } else if ([renderingMode isEqualToString:@"native"]) {
+                smartlookRenderingMode = SLRenderingModeNative;
             } else {
-                if ([renderingMode isEqualToString:@"no_rendering"]) {
-                    [Smartlook beginFullscreenSensitiveMode];
-                } else if ([renderingMode isEqualToString:@"native"]) {
-                    [Smartlook endFullscreenSensitiveMode];
-                } else {
-                    [self raiseExceptionWithMessage:[NSString stringWithFormat:@"`%@` is not a valid rendering mode.", renderingMode] forCallbackID:command.callbackId];
-                }
+                [self raiseExceptionWithMessage:[NSString stringWithFormat:@"`%@` is not a valid rendering mode.", renderingMode] forCallbackID:command.callbackId];
             }
+            [Smartlook setRenderingModeTo:smartlookRenderingMode];
             [self reportOKResultForCallbackID:command.callbackId];
         } @catch (NSException *exception) {
             [self reportException:exception forCallbackID:command.callbackId];
