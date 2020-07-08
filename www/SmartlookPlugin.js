@@ -642,10 +642,10 @@ exports.setRenderingMode = function(options, successCallback, errorCallback) {
  * @description Integration listener can be used to obtain dashboard URL for current session and visitor.
  * These URLs can be propagated to various analytic tools/SDKs.
  * 
- * @callback onSessionReady Called when dashboard session URL is ready. Note that this URL can be accesed only by user
+ * @callback options.onSessionReady Called when dashboard session URL is ready. Note that this URL can be accesed only by user
  * that has access to Smartlook dashboard (it is not public share link).
  * 
- * @callback onVisitorReady Called when dashboard visitor URL is ready. Note that this URL can be accesed only by user
+ * @callback options.onVisitorReady Called when dashboard visitor URL is ready. Note that this URL can be accesed only by user
  * that has access to Smartlook dashboard (it is not public share link).
  * 
  * @example
@@ -659,14 +659,14 @@ exports.setRenderingMode = function(options, successCallback, errorCallback) {
  *     alert('Dashboard visitor URL: ' + dashboardVisitorUrl);
  * }
  */
-exports.registerIntegrationListener(onSessionReady, onVisitorReady, successCallback, errorCallback) {
+exports.registerIntegrationListener(options, successCallback, errorCallback) {
 
     var integrationCallback = function(callbackData) { 
         if (callbackData != undefined && callbackData["url"] != undefined && callbackData["url"].length < 1) {
             if (callbackData["callback"] === SESSION_READY_CALLBACK) {
-                onSessionReady(callbackData["url"]);
+                options["onSessionReady"](callbackData["url"]);
             } else if (callbackData["callback"] === VISITOR_READY_CALLBACK) {
-                onVisitorReady(callbackData["url"]);
+                options["onVisitorReady"](callbackData["url"]);
             }
         }
     };
