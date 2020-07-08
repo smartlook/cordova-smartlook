@@ -9,6 +9,7 @@ import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.util.Log;
 import android.webkit.WebView;
@@ -25,6 +26,7 @@ public class SmartlookPlugin extends CordovaPlugin {
     private static final String START_RECORDING = "startRecording";
     private static final String STOP_RECORDING = "stopRecording";
     private static final String IS_RECORING = "isRecording";
+    private static final String RESET_SESSION = "resetSession";
 
     // Fullscreen sensitive mode
     private static final String START_FULLSCREEN_SENSITIVE_MODE = "startFullscreenSensitiveMode";
@@ -51,12 +53,21 @@ public class SmartlookPlugin extends CordovaPlugin {
     // Utilities
     private static final String SET_REFERRER = "setReferrer";
     private static final String GET_DASHBOARD_SESSION_URL = "getDashboardSessionUrl";
+    private static final String GET_DASHBOARD_VISITOR_URL = "getDashboardVisitorUrl";
     private static final String REGISTER_LOG_LISTENER = "registerLogListener";
     private static final String UNREGISTER_LOG_LISTENER = "unregisterLogListener";
     private static final String SET_RENDERING_MODE = "setRenderingMode";
 
+    // Integrations
+    private static final String REGISTER_INTEGRATION_LISTENER = "registerIntegrationListener";
+    private static final String UNREGISTER_INTEGRATION_LISTENER = "unregisterIntegrationListener";
+
     // Internal logic
     private static final String SET_PLUGIN_VERISION = "setPluginVersion";
+
+    // Callbacks
+    private static final String SESSION_READY_CALLBACK = "onSessionReady";
+    private static final String VISITOR_READY_CALLBACK = "onVisitorReady";
 
     // Arguments
     private static final int SMARTLOOK_API_KEY = 0;
@@ -81,6 +92,7 @@ public class SmartlookPlugin extends CordovaPlugin {
     private static final int SOURCE = 1;
     private static final int EVENT_TRACKING_MODE = 0;
     private static final int RENDERING_MODE = 0;
+    private static final int WITH_CURRENT_TIMESTAMP = 0;
 
     // Undefined
     private static final int UNDEFINED_FPS = -1;
@@ -100,6 +112,8 @@ public class SmartlookPlugin extends CordovaPlugin {
                 stopRecording(callbackContext);
             } else if (action.equals(IS_RECORING)) {
                 isRecording(callbackContext);
+            } else if (action.equals(RESET_SESSION)) {
+                resetSession(args, callbackContext);
             } else if (action.equals(START_FULLSCREEN_SENSITIVE_MODE)) {
                 startFullscreenSensitiveMode(callbackContext);
             } else if (action.equals(STOP_FULLSCREEN_SENSITIVE_MODE)) {
@@ -131,13 +145,19 @@ public class SmartlookPlugin extends CordovaPlugin {
             } else if (action.equals(SET_REFERRER)) {
                 setReferrer(args, callbackContext);
             } else if (action.equals(GET_DASHBOARD_SESSION_URL)) {
-                getDashboardSessionUrl(callbackContext);
+                getDashboardSessionUrl(args, callbackContext);
+            } else if (action.equals(GET_DASHBOARD_VISITOR_URL)) {
+                getDashboardVisitorUrl(callbackContext);
             } else if (action.equals(REGISTER_LOG_LISTENER)) {
                 registerLogListener(callbackContext);
             } else if (action.equals(UNREGISTER_LOG_LISTENER)){
                 unregisterLogListener(callbackContext);    
             } else if (action.equals(SET_RENDERING_MODE)) {
                 setRenderingMode(args, callbackContext);
+            } else if (action.equals(REGISTER_INTEGRATION_LISTENER)) {
+                registerIntegrationListener(callbackContext);
+            } else if (action.equals(UNREGISTER_INTEGRATION_LISTENER)) {
+                unregisterIntegrationListener(callbackContext);
             } else if (action.equals(SET_PLUGIN_VERISION)) {
                 setPluginVersion(args, callbackContext);
             } else {
@@ -210,6 +230,16 @@ public class SmartlookPlugin extends CordovaPlugin {
 
     private void isRecording(CallbackContext callbackContext) throws JSONException {
         callbackContext.success(Smartlook.isRecording() ? "true" : "false");
+    }
+
+    private void resetSession(JSONArray args, CallbackContext callbackContext) {
+        if (!args.isNull(RESET_USER)) {
+            Smartlook.setUserIdentifier(args.getString(IDENTIFIER), args.getJSONObject(SESSION_PROPERTIES));
+            callbackContext.success();
+            return;
+        }
+
+        callbackContext.error("Invalid resetSession parameters!");
     }
 
     // Fullscreen sensitive mode
@@ -378,8 +408,16 @@ public class SmartlookPlugin extends CordovaPlugin {
         callbackContext.error("Invalid setReferrer parameters!");
     }
 
-    private void getDashboardSessionUrl(CallbackContext callbackContext) throws JSONException {
-        callbackContext.success(Smartlook.getDashboardSessionUrl());
+    private void getDashboardSessionUrl(JSONArray args, CallbackContext callbackContext) throws JSONException {
+        if (args.isNull(WITH_CURRENT_TIMESTAMP)) {
+            callbackContext.success(Smartlook.getDashboardSessionUrl(false));    
+        } else {
+            callbackContext.success(Smartlook.getDashboardSessionUrl(args.getBoolean(WITH_CURRENT_TIMESTAMP)));    
+        }
+    }
+
+    private void getDashboardVisitorUrl(CallbackContext callbackContext) throws JSONException {
+        callbackContext.success(Smartlook.getDashboardVisitorUrl());
     }
 
     private void registerLogListener(final CallbackContext callbackContext) throws JSONException {
@@ -404,6 +442,44 @@ public class SmartlookPlugin extends CordovaPlugin {
         }
 
         callbackContext.error("Invalid setReferrer parameters!");
+    }
+
+    // Integrations
+
+    private void registerIntegrationListener(CallbackContext callbackContext) throws JSONException {
+        Smartlook.registerIntegrationListener(new IntegrationListener() {
+
+            @Override
+            public void onSessionReady(String dashboardSessionUrl) {
+                JSONObject json = new JSONObject();
+                try {
+                    json.put("callback", SESSION_READY_CALLBACK);
+                    json.put("url", dashboardSessionUrl);
+                } catch (Exception e) {
+                    callbackContext.onError(e.getMessage());
+                }
+                
+                callbackContext.onSuccess(json);
+            }
+
+            @Override
+            public void onVisitorReady(String dashboardVisitorUrl) {
+                JSONObject json = new JSONObject();
+                try {
+                    json.put("callback", VISITOR_READY_CALLBACK);
+                    json.put("url", dashboardVisitorUrl);
+                } catch (Exception e) {
+                    callbackContext.onError(e.getMessage());
+                }
+
+                callbackContext.onSuccess(json);
+            }
+        });
+    }
+
+    private void unregisterIntegrationListener(CallbackContext callbackContext) {
+        Smartlook.unregisterIntegrationListener();
+        callbackContext.onSuccess();
     }
 
     // Internal logic
