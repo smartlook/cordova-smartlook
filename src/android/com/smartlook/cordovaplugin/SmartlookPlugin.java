@@ -103,8 +103,6 @@ public class SmartlookPlugin extends CordovaPlugin {
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) {
 
-        System.out.println("execute( " + action + " )");
-
         try {
             if (action.equals(SETUP_AND_START_RECORDING)) {
                 setupAndStartRecording(args, callbackContext);
@@ -452,14 +450,10 @@ public class SmartlookPlugin extends CordovaPlugin {
 
     private void registerIntegrationListener(final CallbackContext callbackContext) throws JSONException {
 
-        Log.d("XXXXXXXXXXXX", "registerIntegrationListener()");
-
         Smartlook.registerIntegrationListener(new IntegrationListener() {
 
             @Override
             public void onSessionReady(String dashboardSessionUrl) {
-
-                Log.d("XXXXXXXXXXXX", "onVisitorReady( " + dashboardSessionUrl+ " )");
 
                 JSONObject json = new JSONObject();
                 try {
@@ -468,16 +462,12 @@ public class SmartlookPlugin extends CordovaPlugin {
                 } catch (Exception e) {
                     callbackContext.error(e.getMessage());
                 }
-                
-                Log.d("XXXXXXXXXXXX", "onVisitorReady( " + dashboardSessionUrl+ " )");
 
                 callbackContext.success(json);
             }
 
             @Override
             public void onVisitorReady(String dashboardVisitorUrl) {
-
-                Log.d("XXXXXXXXXXXX", "onVisitorReady( " + dashboardVisitorUrl+ " )");
 
                 JSONObject json = new JSONObject();
                 try {
@@ -486,8 +476,6 @@ public class SmartlookPlugin extends CordovaPlugin {
                 } catch (Exception e) {
                     callbackContext.error(e.getMessage());
                 }
-
-                Log.d("XXXXXXXXXXXX", "onVisitorReady( " + dashboardVisitorUrl+ " )");
 
                 callbackContext.success(json);
             }
