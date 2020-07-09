@@ -649,20 +649,15 @@ exports.setRenderingMode = function(options, successCallback, errorCallback) {
  * that has access to Smartlook dashboard (it is not public share link).
  * 
  * @example
- * Smartlook.registerIntegrationListener(onSessionReady, onVisitorReady, ...);
- *
- * function onSessionReady(dashboardSessionUrl) {
- *     alert('Dashboard session URL: ' + dashboardSessionUrl);
- * }
- * 
- * function onVisitorReady(dashboardVisitorUrl) {
- *     alert('Dashboard visitor URL: ' + dashboardVisitorUrl);
+ * Smartlook.registerIntegrationListener({
+ *      onSessionReady: function (dashboardSessionUrl) { alert("Session: " + dashboardSessionUrl); },
+ *      onVisitorReady: function (dashboardVisitorUrl) { alert("Visitor: " + dashboardVisitorUrl); }
+ *   });
  * }
  */
-exports.registerIntegrationListener(options, successCallback, errorCallback) {
-
+exports.registerIntegrationListener = function(options, successCallback, errorCallback) {
     var integrationCallback = function(callbackData) { 
-        if (callbackData != undefined && callbackData["url"] != undefined && callbackData["url"].length < 1) {
+        if (callbackData != undefined && callbackData["url"] != undefined && callbackData["url"].length > 0) {
             if (callbackData["callback"] === SESSION_READY_CALLBACK) {
                 options["onSessionReady"](callbackData["url"]);
             } else if (callbackData["callback"] === VISITOR_READY_CALLBACK) {
@@ -678,7 +673,7 @@ exports.registerIntegrationListener(options, successCallback, errorCallback) {
 /**
  * @description Unregister Integration listener (@see registerIntegrationListener())
  */
-exports.unregisterIntegrationListener(successCallback, errorCallback) {
+exports.unregisterIntegrationListener = function(successCallback, errorCallback) {
     execWithCallbacks(successCallback, errorCallback, UNREGISTER_INTEGRATION_LISTENER, []);
 }
 

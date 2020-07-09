@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.smartlook.sdk.smartlook.Smartlook;
 import com.smartlook.sdk.smartlook.LogListener;
+import com.smartlook.sdk.smartlook.IntegrationListener;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -93,6 +94,7 @@ public class SmartlookPlugin extends CordovaPlugin {
     private static final int EVENT_TRACKING_MODE = 0;
     private static final int RENDERING_MODE = 0;
     private static final int WITH_CURRENT_TIMESTAMP = 0;
+    private static final int RESET_USER = 0;
 
     // Undefined
     private static final int UNDEFINED_FPS = -1;
@@ -100,6 +102,8 @@ public class SmartlookPlugin extends CordovaPlugin {
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) {
+
+        System.out.println("execute( " + action + " )");
 
         try {
             if (action.equals(SETUP_AND_START_RECORDING)) {
@@ -232,7 +236,7 @@ public class SmartlookPlugin extends CordovaPlugin {
         callbackContext.success(Smartlook.isRecording() ? "true" : "false");
     }
 
-    private void resetSession(JSONArray args, CallbackContext callbackContext) {
+    private void resetSession(JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (!args.isNull(RESET_USER)) {
             Smartlook.setUserIdentifier(args.getString(IDENTIFIER), args.getJSONObject(SESSION_PROPERTIES));
             callbackContext.success();
@@ -446,40 +450,53 @@ public class SmartlookPlugin extends CordovaPlugin {
 
     // Integrations
 
-    private void registerIntegrationListener(CallbackContext callbackContext) throws JSONException {
+    private void registerIntegrationListener(final CallbackContext callbackContext) throws JSONException {
+
+        Log.d("XXXXXXXXXXXX", "registerIntegrationListener()");
+
         Smartlook.registerIntegrationListener(new IntegrationListener() {
 
             @Override
             public void onSessionReady(String dashboardSessionUrl) {
+
+                Log.d("XXXXXXXXXXXX", "onVisitorReady( " + dashboardSessionUrl+ " )");
+
                 JSONObject json = new JSONObject();
                 try {
                     json.put("callback", SESSION_READY_CALLBACK);
                     json.put("url", dashboardSessionUrl);
                 } catch (Exception e) {
-                    callbackContext.onError(e.getMessage());
+                    callbackContext.error(e.getMessage());
                 }
                 
-                callbackContext.onSuccess(json);
+                Log.d("XXXXXXXXXXXX", "onVisitorReady( " + dashboardSessionUrl+ " )");
+
+                callbackContext.success(json);
             }
 
             @Override
             public void onVisitorReady(String dashboardVisitorUrl) {
+
+                Log.d("XXXXXXXXXXXX", "onVisitorReady( " + dashboardVisitorUrl+ " )");
+
                 JSONObject json = new JSONObject();
                 try {
                     json.put("callback", VISITOR_READY_CALLBACK);
                     json.put("url", dashboardVisitorUrl);
                 } catch (Exception e) {
-                    callbackContext.onError(e.getMessage());
+                    callbackContext.error(e.getMessage());
                 }
 
-                callbackContext.onSuccess(json);
+                Log.d("XXXXXXXXXXXX", "onVisitorReady( " + dashboardVisitorUrl+ " )");
+
+                callbackContext.success(json);
             }
         });
     }
 
     private void unregisterIntegrationListener(CallbackContext callbackContext) {
         Smartlook.unregisterIntegrationListener();
-        callbackContext.onSuccess();
+        callbackContext.success();
     }
 
     // Internal logic
