@@ -558,7 +558,7 @@ exports.setReferrer = function (options, successCallback, errorCallback) {
  * @callback successCallback Callback value set to dashboard sessionURL.
  * 
  * @example
- * Smartlook.getDashboardSessionUrl(successCallback, ...);
+ * Smartlook.getDashboardSessionUrl({withCurrentTimestamp: true}, successCallback, ...);
  *
  * function successCallback(value) {
  *     alert('Shareable dashboard session URL: ' + value);
@@ -655,27 +655,27 @@ exports.setRenderingMode = function(options, successCallback, errorCallback) {
  *   });
  * }
  */
-exports.registerIntegrationListener = function(options, successCallback, errorCallback) {
-    var integrationCallback = function(callbackData) { 
-        if (callbackData != undefined && callbackData["url"] != undefined && callbackData["url"].length > 0) {
-            if (callbackData["callback"] === SESSION_READY_CALLBACK) {
-                options["onSessionReady"](callbackData["url"]);
-            } else if (callbackData["callback"] === VISITOR_READY_CALLBACK) {
-                options["onVisitorReady"](callbackData["url"]);
-            }
-        }
-    };
+// exports.registerIntegrationListener = function(options, successCallback, errorCallback) {
+//     var integrationCallback = function(callbackData) { 
+//         if (callbackData != undefined && callbackData["url"] != undefined && callbackData["url"].length > 0) {
+//             if (callbackData["callback"] === SESSION_READY_CALLBACK) {
+//                 options["onSessionReady"](callbackData["url"]);
+//             } else if (callbackData["callback"] === VISITOR_READY_CALLBACK) {
+//                 options["onVisitorReady"](callbackData["url"]);
+//             }
+//         }
+//     };
 
-    execWithCallbacks(integrationCallback, errorCallback, REGISTER_INTEGRATION_LISTENER, []);
-    successCallback();
-}
+//     execWithCallbacks(integrationCallback, errorCallback, REGISTER_INTEGRATION_LISTENER, []);
+//     successCallback();
+// }
 
 /**
  * @description Unregister Integration listener (@see registerIntegrationListener())
  */
-exports.unregisterIntegrationListener = function(successCallback, errorCallback) {
-    execWithCallbacks(successCallback, errorCallback, UNREGISTER_INTEGRATION_LISTENER, []);
-}
+// exports.unregisterIntegrationListener = function(successCallback, errorCallback) {
+//     execWithCallbacks(successCallback, errorCallback, UNREGISTER_INTEGRATION_LISTENER, []);
+// }
 
 // Internal logic
 

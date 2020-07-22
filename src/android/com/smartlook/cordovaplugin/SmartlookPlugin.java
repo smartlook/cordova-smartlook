@@ -8,6 +8,7 @@ import com.smartlook.sdk.smartlook.IntegrationListener;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -449,7 +450,6 @@ public class SmartlookPlugin extends CordovaPlugin {
     // Integrations
 
     private void registerIntegrationListener(final CallbackContext callbackContext) throws JSONException {
-
         Smartlook.registerIntegrationListener(new IntegrationListener() {
 
             @Override
@@ -460,10 +460,10 @@ public class SmartlookPlugin extends CordovaPlugin {
                     json.put("callback", SESSION_READY_CALLBACK);
                     json.put("url", dashboardSessionUrl);
                 } catch (Exception e) {
-                    callbackContext.error(e.getMessage());
+                    callCallback(callbackContext, e.getMessage(), false);
                 }
 
-                callbackContext.success(json);
+                callCallback(callbackContext, json, true);
             }
 
             @Override
@@ -474,10 +474,10 @@ public class SmartlookPlugin extends CordovaPlugin {
                     json.put("callback", VISITOR_READY_CALLBACK);
                     json.put("url", dashboardVisitorUrl);
                 } catch (Exception e) {
-                    callbackContext.error(e.getMessage());
+                    callCallback(callbackContext, e.getMessage(), false);
                 }
 
-                callbackContext.success(json);
+                callCallback(callbackContext, json, true);
             }
         });
     }
@@ -494,4 +494,24 @@ public class SmartlookPlugin extends CordovaPlugin {
         callbackContext.success();
     }
 
+    public void callCallback(CallbackContext callbackContext, JSONObject message, boolean successful) {
+        callCallback(callbackContext, new PluginResult(callbackStatus(successful), message), successful);
+    }
+
+    public void callCallback(CallbackContext callbackContext, String message, boolean successful) {
+        callCallback(callbackContext, new PluginResult(callbackStatus(successful), message), successful);
+    }
+
+    private void callCallback(CallbackContext callbackContext, PluginResult pluginResult, boolean successful) {
+        pluginResult.setKeepCallback(true);
+        callbackContext.sendPluginResult(pluginResult);
+    }
+
+    private PluginResult.Status callbackStatus(boolean successful) {
+        if (successful) {
+            return PluginResult.Status.OK;
+        } else {
+            return PluginResult.Status.ERROR;
+        }    
+    }
 }
