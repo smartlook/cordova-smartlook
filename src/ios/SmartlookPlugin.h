@@ -11,6 +11,8 @@
 - (void)stopRecording:(CDVInvokedUrlCommand*)command;
 - (void)isRecording:(CDVInvokedUrlCommand*)command;
 
+- (void)resetSession:(CDVInvokedUrlCommand*)command;
+
 // Full screen sensitive mode
 - (void)startFullscreenSensitiveMode:(CDVInvokedUrlCommand*)command;
 - (void)stopFullscreenSensitiveMode:(CDVInvokedUrlCommand*)command;
@@ -36,11 +38,16 @@
 - (void)removeGlobalEventProperty:(CDVInvokedUrlCommand*)command;
 - (void)removeAllGlobalEventProperties:(CDVInvokedUrlCommand*)command;
 
+// Integrationa
+- (void)getDashboardSessionUrl:(CDVInvokedUrlCommand*)command;
+- (void)getDashboardVisitorUrl:(CDVInvokedUrlCommand*)command;
+
+- (void)registerIntegrationListener:(CDVInvokedUrlCommand*)command;
+- (void)unregisterIntegrationListener:(CDVInvokedUrlCommand*)command;
+
 // Utilities
 
 - (void)setReferrer:(CDVInvokedUrlCommand*)command;
-
-- (void)getDashboardSessionUrl:(CDVInvokedUrlCommand*)command;
 
 - (void)registerLogListener:(CDVInvokedUrlCommand*)command;
 - (void)unregisterLogListener:(CDVInvokedUrlCommand*)command;
