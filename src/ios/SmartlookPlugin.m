@@ -507,6 +507,7 @@ NSString *integrationCallbackId;
                 [params setValue:[Smartlook getDashboardVisitorURL].absoluteString forKey:@"url"];
             }
             CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
+            [pluginResult setKeepCallbackAsBool:YES];
             [self.commandDelegate sendPluginResult:pluginResult callbackId:integrationCallbackId];
         });
     }
