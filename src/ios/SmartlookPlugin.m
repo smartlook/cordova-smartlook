@@ -148,24 +148,6 @@ static NSString *__smartlookPluginVersion = @"unknown";
     });
 }
 
-- (void)resetSession:(CDVInvokedUrlCommand*)command {
-    DLog(@"entering `resetSession`");
-    dispatch_async(dispatch_get_main_queue(), ^{
-        @try {
-            BOOL resetUser = NO;
-            id resetUserArg = [command argumentAtIndex:0];
-            if ([resetUserArg respondsToSelector:@selector(boolValue)]) {
-                resetUser = [resetUserArg boolValue];
-            }
-            [Smartlook resetSessionAndUser:resetUser];
-            [self reportOKResultForCallbackID:command.callbackId];
-        } @catch (NSException *exception) {
-            [self reportException:exception forCallbackID:command.callbackId];
-        }
-    });
-}
-
-
 // MARK: - Full Screen Sensitive Mode
 
 - (void)startFullscreenSensitiveMode:(CDVInvokedUrlCommand*)command
@@ -173,10 +155,7 @@ static NSString *__smartlookPluginVersion = @"unknown";
     DLog(@"entering `startFullscreenSensitiveMode`");
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {
-            #pragma clang diagnostic push
-            #pragma clang diagnostic ignored "-Wdeprecated-declarations"
             [Smartlook beginFullscreenSensitiveMode];
-            #pragma clang diagnostic pop
             [self reportOKResultForCallbackID:command.callbackId];
         } @catch (NSException *exception) {
             [self reportException:exception forCallbackID:command.callbackId];
@@ -190,10 +169,7 @@ static NSString *__smartlookPluginVersion = @"unknown";
     DLog(@"entering `stopFullscreenSensitiveMode`");
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {
-            #pragma clang diagnostic push
-            #pragma clang diagnostic ignored "-Wdeprecated-declarations"
             [Smartlook endFullscreenSensitiveMode];
-            #pragma clang diagnostic pop
             [self reportOKResultForCallbackID:command.callbackId];
         } @catch (NSException *exception) {
             [self reportException:exception forCallbackID:command.callbackId];
@@ -207,10 +183,7 @@ static NSString *__smartlookPluginVersion = @"unknown";
     DLog(@"entering `stopFullscreenSensitiveMode`");
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {
-            #pragma clang diagnostic push
-            #pragma clang diagnostic ignored "-Wdeprecated-declarations"
             BOOL isActive = [Smartlook isFullscreenSensitiveModeActive];
-            #pragma clang diagnostic pop
             CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsBool:isActive];
             [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         } @catch (NSException *exception) {
@@ -444,15 +417,10 @@ static NSString *__smartlookPluginVersion = @"unknown";
 }
 
 - (void)getDashboardSessionUrl:(CDVInvokedUrlCommand*)command {
-    DLog(@"entering `getDashboardSessionUrl` arguments: %@", command.arguments);
+    DLog(@"entering `getDashboardSessionUrl`");
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {
-            BOOL withTimestamp = NO;
-            id withTimestampArg = [command argumentAtIndex:0];
-            if ([withTimestampArg respondsToSelector:@selector(boolValue)]) {
-                withTimestamp = [withTimestampArg boolValue];
-            }
-            NSURL *dashboardURL = [Smartlook getDashboardSessionURLWithCurrentTimestamp:withTimestamp];
+            NSURL *dashboardURL = [Smartlook getDashboardSessionURL];
             CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[dashboardURL absoluteString]];
             [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         } @catch (NSException *exception) {
@@ -460,60 +428,6 @@ static NSString *__smartlookPluginVersion = @"unknown";
         }
     });
 }
-
-- (void)getDashboardVisitorUrl:(CDVInvokedUrlCommand*)command {
-    DLog(@"entering `getDashboardVisitorUrl` arguments: %@", command.arguments);
-    dispatch_async(dispatch_get_main_queue(), ^{
-        @try {
-            NSURL *dashboardVisitorURL = [Smartlook getDashboardVisitorURL];
-            CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[dashboardVisitorURL absoluteString]];
-            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-        } @catch (NSException *exception) {
-            [self reportException:exception forCallbackID:command.callbackId];
-        }
-    });
-}
-
-NSString *integrationCallbackId;
-
-- (void)registerIntegrationListener:(CDVInvokedUrlCommand*)command {
-    DLog(@"entering `registerIntegrationListener` arguments: %@", command.arguments);
-    if (integrationCallbackId == nil) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dashboardURLDidChange:) name:SLDashboardSessionURLChangedNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dashboardURLDidChange:) name:SLDashboardVisitorURLChangedNotification object:nil];
-    }
-    integrationCallbackId = command.callbackId;
-}
-
-- (void)unregisterIntegrationListener:(CDVInvokedUrlCommand*)command {
-    DLog(@"entering `unregisterIntegrationListener` arguments: %@", command.arguments);
-    if (integrationCallbackId != nil) {
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:SLDashboardSessionURLChangedNotification object:nil];
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:SLDashboardVisitorURLChangedNotification object:nil];
-    }
-    integrationCallbackId = nil;
-}
-
-- (void)dashboardURLDidChange:(NSNotification *)notification {
-    if (integrationCallbackId != nil) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            DLog(@"entering `dashboardURLDidChange` notification: %@", notification.name);
-            NSMutableDictionary *params = [NSMutableDictionary new];
-            if ([notification.name isEqualToString:SLDashboardSessionURLChangedNotification]) {
-                [params setValue:@"onSessionReady" forKey:@"callback"];
-                [params setValue:[Smartlook getDashboardSessionURLWithCurrentTimestamp:NO].absoluteString forKey:@"url"];
-            } else if ([notification.name isEqualToString:SLDashboardVisitorURLChangedNotification]) {
-                [params setValue:@"onVisitorReady" forKey:@"callback"];
-                [params setValue:[Smartlook getDashboardVisitorURL].absoluteString forKey:@"url"];
-            }
-            CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:params];
-            [pluginResult setKeepCallbackAsBool:YES];
-            [self.commandDelegate sendPluginResult:pluginResult callbackId:integrationCallbackId];
-        });
-    }
-}
-
-//
 
 - (void)registerLogListener:(CDVInvokedUrlCommand*)command {
     DLog(@"entering `registerLogListener` arguments: %@", command.arguments);

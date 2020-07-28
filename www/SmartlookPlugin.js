@@ -14,7 +14,6 @@ const SETUP = "setup";
 const START_RECORDING = "startRecording";
 const STOP_RECORDING = "stopRecording";
 const IS_RECORING = "isRecording";
-const RESET_SESSION = "resetSession";
 
 // Fullscreen sensitive mode
 const START_FULLSCREEN_SENSITIVE_MODE = "startFullscreenSensitiveMode";
@@ -41,18 +40,9 @@ const REMOVE_ALL_GLOBAL_EVENT_PROPERTIES = "removeAllGlobalEventProperties";
 // Utilities
 const SET_REFERRER = "setReferrer";
 const GET_DASHBOARD_SESSION_URL = "getDashboardSessionUrl";
-const GET_DASHBOARD_VISITOR_URL = "getDashboardVisitorUrl";
 const REGISTER_LOG_LISTENER = "registerLogListener";
 const UNREGISTER_LOG_LISTENER = "unregisterLogListener";
 const SET_RENDERING_MODE = "setRenderingMode";
-
-//Integrations
-const REGISTER_INTEGRATION_LISTENER = "registerIntegrationListener";
-const UNREGISTER_INTEGRATION_LISTENER = "unregisterIntegrationListener";
-
-// Callbacks
-const SESSION_READY_CALLBACK = "onSessionReady";
-const VISITOR_READY_CALLBACK = "onVisitorReady";
 
 // Internal logic
 const SET_PLUGIN_VERISION = "setPluginVersion";
@@ -206,23 +196,6 @@ exports.stopRecording = function (successCallback, errorCallback) {
  */
 exports.isRecording = function (successCallback, errorCallback) {
     execWithCallbacks(successCallback, errorCallback, IS_RECORING, []);
-};
-
-/**
- * @description Resets current session and new session in dashboard is created.
- * 
- * @param options.resetUser (Optional) If set to TRUE new visitor is created in the dashboard-
- */
-exports.resetSession = function (options, successCallback, errorCallback) {
-    var arguments = [];
-
-    if (checkBooleanOption("resetSession", "resetUser", options, errorCallback, true)) {
-        arguments.push(options["resetUser"]);
-    } else {
-        return;
-    }
-
-    execWithCallbacks(successCallback, errorCallback, RESET_SESSION, arguments);
 };
 
 // Fullscreen sensitive mode
@@ -558,36 +531,14 @@ exports.setReferrer = function (options, successCallback, errorCallback) {
  * @callback successCallback Callback value set to dashboard sessionURL.
  * 
  * @example
- * Smartlook.getDashboardSessionUrl({withCurrentTimestamp: true}, successCallback, ...);
+ * Smartlook.getDashboardSessionUrl(successCallback, ...);
  *
  * function successCallback(value) {
  *     alert('Shareable dashboard session URL: ' + value);
  * }
  */
-exports.getDashboardSessionUrl = function (options, successCallback, errorCallback) {
-    var arguments = [];
-
-    if (checkBooleanOption("getDashboardSessionUrl", "withCurrentTimestamp", options, errorCallback, false)) {
-        arguments.push(options["withCurrentTimestamp"]);
-    }
-
-    execWithCallbacks(successCallback, errorCallback, GET_DASHBOARD_SESSION_URL, arguments);
-};
-
-/**
- * @description Obtain sharable url to visitor page in our dashboard.
- * 
- * @callback successCallback Callback value set to dashboard visitorURL.
- * 
- * @example
- * Smartlook.getDashboardVisitorUrl(successCallback, ...);
- *
- * function successCallback(value) {
- *     alert('Shareable dashboard visitor URL: ' + value);
- * }
- */
-exports.getDashboardVisitorUrl = function (successCallback, errorCallback) {
-    execWithCallbacks(successCallback, errorCallback, GET_DASHBOARD_VISITOR_URL, []);
+exports.getDashboardSessionUrl = function (successCallback, errorCallback) {
+    execWithCallbacks(successCallback, errorCallback, GET_DASHBOARD_SESSION_URL, []);
 };
 
 /**
@@ -603,14 +554,14 @@ exports.getDashboardVisitorUrl = function (successCallback, errorCallback) {
  * }
  */
 exports.registerLogListener = function (successCallback, errorCallback) {
-    execWithCallbacks(successCallback, errorCallback, REGISTER_LOG_LISTENER, []);
+    execWithCallbacks(successCallback, errorCallback, REGISTER_LOG_LISTENER, [])
 }
 
 /**
  * You can unregister allback to all public SDK logs if registered before.
  */
 exports.unregisterLogListener = function(successCallback, errorCallback) {
-    execWithCallbacks(successCallback, errorCallback, UNREGISTER_LOG_LISTENER, []);
+    execWithCallbacks(successCallback, errorCallback, UNREGISTER_LOG_LISTENER, [])
 }
 
 /**
@@ -628,53 +579,12 @@ exports.setRenderingMode = function(options, successCallback, errorCallback) {
         exports.RenderingMode.NATIVE];
 
     if (checkStringArrayOption("setRenderingMode", "renderingMode", options, allowedValues, errorCallback, true)) {
-        arguments.push(options["renderingMode"]);
+        arguments.push(options["renderingMode"])
     } else {
-        return;
+        return
     }
 
     execWithCallbacks(successCallback, errorCallback, SET_RENDERING_MODE, arguments);    
-}
-
-// Integrations
-
-/**
- * @description Integration listener can be used to obtain dashboard URL for current session and visitor.
- * These URLs can be propagated to various analytic tools/SDKs.
- * 
- * @callback options.onSessionReady Called when dashboard session URL is ready. Note that this URL can be accesed only by user
- * that has access to Smartlook dashboard (it is not public share link).
- * 
- * @callback options.onVisitorReady Called when dashboard visitor URL is ready. Note that this URL can be accesed only by user
- * that has access to Smartlook dashboard (it is not public share link).
- * 
- * @example
- * Smartlook.registerIntegrationListener({
- *      onSessionReady: function (dashboardSessionUrl) { alert("Session: " + dashboardSessionUrl); },
- *      onVisitorReady: function (dashboardVisitorUrl) { alert("Visitor: " + dashboardVisitorUrl); }
- *   });
- * }
- */
-exports.registerIntegrationListener = function(options, successCallback, errorCallback) {
-    var integrationCallback = function(callbackData) { 
-        if (callbackData != undefined && callbackData["url"] != undefined && callbackData["url"].length > 0) {
-            if (callbackData["callback"] === SESSION_READY_CALLBACK) {
-                options["onSessionReady"](callbackData["url"]);
-            } else if (callbackData["callback"] === VISITOR_READY_CALLBACK) {
-                options["onVisitorReady"](callbackData["url"]);
-            }
-        }
-    };
-
-    execWithCallbacks(integrationCallback, errorCallback, REGISTER_INTEGRATION_LISTENER, []);
-    successCallback();
-}
-
-/**
- * @description Unregister Integration listener (@see registerIntegrationListener())
- */
-exports.unregisterIntegrationListener = function(successCallback, errorCallback) {
-    execWithCallbacks(successCallback, errorCallback, UNREGISTER_INTEGRATION_LISTENER, []);
 }
 
 // Internal logic
