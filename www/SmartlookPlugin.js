@@ -107,9 +107,11 @@ exports.RenderingMode = {
 /**
  * @description Setup and start Smartlook SDK recording.
  *
- * @param options.smartlookAPIKey Unique 40 character key identifying your app. You can find in your
- *                                dashboard. If invalid key is set SDK will not work properly.
- * @param options.fps             (Optional) Desired FPS for the recording, that must be in range from 1 to 10.
+ * @param options.smartlookAPIKey        Unique 40 character key identifying your app. You can find in your
+ *                                       dashboard. If invalid key is set SDK will not work properly.
+ * @param options.fps                    (Optional) Desired FPS for the recording, that must be in range from 1 to 10.
+ * @param options.startNewSession        (Optional) If true new session is going to be created
+ * @param options.startNewSessionAndUser (Optional) If true new session and visitor is going to be created 
  */
 exports.setupAndStartRecording = function (options, successCallback, errorCallback) {
 
@@ -138,15 +140,29 @@ exports.setupAndStartRecording = function (options, successCallback, errorCallba
         arguments.push(UNDEFINED_RENDERING_MODE)
     }
 
+    if (checkBooleanOption("setupAndStartRecording", "startNewSession", options, renderingModeAllowedValues, errorCallback, false)) {
+        arguments.push(options["startNewSession"])
+    } else {
+        arguments.push(false)
+    }
+
+    if (checkBooleanOption("setupAndStartRecording", "startNewSessionAndUser", options, renderingModeAllowedValues, errorCallback, false)) {
+        arguments.push(options["startNewSessionAndUser"])
+    } else {
+        arguments.push(false)
+    }
+
     execWithCallbacks(successCallback, errorCallback, SETUP_AND_START_RECORDING, arguments);
 };
 
 /**
  * @description Setup/initialize Smartlook SDK. This method DOESN'T start the recording (@see Smartlook.startRecording())
  *
- * @param options.smartlookAPIKey Unique 40 character key identifying your app. You can find in your
- *                                dashboard. If invalid key is set SDK will not work properly.
- * @param options.fps             (Optional) Desired FPS for the recording, that must be in range from 1 to 10.
+ * @param options.smartlookAPIKey        Unique 40 character key identifying your app. You can find in your
+ *                                       dashboard. If invalid key is set SDK will not work properly.
+ * @param options.fps                    (Optional) Desired FPS for the recording, that must be in range from 1 to 10.
+ * @param options.startNewSession        (Optional) If true new session is going to be created
+ * @param options.startNewSessionAndUser (Optional) If true new session and visitor is going to be created 
  */
 exports.setup = function (options, successCallback, errorCallback) {
 
@@ -169,10 +185,16 @@ exports.setup = function (options, successCallback, errorCallback) {
         arguments.push(UNDEFINED_FPS)
     }
 
-    if (checkStringArrayOption("setupAndStartRecording", "renderingMode", options, renderingModeAllowedValues, errorCallback, false)) {
-        arguments.push(options["renderingMode"])
+    if (checkBooleanOption("setupAndStartRecording", "startNewSession", options, renderingModeAllowedValues, errorCallback, false)) {
+        arguments.push(options["startNewSession"])
     } else {
-        arguments.push(UNDEFINED_RENDERING_MODE)
+        arguments.push(false)
+    }
+
+    if (checkBooleanOption("setupAndStartRecording", "startNewSessionAndUser", options, renderingModeAllowedValues, errorCallback, false)) {
+        arguments.push(options["startNewSessionAndUser"])
+    } else {
+        arguments.push(false)
     }
 
     execWithCallbacks(successCallback, errorCallback, SETUP, arguments);
