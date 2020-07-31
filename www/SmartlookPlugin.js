@@ -110,6 +110,7 @@ exports.RenderingMode = {
  * @param options.smartlookAPIKey        Unique 40 character key identifying your app. You can find in your
  *                                       dashboard. If invalid key is set SDK will not work properly.
  * @param options.fps                    (Optional) Desired FPS for the recording, that must be in range from 1 to 10.
+ * @param options.renderingMode          (Optional) Mode defining the video output of recording.
  * @param options.startNewSession        (Optional) If true new session is going to be created
  * @param options.startNewSessionAndUser (Optional) If true new session and visitor is going to be created 
  */
@@ -161,6 +162,7 @@ exports.setupAndStartRecording = function (options, successCallback, errorCallba
  * @param options.smartlookAPIKey        Unique 40 character key identifying your app. You can find in your
  *                                       dashboard. If invalid key is set SDK will not work properly.
  * @param options.fps                    (Optional) Desired FPS for the recording, that must be in range from 1 to 10.
+ * @param options.renderingMode          (Optional) Mode defining the video output of recording.
  * @param options.startNewSession        (Optional) If true new session is going to be created
  * @param options.startNewSessionAndUser (Optional) If true new session and visitor is going to be created 
  */
