@@ -141,18 +141,19 @@ exports.setupAndStartRecording = function (options, successCallback, errorCallba
         arguments.push(UNDEFINED_RENDERING_MODE)
     }
 
-    if (checkBooleanOption("setupAndStartRecording", "startNewSession", options, renderingModeAllowedValues, errorCallback, false)) {
+    if (checkBooleanOption("setupAndStartRecording", "startNewSession", options, errorCallback, false)) {
         arguments.push(options["startNewSession"])
     } else {
         arguments.push(false)
     }
 
-    if (checkBooleanOption("setupAndStartRecording", "startNewSessionAndUser", options, renderingModeAllowedValues, errorCallback, false)) {
+    if (checkBooleanOption("setupAndStartRecording", "startNewSessionAndUser", options, errorCallback, false)) {
         arguments.push(options["startNewSessionAndUser"])
     } else {
         arguments.push(false)
     }
 
+    console.log("setupAndStart()" + arguments);
     execWithCallbacks(successCallback, errorCallback, SETUP_AND_START_RECORDING, arguments);
 };
 
@@ -187,13 +188,13 @@ exports.setup = function (options, successCallback, errorCallback) {
         arguments.push(UNDEFINED_FPS)
     }
 
-    if (checkBooleanOption("setupAndStartRecording", "startNewSession", options, renderingModeAllowedValues, errorCallback, false)) {
+    if (checkBooleanOption("setupAndStartRecording", "startNewSession", options, errorCallback, false)) {
         arguments.push(options["startNewSession"])
     } else {
         arguments.push(false)
     }
 
-    if (checkBooleanOption("setupAndStartRecording", "startNewSessionAndUser", options, renderingModeAllowedValues, errorCallback, false)) {
+    if (checkBooleanOption("setupAndStartRecording", "startNewSessionAndUser", options, errorCallback, false)) {
         arguments.push(options["startNewSessionAndUser"])
     } else {
         arguments.push(false)
