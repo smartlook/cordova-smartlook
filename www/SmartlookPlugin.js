@@ -188,6 +188,12 @@ exports.setup = function (options, successCallback, errorCallback) {
         arguments.push(UNDEFINED_FPS)
     }
 
+    if (checkStringArrayOption("setupAndStartRecording", "renderingMode", options, renderingModeAllowedValues, errorCallback, false)) {
+        arguments.push(options["renderingMode"])
+    } else {
+        arguments.push(UNDEFINED_RENDERING_MODE)
+    }
+
     if (checkBooleanOption("setupAndStartRecording", "startNewSession", options, errorCallback, false)) {
         arguments.push(options["startNewSession"])
     } else {

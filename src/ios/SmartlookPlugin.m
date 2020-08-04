@@ -61,7 +61,7 @@ static NSString *__smartlookPluginVersion = @"unknown";
         options[SLSetupOptionFramerateKey] = fps;
     }
 
-    id renderingMode = [command argumentAtIndex:2 withDefault:[NSNull null]];
+    id renderingMode = [command argumentAtIndex:2];
     if ([renderingMode respondsToSelector:@selector(isEqualToString:)]) {
         if ([renderingMode isEqualToString:@"native"]) {
             options[SLSetupOptionRenderingModeKey] = SLRenderingModeNative;
@@ -70,14 +70,14 @@ static NSString *__smartlookPluginVersion = @"unknown";
         }
     }
 
-    id startNewSession = [command argumentAtIndex:3 withDefault:[NSNull null]];
+    id startNewSession = [command argumentAtIndex:3];
     if ([startNewSession respondsToSelector:@selector(boolValue)]) {
         if ([startNewSession boolValue]) {
             options[SLSetupOptionStartNewSessionKey] = @YES;
         }
     }
 
-    id startNewSessionAndUser = [command argumentAtIndex:4 withDefault:[NSNull null]];
+    id startNewSessionAndUser = [command argumentAtIndex:4];
     if ([startNewSessionAndUser respondsToSelector:@selector(boolValue)]) {
         if ([startNewSessionAndUser boolValue]) {
             options[SLSetupOptionStartNewSessionKey] = @NO; // not needed if accidentally set, too
