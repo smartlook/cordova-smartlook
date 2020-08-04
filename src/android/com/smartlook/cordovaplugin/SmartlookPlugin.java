@@ -75,6 +75,8 @@ public class SmartlookPlugin extends CordovaPlugin {
     private static final int SMARTLOOK_API_KEY = 0;
     private static final int FPS = 1;
     private static final int SETUP_RENDERING_MODE = 2;
+    private static final int SETUP_START_NEW_SESSION = 3;
+    private static final int SETUP_START_NEW_SESSION_AND_USER = 4;
     private static final int IDENTIFIER = 0;
     private static final int SESSION_PROPERTIES = 1;
     private static final int EVENT_NAME = 0;
@@ -190,6 +192,14 @@ public class SmartlookPlugin extends CordovaPlugin {
                 builder.setRenderingMode(args.getString(SETUP_RENDERING_MODE));
             }
 
+            if (!args.isNull(SETUP_START_NEW_SESSION) && args.getBoolean(SETUP_START_NEW_SESSION)) {
+                builder.startNewSession();
+            }
+
+            if (!args.isNull(SETUP_START_NEW_SESSION_AND_USER) && args.getBoolean(SETUP_START_NEW_SESSION_AND_USER)) {
+                builder.startNewSessionAndUser();
+            }
+
             Smartlook.setup(builder.build());
             Smartlook.unregisterBlacklistedClass(WebView.class);
             Smartlook.startRecording();
@@ -211,6 +221,14 @@ public class SmartlookPlugin extends CordovaPlugin {
 
             if (!args.isNull(SETUP_RENDERING_MODE) && !args.getString(SETUP_RENDERING_MODE).equals(UNDEFINED_RENDERING_MODE)) {
                 builder.setRenderingMode(args.getString(SETUP_RENDERING_MODE));
+            }
+
+            if (!args.isNull(SETUP_START_NEW_SESSION) && args.getBoolean(SETUP_START_NEW_SESSION)) {
+                builder.startNewSession();
+            }
+
+            if (!args.isNull(SETUP_START_NEW_SESSION_AND_USER) && args.getBoolean(SETUP_START_NEW_SESSION_AND_USER)) {
+                builder.startNewSessionAndUser();
             }
 
             Smartlook.setup(builder.build());
