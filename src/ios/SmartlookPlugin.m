@@ -60,11 +60,36 @@ static NSString *__smartlookPluginVersion = @"unknown";
     if (fps != nil && [fps isKindOfClass:[NSNumber class]]) {
         options[SLSetupOptionFramerateKey] = fps;
     }
-    
+
+    id renderingMode = [command argumentAtIndex:2 withDefault:[NSNull null]];
+    if ([renderingMode respondsToSelector:@selector(isEqualToString:)]) {
+        if ([renderingMode isEqualToString:@"native"]) {
+            options[SLSetupOptionRenderingModeKey] = SLRenderingModeNative;
+        } else if ([renderingMode isEqualToString:@"no_rendering"]) {
+            options[SLSetupOptionRenderingModeKey] = SLRenderingModeNoRendering;
+        }
+    }
+
+    id startNewSession = [command argumentAtIndex:3 withDefault:[NSNull null]];
+    if ([startNewSession respondsToSelector:@selector(boolValue)]) {
+        if ([startNewSession boolValue]) {
+            options[SLSetupOptionStartNewSessionKey] = @YES;
+        }
+    }
+
+    id startNewSessionAndUser = [command argumentAtIndex:4 withDefault:[NSNull null]];
+    if ([startNewSessionAndUser respondsToSelector:@selector(boolValue)]) {
+        if ([startNewSessionAndUser boolValue]) {
+            options[SLSetupOptionStartNewSessionKey] = @NO; // not needed if accidentally set, too
+            options[SLSetupOptionStartNewSessionAndResetUserKey] = @YES;
+        }
+    }
+
     options[@"__sdk_framework"] = @"cordova";
     options[@"__sdk_framework_version"] = CDV_VERSION;
     options[@"__sdk_framework_plugin_version"] = __smartlookPluginVersion;
-    
+        
+    DLog(@"STARTUP ARGUMENTS %@", [command arguments]);
     DLog(@"STARTUP OPTIONS %@", options);
 
     [Smartlook setupWithKey:key options:options];
