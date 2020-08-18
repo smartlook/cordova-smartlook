@@ -1,3 +1,5 @@
-# cordova-smartlook
+# Smartlook Cordova SDK
+Official Smartlook SDK plugin for Cordova Android & iOS applications.
 
-Official Smartlook SDK plugin for Cordova Android & iOS applications. Documentation can be found [here](https://smartlook.github.io/docs/sdk/cordova-android/?origin_team=T03PHPRA4).
+## Report a issue
+If you want to **submit new issue** please use [smartlook-mobile-issue-tracker](https://github.com/smartlook/smartlook-mobile-issue-tracker).
