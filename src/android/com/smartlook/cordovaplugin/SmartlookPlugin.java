@@ -30,11 +30,6 @@ public class SmartlookPlugin extends CordovaPlugin {
     private static final String IS_RECORING = "isRecording";
     private static final String RESET_SESSION = "resetSession";
 
-    // Fullscreen sensitive mode
-    private static final String START_FULLSCREEN_SENSITIVE_MODE = "startFullscreenSensitiveMode";
-    private static final String STOP_FULLSCREEN_SENSITIVE_MODE = "stopFullscreenSensitiveMode";
-    private static final String IS_FULLSCREEN_SENSITIVE_MODE_ACTIVE = "isFullscreenSensitiveModeActive";
-
     // User identification
     private static final String SET_USER_IDENTIFIER = "setUserIdentifier";
 
@@ -283,7 +278,8 @@ public class SmartlookPlugin extends CordovaPlugin {
 
     private void setUserIdentifier(JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (!args.isNull(IDENTIFIER) && !args.isNull(SESSION_PROPERTIES)) {
-            Smartlook.setUserIdentifier(args.getString(IDENTIFIER), args.getJSONObject(SESSION_PROPERTIES));
+            Smartlook.setUserIdentifier(args.getString(IDENTIFIER));
+            Smartlook.setUserProperties(args.getJSONObject(SESSION_PROPERTIES), false)
             callbackContext.success();
             return;
         } else if (!args.isNull(IDENTIFIER)) {

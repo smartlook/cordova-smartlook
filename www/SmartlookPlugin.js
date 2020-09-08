@@ -16,11 +16,6 @@ const STOP_RECORDING = "stopRecording";
 const IS_RECORING = "isRecording";
 const RESET_SESSION = "resetSession";
 
-// Fullscreen sensitive mode
-const START_FULLSCREEN_SENSITIVE_MODE = "startFullscreenSensitiveMode";
-const STOP_FULLSCREEN_SENSITIVE_MODE = "stopFullscreenSensitiveMode";
-const IS_FULLSCREEN_SENSITIVE_MODE_ACTIVE = "isFullscreenSensitiveModeActive";
-
 // User identifier
 const SET_USER_IDENTIFIER = "setUserIdentifier";
 
@@ -62,6 +57,11 @@ const UNDEFINED_FPS = -1;
 const UNDEFINED_RENDERING_MODE = "";
 
 var emptyCallback = function() { return; };
+
+/**
+ * @deprecated Variable used only for support of deprecated methods. Should be removed on next release.
+ */
+var fullscreenModeActive = false;
 
 ////////////////////////////////////////////////////////////////////////////////
 // SDK API constants
@@ -256,24 +256,36 @@ exports.resetSession = function (options, successCallback, errorCallback) {
     execWithCallbacks(successCallback, errorCallback, RESET_SESSION, arguments);
 };
 
-// Fullscreen sensitive mode
+// @deprecated Should be removed in next release Fullscreen sensitive mode
 
 /**
+ * @deprecated This method is deprecated and should not be further used. Please use:
+ * Smartlook.setRenderingMode({renderingMode: Smartlook.RenderingMode.NO_RENDERING})
+ * 
  * @description When you start sensitive mode SDK records blank videos (single color) but SDK still 
  *              sends Analytic events.
  */
 exports.startFullscreenSensitiveMode = function (successCallback, errorCallback) {
-    execWithCallbacks(successCallback, errorCallback, START_FULLSCREEN_SENSITIVE_MODE, []);
+    console.warn("Calling deprecated function!");
+    fullscreenModeActive = true;
+    exports.setRenderingMode({renderingMode: exports.RenderingMode.NO_RENDERING}, successCallback, errorCallback);
 };
 
 /**
+ * @deprecated This method is deprecated and should not be further used. Please use:
+ * Smartlook.setRenderingMode({renderingMode: Smartlook.RenderingMode.NO_RENDERING})
+ * 
  * @description Stop sensitive mode -> SDK records video.
  */
 exports.stopFullscreenSensitiveMode = function (successCallback, errorCallback) {
-    execWithCallbacks(successCallback, errorCallback, STOP_FULLSCREEN_SENSITIVE_MODE, []);
+    console.warn("Calling deprecated function!");
+    fullscreenModeActive = false;
+    exports.setRenderingMode({renderingMode: exports.RenderingMode.NATIVE}, successCallback, errorCallback);
 };
 
 /**
+ * @deprecated This method is deprecated and should not be further used.
+ * 
  * @description Check if SDK is running in fullscreen sensitive mode.
  * 
  * @callback successCallback Callback value set to true if SDK is currently in fullscreen sensitive mode.
@@ -286,7 +298,8 @@ exports.stopFullscreenSensitiveMode = function (successCallback, errorCallback) 
  * }
  */
 exports.isFullscreenSensitiveModeActive = function (successCallback, errorCallback) {
-    execWithCallbacks(successCallback, errorCallback, IS_FULLSCREEN_SENSITIVE_MODE_ACTIVE, []);
+    console.warn("Calling deprecated function!");
+    successCallback(fullscreenModeActive);
 };
 
 
