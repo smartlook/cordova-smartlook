@@ -78,7 +78,7 @@ public class SmartlookPlugin extends CordovaPlugin {
     private static final int SETUP_START_NEW_SESSION = 3;
     private static final int SETUP_START_NEW_SESSION_AND_USER = 4;
     private static final int IDENTIFIER = 0;
-    private static final int SESSION_PROPERTIES = 1;
+    private static final int USER_PROPERTIES = 1;
     private static final int EVENT_NAME = 0;
     private static final int EVENT_PROPERTIES = 1;
     private static final int GLOBAL_EVENT_PROPERTIES = 0;
@@ -119,12 +119,6 @@ public class SmartlookPlugin extends CordovaPlugin {
                 isRecording(callbackContext);
             } else if (action.equals(RESET_SESSION)) {
                 resetSession(args, callbackContext);
-            } else if (action.equals(START_FULLSCREEN_SENSITIVE_MODE)) {
-                startFullscreenSensitiveMode(callbackContext);
-            } else if (action.equals(STOP_FULLSCREEN_SENSITIVE_MODE)) {
-                stopFullscreenSensitiveMode(callbackContext);
-            } else if (action.equals(IS_FULLSCREEN_SENSITIVE_MODE_ACTIVE)) {
-                isFullscreenSensitiveModeActive(callbackContext);
             } else if (action.equals(SET_USER_IDENTIFIER)) {
                 setUserIdentifier(args, callbackContext);
             } else if (action.equals(SET_EVENT_TRACKING_MODE)) {        
@@ -255,7 +249,7 @@ public class SmartlookPlugin extends CordovaPlugin {
 
     private void resetSession(JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (!args.isNull(RESET_USER)) {
-            Smartlook.setUserIdentifier(args.getString(IDENTIFIER), args.getJSONObject(SESSION_PROPERTIES));
+            Smartlook.resetSession(args.getBoolean(RESET_USER));
             callbackContext.success();
             return;
         }
@@ -282,8 +276,9 @@ public class SmartlookPlugin extends CordovaPlugin {
     // User identification
 
     private void setUserIdentifier(JSONArray args, CallbackContext callbackContext) throws JSONException {
-        if (!args.isNull(IDENTIFIER) && !args.isNull(SESSION_PROPERTIES)) {
-            Smartlook.setUserIdentifier(args.getString(IDENTIFIER), args.getJSONObject(SESSION_PROPERTIES));
+        if (!args.isNull(IDENTIFIER) && !args.isNull(USER_PROPERTIES)) {
+            Smartlook.setUserIdentifier(args.getString(IDENTIFIER));
+            Smartlook.setUserProperties(args.getJSONObject(USER_PROPERTIES), false);
             callbackContext.success();
             return;
         } else if (!args.isNull(IDENTIFIER)) {
