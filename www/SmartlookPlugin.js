@@ -3,8 +3,10 @@ var exec = require('cordova/exec');
 // Plugin name
 const SMARTLOOK_PLUGIN = "SmartlookPlugin"
 
-// Plugin version
-const SMARTLOOK_PLUGIN_VERSION = "1.5.2"
+// Smartlook framework info
+const SMARTLOOK_FRAMEWORK = "CORDOVA"
+const SMARTLOOK_FRAMEWORK_VERSION = "-"
+const SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = "1.5.3"
 
 // API methods names
 
@@ -724,7 +726,7 @@ exports.unregisterIntegrationListener = function(successCallback, errorCallback)
 // Internal logic
 
 function setPluginVersion() {
-    exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, SET_PLUGIN_VERISION, [SMARTLOOK_PLUGIN_VERSION]);
+    exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, SET_PLUGIN_VERISION, [SMARTLOOK_FRAMEWORK, SMARTLOOK_FRAMEWORK_VERSION, SMARTLOOK_FRAMEWORK_PLUGIN_VERSION]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

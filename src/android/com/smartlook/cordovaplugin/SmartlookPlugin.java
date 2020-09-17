@@ -93,6 +93,9 @@ public class SmartlookPlugin extends CordovaPlugin {
     private static final int RENDERING_MODE = 0;
     private static final int WITH_CURRENT_TIMESTAMP = 0;
     private static final int RESET_USER = 0;
+    private static final int SMARTLOOK_FRAMEWORK = 0
+    private static final int SMARTLOOK_FRAMEWORK_VERSION = 1
+    private static final int SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = 2
 
     // Undefined
     private static final int UNDEFINED_FPS = -1;
@@ -498,7 +501,23 @@ public class SmartlookPlugin extends CordovaPlugin {
     // Internal logic
 
     private void setPluginVersion(JSONArray args, CallbackContext callbackContext) throws JSONException {
-        //todo not implemented
+        String framework = "";
+        String frameworkVersion = "";
+        String frameworkPluginVersion = "";
+
+        if (!args.isNull(SMARTLOOK_FRAMEWORK)) {
+            framework = args.getString(SMARTLOOK_FRAMEWORK);
+        }
+
+        if (!args.isNull(SMARTLOOK_FRAMEWORK_VERSION)) {
+            frameworkVersion = args.getString(SMARTLOOK_FRAMEWORK_VERSION);
+        }
+
+        if (!args.isNull(SMARTLOOK_FRAMEWORK)) {
+            frameworkPluginVersion = args.getString(SMARTLOOK_FRAMEWORK_PLUGIN_VERSION);
+        }
+
+        Smartlook.setFrameworkInfo(framework, frameworkVersion, frameworkPluginVersion);
         callbackContext.success();
     }
 
