@@ -4,9 +4,9 @@ var exec = require('cordova/exec');
 const SMARTLOOK_PLUGIN = "SmartlookPlugin"
 
 // Smartlook framework info
-const SMARTLOOK_FRAMEWORK = "CORDOVA"
-const SMARTLOOK_FRAMEWORK_VERSION = "-"
-const SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = "1.5.3"
+const SMARTLOOK_FRAMEWORK = "CORDOVA";
+const SMARTLOOK_FRAMEWORK_VERSION = "-";
+const SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = "1.5.3";
 
 // API methods names
 
@@ -23,6 +23,7 @@ const SET_USER_IDENTIFIER = "setUserIdentifier";
 
 //Tracking
 const SET_EVENT_TRACKING_MODE = "setEventTrackingMode";
+const SET_EVENT_TRACKING_MODES = "setEventTrackingModes";
 const TRACK_NAVIGATION_EVENT = "trackNavigationEvent";
 const START_TIMED_CUSTOM_EVENT = "startTimedCustomEvent";
 const STOP_TIMED_CUSTOM_EVENT = "stopTimedCustomEvent";
@@ -76,6 +77,8 @@ exports.ViewState = {
 exports.EventTrackingMode = {
     FULL_TRACKING: "full_tracking",
     IGNORE_USER_INTERACTION: "ignore_user_interaction",
+    IGNORE_NAVIGATION_INTERACTION: "ignore_navigation_interaction",
+    IGNORE_RAGE_CLICKS: "ignore_rage_clicks",
     NO_TRACKING: "no_tracking"
 }
 
@@ -113,8 +116,9 @@ exports.RenderingMode = {
  *                                       dashboard. If invalid key is set SDK will not work properly.
  * @param options.fps                    (Optional) Desired FPS for the recording, that must be in range from 1 to 10.
  * @param options.renderingMode          (Optional) Mode defining the video output of recording.
- * @param options.startNewSession        (Optional) If true new session is going to be created
- * @param options.startNewSessionAndUser (Optional) If true new session and visitor is going to be created 
+ * @param options.startNewSession        (Optional) If true new session is going to be created.
+ * @param options.startNewSessionAndUser (Optional) If true new session and visitor is going to be created.
+ * @param options.eventTrackignModes     (Optional) Array of EventTrackingModes that should be applied to recording. 
  */
 exports.setupAndStartRecording = function (options, successCallback, errorCallback) {
 
@@ -155,6 +159,12 @@ exports.setupAndStartRecording = function (options, successCallback, errorCallba
         arguments.push(false)
     }
 
+    if (checkEventTrackingModeArray("setupAndStartRecording", "eventTrackingModes", options, errorCallback, false)) {
+        arguments.push(options["eventTrackingModes"])
+    } else {
+        [arguments.push([])]
+    }
+
     console.log("setupAndStart()" + arguments);
     execWithCallbacks(successCallback, errorCallback, SETUP_AND_START_RECORDING, arguments);
 };
@@ -166,8 +176,9 @@ exports.setupAndStartRecording = function (options, successCallback, errorCallba
  *                                       dashboard. If invalid key is set SDK will not work properly.
  * @param options.fps                    (Optional) Desired FPS for the recording, that must be in range from 1 to 10.
  * @param options.renderingMode          (Optional) Mode defining the video output of recording.
- * @param options.startNewSession        (Optional) If true new session is going to be created
- * @param options.startNewSessionAndUser (Optional) If true new session and visitor is going to be created 
+ * @param options.startNewSession        (Optional) If true new session is going to be created.
+ * @param options.startNewSessionAndUser (Optional) If true new session and visitor is going to be created. 
+ * @param options.eventTrackignModes     (Optional) Array of EventTrackingModes that should be applied to recording.
  */
 exports.setup = function (options, successCallback, errorCallback) {
 
@@ -206,6 +217,12 @@ exports.setup = function (options, successCallback, errorCallback) {
         arguments.push(options["startNewSessionAndUser"])
     } else {
         arguments.push(false)
+    }
+
+    if (checkEventTrackingModeArray("setupAndStartRecording", "eventTrackingModes", options, errorCallback, false)) {
+        arguments.push(options["eventTrackingModes"])
+    } else {
+        [arguments.push([])]
     }
 
     execWithCallbacks(successCallback, errorCallback, SETUP, arguments);
@@ -339,14 +356,19 @@ exports.setUserIdentifier = function (options, successCallback, errorCallback) {
  * 
  * @param options.eventTrackingMode Can be on of:
  *                                  - EventTrackingMode.FULL_TRACKING ... track everything
- *                                  - EventTrackingMode.IGNORE_USER_INTERACTION ... will not track touches, focus, keyboard, selector events
- *                                  - EventTrackingMode.NO_TRACKING ... not gonna track any events 
+ *                                  - EventTrackingMode.IGNORE_USER_INTERACTION ... will not track touches
+ *                                    focus, keyboard, selector events
+ *                                  - EventTrackingMode.IGNORE_NAVIGATION_INTERACTION ... will not track screen names
+ *                                  - EventTrackingMode.IGNORE_RAGE_CLICKS ... will not track rage clicks
+ *                                  - EventTrackingMode.NO_TRACKING ... not gonna track any events
  */
 exports.setEventTrackingMode = function (options, successCallback, errorCallback) {
     var arguments = [];
     var allowedValues = [
         exports.EventTrackingMode.FULL_TRACKING,
         exports.EventTrackingMode.IGNORE_USER_INTERACTION,
+        exports.EventTrackingMode.IGNORE_NAVIGATION_INTERACTION,
+        exports.EventTrackingMode.IGNORE_RAGE_CLICKS,
         exports.EventTrackingMode.NO_TRACKING];
 
     if (checkStringArrayOption("setEventTrackingMode", "eventTrackingMode", options, allowedValues, errorCallback, true)) {
@@ -356,6 +378,29 @@ exports.setEventTrackingMode = function (options, successCallback, errorCallback
     }
 
     execWithCallbacks(successCallback, errorCallback, SET_EVENT_TRACKING_MODE, arguments);
+}
+
+/**
+ * @description You can configure which events are being tracked by setting eventTrackingMode.
+ * 
+ * @param options.eventTrackingModes Array of EventTrackingMode tha can be one of:
+ *                                  - EventTrackingMode.FULL_TRACKING ... track everything
+ *                                  - EventTrackingMode.IGNORE_USER_INTERACTION ... will not track touches
+ *                                    focus, keyboard, selector events
+ *                                  - EventTrackingMode.IGNORE_NAVIGATION_INTERACTION ... will not track screen names
+ *                                  - EventTrackingMode.IGNORE_RAGE_CLICKS ... will not track rage clicks
+ *                                  - EventTrackingMode.NO_TRACKING ... not gonna track any events
+ */
+exports.setEventTrackingModes = function (options, successCallback, errorCallback) {
+    var arguments = [];
+
+    if (checkEventTrackingModeArray("setEventTrackingModes", "eventTrackingModes", options, errorCallback, true)) {
+        arguments.push(options["eventTrackingModes"])
+    } else {
+        return
+    }
+
+    execWithCallbacks(successCallback, errorCallback, SET_EVENT_TRACKING_MODES, arguments);
 }
 
 /**
@@ -864,6 +909,34 @@ function checkFpsOption(method, options, errorCallback, isMandatory) {
     }
 
     return true;
+}
+
+function checkEventTrackingModeArray(method, options, errorCallback, isMandatory) {
+    var allowedValues = [
+        exports.EventTrackingMode.FULL_TRACKING,
+        exports.EventTrackingMode.IGNORE_USER_INTERACTION,
+        exports.EventTrackingMode.IGNORE_NAVIGATION_INTERACTION,
+        exports.EventTrackingMode.IGNORE_RAGE_CLICKS,
+        exports.EventTrackingMode.NO_TRACKING];
+
+    var eventTrackingModeArray = options["eventTrackingModes"];
+    var noneFailed = true;    
+
+    if (eventTrackingModeArray == undefined || eventTrackingModeArray == null || !Array.isArray(eventTrackingModeArray)) {
+        if (isMandatory != undefined && isMandatory === true) {
+            logError(errorCallback, method + "(): must be called with eventTrackingModes array option!");     
+        }
+
+        return false;
+    } 
+
+    for (var i = 0; i < eventTrackingModeArray.length; i++) {
+        if (!checkStringArrayOption(method, "eventTrackingMode", options, allowedValues, errorCallback, isMandatory)) {
+            noneFailed = false;
+        }
+    }
+
+    return noneFailed;
 }
 
 // Utility methods
