@@ -122,7 +122,7 @@ exports.RenderingMode = {
  * 
  * @SL_COMPATIBILITY_NAME("name=setup;type=func;params=smartlookAPIKey{string}")
  * @SL_COMPATIBILITY_NAME("name=setup;type=func;params=setupOptions{SetupOptions}")
- * @SL_COMPATIBILITY_NAME("name=SetupOptions;type=builder;members=smartlookAPIKey,fps,startNewSession,startNewSessionAndUser, eventTrackingModes")
+ * @SL_COMPATIBILITY_NAME("name=SetupOptions;type=builder;members=smartlookAPIKey,fps,renderingMode,startNewSession,startNewSessionAndUser,eventTrackingModes")
  */
 exports.setupAndStartRecording = function (options, successCallback, errorCallback) {
 
