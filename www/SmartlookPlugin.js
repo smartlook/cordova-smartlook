@@ -4,7 +4,7 @@ var exec = require('cordova/exec');
 const SMARTLOOK_PLUGIN = "SmartlookPlugin"
 
 // Plugin version
-const SMARTLOOK_PLUGIN_VERSION = "1.5.2"
+const SMARTLOOK_PLUGIN_VERSION = "1.6.0"
 
 // API methods names
 
