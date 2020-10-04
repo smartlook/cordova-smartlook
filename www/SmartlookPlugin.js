@@ -80,12 +80,12 @@ exports.EventTrackingMode = {
     IGNORE_NAVIGATION_INTERACTION: "ignore_navigation_interaction",
     IGNORE_RAGE_CLICKS: "ignore_rage_clicks",
     NO_TRACKING: "no_tracking"
-}
+};
 
 exports.RenderingMode = {
     NO_RENDERING: "no_rendering",
     NATIVE: "native"
-}
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 // SDK API methods
@@ -145,7 +145,7 @@ exports.setupAndStartRecording = function (options, successCallback, errorCallba
         arguments.push(UNDEFINED_FPS)
     }
 
-    if (checkStringArrayOption("setupAndStartRecording", "renderingMode", options, renderingModeAllowedValues, errorCallback, false)) {
+    if (checkStringArrayOption("setupAndStartRecording", options["renderingMode"], "renderingMode", renderingModeAllowedValues, errorCallback, false)) {
         arguments.push(options["renderingMode"])
     } else {
         arguments.push(UNDEFINED_RENDERING_MODE)
@@ -163,13 +163,12 @@ exports.setupAndStartRecording = function (options, successCallback, errorCallba
         arguments.push(false)
     }
 
-    if (checkEventTrackingModeArray("setupAndStartRecording", "eventTrackingModes", options, errorCallback, false)) {
+    if (checkEventTrackingModeArray("setupAndStartRecording", options, errorCallback, false)) {
         arguments.push(options["eventTrackingModes"])
     } else {
-        [arguments.push([])]
+        arguments.push([])
     }
 
-    console.log("setupAndStart()" + arguments);
     execWithCallbacks(successCallback, errorCallback, SETUP_AND_START_RECORDING, arguments);
 };
 
@@ -205,31 +204,31 @@ exports.setup = function (options, successCallback, errorCallback) {
     if (checkFpsOption("setup", options, errorCallback, false)) {
         arguments.push(options["fps"]);
     } else {
-        arguments.push(UNDEFINED_FPS)
+        arguments.push(UNDEFINED_FPS);
     }
 
-    if (checkStringArrayOption("setupAndStartRecording", "renderingMode", options, renderingModeAllowedValues, errorCallback, false)) {
-        arguments.push(options["renderingMode"])
+    if (checkStringArrayOption("setupAndStartRecording", options["renderingMode"], "renderingMode", renderingModeAllowedValues, errorCallback, false)) {
+        arguments.push(options["renderingMode"]);
     } else {
-        arguments.push(UNDEFINED_RENDERING_MODE)
+        arguments.push(UNDEFINED_RENDERING_MODE);
     }
 
     if (checkBooleanOption("setupAndStartRecording", "startNewSession", options, errorCallback, false)) {
-        arguments.push(options["startNewSession"])
+        arguments.push(options["startNewSession"]);
     } else {
-        arguments.push(false)
+        arguments.push(false);
     }
 
     if (checkBooleanOption("setupAndStartRecording", "startNewSessionAndUser", options, errorCallback, false)) {
-        arguments.push(options["startNewSessionAndUser"])
+        arguments.push(options["startNewSessionAndUser"]);
     } else {
-        arguments.push(false)
+        arguments.push(false);
     }
 
-    if (checkEventTrackingModeArray("setupAndStartRecording", "eventTrackingModes", options, errorCallback, false)) {
-        arguments.push(options["eventTrackingModes"])
+    if (checkEventTrackingModeArray("setupAndStartRecording", options, errorCallback, false)) {
+        arguments.push(options["eventTrackingModes"]);
     } else {
-        [arguments.push([])]
+        arguments.push([]);
     }
 
     execWithCallbacks(successCallback, errorCallback, SETUP, arguments);
@@ -397,10 +396,10 @@ exports.setEventTrackingMode = function (options, successCallback, errorCallback
         exports.EventTrackingMode.IGNORE_RAGE_CLICKS,
         exports.EventTrackingMode.NO_TRACKING];
 
-    if (checkStringArrayOption("setEventTrackingMode", "eventTrackingMode", options, allowedValues, errorCallback, true)) {
-        arguments.push(options["eventTrackingMode"])
+    if (checkStringArrayOption("setEventTrackingMode", options["eventTrackingMode"], "eventTrackingMode", allowedValues, errorCallback, true)) {
+        arguments.push(options["eventTrackingMode"]);
     } else {
-        return
+        return;
     }
 
     execWithCallbacks(successCallback, errorCallback, SET_EVENT_TRACKING_MODE, arguments);
@@ -420,10 +419,10 @@ exports.setEventTrackingMode = function (options, successCallback, errorCallback
 exports.setEventTrackingModes = function (options, successCallback, errorCallback) {
     var arguments = [];
 
-    if (checkEventTrackingModeArray("setEventTrackingModes", "eventTrackingModes", options, errorCallback, true)) {
-        arguments.push(options["eventTrackingModes"])
+    if (checkEventTrackingModeArray("setEventTrackingModes", options, errorCallback, true)) {
+        arguments.push(options["eventTrackingModes"]);
     } else {
-        return
+        return;
     }
 
     execWithCallbacks(successCallback, errorCallback, SET_EVENT_TRACKING_MODES, arguments);
@@ -449,10 +448,10 @@ exports.trackNavigationEvent = function (options, successCallback, errorCallback
         return;
     }
 
-    if (checkStringArrayOption("trackNavigationEvent", "viewState", options, allowedValues, errorCallback, true)) {
+    if (checkStringArrayOption("trackNavigationEvent", options["viewState"], "viewState", allowedValues, errorCallback, true)) {
         arguments.push(options["viewState"]);
     } else {
-        return
+        return;
     }
 
     execWithCallbacks(successCallback, errorCallback, TRACK_NAVIGATION_EVENT, arguments);
@@ -610,7 +609,7 @@ exports.setGlobalEventProperties = function (options, successCallback, errorCall
     if (checkBooleanOption("setGlobalEventProperties", "immutable", options, errorCallback, true)) {
         arguments.push(options["immutable"]);
     } else {
-        return
+        return;
     }
 
     execWithCallbacks(successCallback, errorCallback, SET_GLOBAL_EVENT_PROPERTIES, arguments);
@@ -639,7 +638,7 @@ exports.setGlobalEventProperty = function (options, successCallback, errorCallba
     if (checkBooleanOption("setGlobalEventProperty", "immutable", options, errorCallback, true)) {
         arguments.push(options["immutable"]);
     } else {
-        return
+        return;
     }
 
     execWithCallbacks(successCallback, errorCallback, SET_GLOBAL_EVENT_PROPERTY, arguments);
@@ -658,7 +657,7 @@ exports.removeGlobalEventProperty = function (options, successCallback, errorCal
     if (checkStringOption("removeGlobalEventProperty", "key", options, errorCallback, true)) {
         arguments.push(options["key"]);
     } else {
-        return
+        return;
     }
 
     execWithCallbacks(successCallback, errorCallback, REMOVE_GLOBAL_EVENT_PROPERTY, arguments);
@@ -784,7 +783,7 @@ exports.setRenderingMode = function(options, successCallback, errorCallback) {
         exports.RenderingMode.NO_RENDERING,
         exports.RenderingMode.NATIVE];
 
-    if (checkStringArrayOption("setRenderingMode", "renderingMode", options, allowedValues, errorCallback, true)) {
+    if (checkStringArrayOption("setRenderingMode", options["renderingMode"], "renderingMode", allowedValues, errorCallback, true)) {
         arguments.push(options["renderingMode"]);
     } else {
         return;
@@ -851,7 +850,7 @@ function setPluginVersion() {
 // Check functions
 
 function checkStringOption(method, option, options, errorCallback, isMandatory) {
-    var toCheck = options[option]
+    var toCheck = options[option];
 
     if (toCheck == undefined || toCheck == null) {
         if (isMandatory != undefined && isMandatory === true) {
@@ -863,14 +862,13 @@ function checkStringOption(method, option, options, errorCallback, isMandatory) 
 
     if (typeof toCheck !== 'string' || toCheck.length < 1) {
         logError(errorCallback, method + "(): " + option + " must be non-empty string!");
-        return false
+        return false;
     }
 
     return true;
 }
 
-function checkStringArrayOption(method, option, options, possibleValueArray, errorCallback, isMandatory) {
-    var toCheck = options[option];
+function checkStringArrayOption(method, toCheck, option, possibleValueArray, errorCallback, isMandatory) {
 
     if (toCheck == undefined || toCheck == null) {
         if (isMandatory != undefined && isMandatory === true) {
@@ -888,10 +886,10 @@ function checkStringArrayOption(method, option, options, possibleValueArray, err
                 found = true;
             }
 
-            errorMessagePossibilities += possibleValueArray[i] + " "
+            errorMessagePossibilities += possibleValueArray[i] + " ";
         }
         
-        errorMessagePossibilities.trim()
+        errorMessagePossibilities.trim();
 
         if (!found) {
             logError(errorCallback, method + "(): " + option + " must be one of: " + errorMessagePossibilities);
@@ -906,7 +904,7 @@ function checkStringArrayOption(method, option, options, possibleValueArray, err
 }
 
 function checkBooleanOption(method, option, options, errorCallback, isMandatory) {
-    var toCheck = options[option]
+    var toCheck = options[option];
 
     if (toCheck == undefined || toCheck == null) {
         if (isMandatory != undefined && isMandatory === true) {
@@ -918,14 +916,14 @@ function checkBooleanOption(method, option, options, errorCallback, isMandatory)
 
     if (typeof toCheck !== 'boolean') {
         logError(errorCallback, method + "(): " + option + " must be boolean!");
-        return false
+        return false;
     }
 
     return true;
 }
 
 function checkProperties(method, option, options, errorCallback, isMandatory) {
-    var toCheck = options[option]
+    var toCheck = options[option];
 
     if (toCheck == undefined || toCheck == null) {
         if (isMandatory != undefined && isMandatory === true) {
@@ -947,7 +945,7 @@ function checkKeyValueOptions(method, options, errorCallback, isMandatory) {
             logError(errorCallback, method + "(): must be called with key value options!");     
         }
         
-        return false
+        return false;
     }
 
     if (typeof key !== 'string' || key.length < 1 || typeof value !== 'string') {
@@ -1002,7 +1000,8 @@ function checkEventTrackingModeArray(method, options, errorCallback, isMandatory
     } 
 
     for (var i = 0; i < eventTrackingModeArray.length; i++) {
-        if (!checkStringArrayOption(method, "eventTrackingMode", options, allowedValues, errorCallback, isMandatory)) {
+        console.log("checkEventTrackingModeArray(): gonna check: " + eventTrackingModeArray[i]);
+        if (!checkStringArrayOption(method, eventTrackingModeArray[i], "eventTrackingMode", allowedValues, errorCallback, isMandatory)) {
             noneFailed = false;
         }
     }

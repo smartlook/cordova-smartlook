@@ -81,6 +81,7 @@ public class SmartlookPlugin extends CordovaPlugin {
     private static final int SETUP_RENDERING_MODE = 2;
     private static final int SETUP_START_NEW_SESSION = 3;
     private static final int SETUP_START_NEW_SESSION_AND_USER = 4;
+    private static final int SETUP_EVENT_TRACKING_MODES = 5;
     private static final int IDENTIFIER = 0;
     private static final int USER_PROPERTIES = 1;
     private static final int EVENT_NAME = 0;
@@ -204,6 +205,17 @@ public class SmartlookPlugin extends CordovaPlugin {
                 builder.startNewSessionAndUser();
             }
 
+            if (!args.isNull(SETUP_EVENT_TRACKING_MODES)) {
+                List<String> eventTrackingModeStringList = jsonArrayToStringList(args.getJSONArray(SETUP_EVENT_TRACKING_MODES));
+                List<EventTrackingMode> eventTrackingModeList = new ArrayList<>();
+    
+                for(String event: eventTrackingModeStringList) {
+                    eventTrackingModeList.add(stringToEventTrackingMode(event));
+                }
+    
+                builder.setEventTrackingModes(eventTrackingModeList);
+            }
+
             Smartlook.setup(builder.build());
             Smartlook.unregisterBlacklistedClass(WebView.class);
             Smartlook.startRecording();
@@ -233,6 +245,17 @@ public class SmartlookPlugin extends CordovaPlugin {
 
             if (!args.isNull(SETUP_START_NEW_SESSION_AND_USER) && args.getBoolean(SETUP_START_NEW_SESSION_AND_USER)) {
                 builder.startNewSessionAndUser();
+            }
+
+            if (!args.isNull(SETUP_EVENT_TRACKING_MODES)) {
+                List<String> eventTrackingModeStringList = jsonArrayToStringList(args.getJSONArray(SETUP_EVENT_TRACKING_MODES));
+                List<EventTrackingMode> eventTrackingModeList = new ArrayList<>();
+    
+                for(String event: eventTrackingModeStringList) {
+                    eventTrackingModeList.add(stringToEventTrackingMode(event));
+                }
+    
+                builder.setEventTrackingModes(eventTrackingModeList);
             }
 
             Smartlook.setup(builder.build());
@@ -616,7 +639,7 @@ public class SmartlookPlugin extends CordovaPlugin {
             case "no_rendering":
                 return RenderingMode.NO_RENDERING;
             case "native":
-                return ViewState.NATIVE;          
+                return RenderingMode.NATIVE;          
             default:
                 throw new InvalidParameterException();
         }
