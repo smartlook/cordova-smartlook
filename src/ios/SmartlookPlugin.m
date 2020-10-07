@@ -75,7 +75,7 @@ static NSString *__smartlookPluginVersion = @"unknown";
 
 - (void)setPluginVersion:(CDVInvokedUrlCommand*)command {
     DLog(@"setPluginVersion: %@", [command arguments]);
-    __smartlookPluginVersion = [command argumentAtIndex:0];
+    __smartlookPluginVersion = [command argumentAtIndex:2];
 }
 
 - (BOOL)internalSetup:(CDVInvokedUrlCommand*)command {
@@ -118,7 +118,7 @@ static NSString *__smartlookPluginVersion = @"unknown";
         }
     }
 
-    options[@"__sdk_framework"] = @"cordova";
+    options[@"__sdk_framework"] = @"CORDOVA";
     options[@"__sdk_framework_version"] = CDV_VERSION;
     options[@"__sdk_framework_plugin_version"] = __smartlookPluginVersion;
         
