@@ -11,6 +11,38 @@
 
 @implementation SmartlookPlugin
 
+NSDictionary *cordovaEventTrackingModeToNative;
+NSDictionary *nativeEventTrackingModeToCordova;
+
+NSDictionary *cordovaRenderingModeToNative;
+NSDictionary *nativeRenderingModeToCordova;
+
+- (void)initializeEnumConversionTables {
+    cordovaEventTrackingModeToNative = @{
+        @"full_tracking"                 : SLEventTrackingModeFullTracking,
+        @"ignore_user_interaction"       : SLEventTrackingModeIgnoreUserInteractionEvents,
+        @"ignore_navigation_interaction" : SLEventTrackingModeIgnoreNavigationInteractionEvents,
+        @"ignore_rage_clicks"            : SLEventTrackingModeIgnoreRageClickEvents,
+        @"no_tracking"                   : SLEventTrackingModeNoTracking
+    };
+    nativeEventTrackingModeToCordova = @{
+        SLEventTrackingModeFullTracking                      : @"full_tracking",
+        SLEventTrackingModeIgnoreUserInteractionEvents       : @"ignore_user_interaction",
+        SLEventTrackingModeIgnoreNavigationInteractionEvents : @"ignore_navigation_interaction",
+        SLEventTrackingModeIgnoreRageClickEvents             : @"ignore_rage_clicks",
+        SLEventTrackingModeNoTracking                        : @"no_tracking"
+    };
+    cordovaRenderingModeToNative = @{
+        @"native"       : SLRenderingModeNative,
+        @"no_rendering" : SLRenderingModeNoRendering,
+    };
+    nativeRenderingModeToCordova = @{
+        SLRenderingModeNative      : @"native",
+        SLRenderingModeNoRendering : @"no_rendering"
+    };
+}
+
+
 - (void)reportOKResultForCallbackID:(NSString *)callbackID {
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackID];
@@ -43,10 +75,12 @@ static NSString *__smartlookPluginVersion = @"unknown";
 
 - (void)setPluginVersion:(CDVInvokedUrlCommand*)command {
     DLog(@"setPluginVersion: %@", [command arguments]);
-    __smartlookPluginVersion = [command argumentAtIndex:0];
+    __smartlookPluginVersion = [command argumentAtIndex:2];
 }
 
 - (BOOL)internalSetup:(CDVInvokedUrlCommand*)command {
+    
+    [self initializeEnumConversionTables];
     
     NSString *key = [self checkFirstArgumentInCommand:command argName:@"API key"];
     if (key == nil) {
@@ -63,10 +97,9 @@ static NSString *__smartlookPluginVersion = @"unknown";
 
     id renderingMode = [command argumentAtIndex:2];
     if ([renderingMode respondsToSelector:@selector(isEqualToString:)]) {
-        if ([renderingMode isEqualToString:@"native"]) {
-            options[SLSetupOptionRenderingModeKey] = SLRenderingModeNative;
-        } else if ([renderingMode isEqualToString:@"no_rendering"]) {
-            options[SLSetupOptionRenderingModeKey] = SLRenderingModeNoRendering;
+        SLRenderingMode smartlookRenderingMode = cordovaRenderingModeToNative[renderingMode];
+        if (smartlookRenderingMode != nil) {
+            options[SLSetupOptionRenderingModeKey] = smartlookRenderingMode;
         }
     }
 
@@ -85,7 +118,7 @@ static NSString *__smartlookPluginVersion = @"unknown";
         }
     }
 
-    options[@"__sdk_framework"] = @"cordova";
+    options[@"__sdk_framework"] = @"CORDOVA";
     options[@"__sdk_framework_version"] = CDV_VERSION;
     options[@"__sdk_framework_plugin_version"] = __smartlookPluginVersion;
         
@@ -274,20 +307,42 @@ static NSString *__smartlookPluginVersion = @"unknown";
     DLog(@"entering `setEventTrackingMode` %@", [command arguments]);
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {
-            NSString *trackingMode = [self checkFirstArgumentInCommand:command argName:@"Tracking Mode"];
             NSString *smartlookTrackingMode;
-            if ([trackingMode isEqualToString:@"full_tracking"]) {
-                smartlookTrackingMode = @"event-tracking-mode-full";
-            } else if ([trackingMode isEqualToString:@"ignore_user_interaction"]) {
-                smartlookTrackingMode = @"event-tracking-mode-ignore-user-interaction";
-            } else if ([trackingMode isEqualToString:@"no_tracking"]) {
-                smartlookTrackingMode = @"event-tracking-mode-no-tracking";
-            } else {
+            NSString *trackingMode = [self checkFirstArgumentInCommand:command argName:@"Tracking Mode"];
+            if (trackingMode != nil) {
+                smartlookTrackingMode= cordovaEventTrackingModeToNative[trackingMode];
+            }
+            if (smartlookTrackingMode == nil) {
                 [self raiseExceptionWithMessage:[NSString stringWithFormat:@"'%@' is not a recognized event tracking mode", trackingMode] forCallbackID:command.callbackId];
             };
             DLog(@"tracking mode: %@", smartlookTrackingMode);
             [Smartlook setEventTrackingModeTo:smartlookTrackingMode];
             [self reportOKResultForCallbackID:command.callbackId];
+        } @catch (NSException *exception) {
+            [self reportException:exception forCallbackID:command.callbackId];
+        }
+    });
+}
+
+- (void)setEventTrackingModes:(CDVInvokedUrlCommand*)command {
+    DLog(@"entering `setEventTrackingModes` %@", [command arguments]);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        @try {
+            NSMutableArray *smartlookTrackingModes = [NSMutableArray new];
+            NSArray *trackingModes = [command argumentAtIndex:0];
+            if ([trackingModes isKindOfClass:[NSArray class]]) {
+                [trackingModes enumerateObjectsUsingBlock:^(NSString *  _Nonnull trackingMode, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if ([trackingMode isKindOfClass:[NSString class]]) {
+                        SLEventTrackingMode smartlookTrackingMode = cordovaEventTrackingModeToNative[trackingMode];
+                        if (smartlookTrackingMode != nil) {
+                            [smartlookTrackingModes addObject:smartlookTrackingMode];
+                        } else {
+                            [self raiseExceptionWithMessage:[NSString stringWithFormat:@"'%@' is not a recognized event tracking mode", trackingMode] forCallbackID:command.callbackId];
+                        }
+                    }
+                }];
+                [Smartlook setEventTrackingModesTo:smartlookTrackingModes];
+            }
         } @catch (NSException *exception) {
             [self reportException:exception forCallbackID:command.callbackId];
         }
@@ -566,13 +621,12 @@ NSString *integrationCallbackId;
     DLog(@"entering `setRenderingMode` arguments: %@", command.arguments);
     dispatch_async(dispatch_get_main_queue(), ^{
         @try {
-            NSString *renderingMode = [self checkFirstArgumentInCommand:command argName:@"renderingMode"];
             NSString *smartlookRenderingMode;
-            if ([renderingMode isEqualToString:@"no_rendering"]) {
-                smartlookRenderingMode = @"no-rendering";
-            } else if ([renderingMode isEqualToString:@"native"]) {
-                smartlookRenderingMode = SLRenderingModeNative;
-            } else {
+            NSString *renderingMode = [self checkFirstArgumentInCommand:command argName:@"renderingMode"];
+            if (renderingMode != nil) {
+                smartlookRenderingMode = cordovaRenderingModeToNative[renderingMode];
+            }
+            if (smartlookRenderingMode == nil) {
                 [self raiseExceptionWithMessage:[NSString stringWithFormat:@"`%@` is not a valid rendering mode.", renderingMode] forCallbackID:command.callbackId];
             }
             [Smartlook setRenderingModeTo:smartlookRenderingMode];

@@ -3,8 +3,10 @@ var exec = require('cordova/exec');
 // Plugin name
 const SMARTLOOK_PLUGIN = "SmartlookPlugin"
 
-// Plugin version
-const SMARTLOOK_PLUGIN_VERSION = "1.6.0"
+// Smartlook framework info
+const SMARTLOOK_FRAMEWORK = "CORDOVA";
+const SMARTLOOK_FRAMEWORK_VERSION = "-";
+const SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = "1.7.0"
 
 // API methods names
 
@@ -21,6 +23,7 @@ const SET_USER_IDENTIFIER = "setUserIdentifier";
 
 //Tracking
 const SET_EVENT_TRACKING_MODE = "setEventTrackingMode";
+const SET_EVENT_TRACKING_MODES = "setEventTrackingModes";
 const TRACK_NAVIGATION_EVENT = "trackNavigationEvent";
 const START_TIMED_CUSTOM_EVENT = "startTimedCustomEvent";
 const STOP_TIMED_CUSTOM_EVENT = "stopTimedCustomEvent";
@@ -74,13 +77,15 @@ exports.ViewState = {
 exports.EventTrackingMode = {
     FULL_TRACKING: "full_tracking",
     IGNORE_USER_INTERACTION: "ignore_user_interaction",
+    IGNORE_NAVIGATION_INTERACTION: "ignore_navigation_interaction",
+    IGNORE_RAGE_CLICKS: "ignore_rage_clicks",
     NO_TRACKING: "no_tracking"
-}
+};
 
 exports.RenderingMode = {
     NO_RENDERING: "no_rendering",
     NATIVE: "native"
-}
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 // SDK API methods
@@ -111,8 +116,13 @@ exports.RenderingMode = {
  *                                       dashboard. If invalid key is set SDK will not work properly.
  * @param options.fps                    (Optional) Desired FPS for the recording, that must be in range from 1 to 10.
  * @param options.renderingMode          (Optional) Mode defining the video output of recording.
- * @param options.startNewSession        (Optional) If true new session is going to be created
- * @param options.startNewSessionAndUser (Optional) If true new session and visitor is going to be created 
+ * @param options.startNewSession        (Optional) If true new session is going to be created.
+ * @param options.startNewSessionAndUser (Optional) If true new session and visitor is going to be created.
+ * @param options.eventTrackignModes     (Optional) Array of EventTrackingModes that should be applied to recording. 
+ * 
+ * @SL_COMPATIBILITY_NAME("name=setup;type=func;params=smartlookAPIKey{string}")
+ * @SL_COMPATIBILITY_NAME("name=setup;type=func;params=setupOptions{SetupOptions}")
+ * @SL_COMPATIBILITY_NAME("name=SetupOptions;type=builder;members=smartlookAPIKey,fps,renderingMode,startNewSession,startNewSessionAndUser,eventTrackingModes")
  */
 exports.setupAndStartRecording = function (options, successCallback, errorCallback) {
 
@@ -135,7 +145,7 @@ exports.setupAndStartRecording = function (options, successCallback, errorCallba
         arguments.push(UNDEFINED_FPS)
     }
 
-    if (checkStringArrayOption("setupAndStartRecording", "renderingMode", options, renderingModeAllowedValues, errorCallback, false)) {
+    if (checkStringArrayOption("setupAndStartRecording", options["renderingMode"], "renderingMode", renderingModeAllowedValues, errorCallback, false)) {
         arguments.push(options["renderingMode"])
     } else {
         arguments.push(UNDEFINED_RENDERING_MODE)
@@ -153,7 +163,12 @@ exports.setupAndStartRecording = function (options, successCallback, errorCallba
         arguments.push(false)
     }
 
-    console.log("setupAndStart()" + arguments);
+    if (checkEventTrackingModeArray("setupAndStartRecording", options, errorCallback, false)) {
+        arguments.push(options["eventTrackingModes"])
+    } else {
+        arguments.push([])
+    }
+
     execWithCallbacks(successCallback, errorCallback, SETUP_AND_START_RECORDING, arguments);
 };
 
@@ -164,8 +179,12 @@ exports.setupAndStartRecording = function (options, successCallback, errorCallba
  *                                       dashboard. If invalid key is set SDK will not work properly.
  * @param options.fps                    (Optional) Desired FPS for the recording, that must be in range from 1 to 10.
  * @param options.renderingMode          (Optional) Mode defining the video output of recording.
- * @param options.startNewSession        (Optional) If true new session is going to be created
- * @param options.startNewSessionAndUser (Optional) If true new session and visitor is going to be created 
+ * @param options.startNewSession        (Optional) If true new session is going to be created.
+ * @param options.startNewSessionAndUser (Optional) If true new session and visitor is going to be created. 
+ * @param options.eventTrackignModes     (Optional) Array of EventTrackingModes that should be applied to recording.
+ * 
+ * @SL_COMPATIBILITY_NAME("name=setup;type=func;params=smartlookAPIKey{string}")
+ * @SL_COMPATIBILITY_NAME("name=setup;type=func;params=setupOptions{SetupOptions}")
  */
 exports.setup = function (options, successCallback, errorCallback) {
 
@@ -185,25 +204,31 @@ exports.setup = function (options, successCallback, errorCallback) {
     if (checkFpsOption("setup", options, errorCallback, false)) {
         arguments.push(options["fps"]);
     } else {
-        arguments.push(UNDEFINED_FPS)
+        arguments.push(UNDEFINED_FPS);
     }
 
-    if (checkStringArrayOption("setupAndStartRecording", "renderingMode", options, renderingModeAllowedValues, errorCallback, false)) {
-        arguments.push(options["renderingMode"])
+    if (checkStringArrayOption("setupAndStartRecording", options["renderingMode"], "renderingMode", renderingModeAllowedValues, errorCallback, false)) {
+        arguments.push(options["renderingMode"]);
     } else {
-        arguments.push(UNDEFINED_RENDERING_MODE)
+        arguments.push(UNDEFINED_RENDERING_MODE);
     }
 
     if (checkBooleanOption("setupAndStartRecording", "startNewSession", options, errorCallback, false)) {
-        arguments.push(options["startNewSession"])
+        arguments.push(options["startNewSession"]);
     } else {
-        arguments.push(false)
+        arguments.push(false);
     }
 
     if (checkBooleanOption("setupAndStartRecording", "startNewSessionAndUser", options, errorCallback, false)) {
-        arguments.push(options["startNewSessionAndUser"])
+        arguments.push(options["startNewSessionAndUser"]);
     } else {
-        arguments.push(false)
+        arguments.push(false);
+    }
+
+    if (checkEventTrackingModeArray("setupAndStartRecording", options, errorCallback, false)) {
+        arguments.push(options["eventTrackingModes"]);
+    } else {
+        arguments.push([]);
     }
 
     execWithCallbacks(successCallback, errorCallback, SETUP, arguments);
@@ -211,6 +236,8 @@ exports.setup = function (options, successCallback, errorCallback) {
 
 /**
  * @description Start SDK recording.
+ * 
+ * @SL_COMPATIBILITY_NAME("name=startRecording;type=func")
  */
 exports.startRecording = function (successCallback, errorCallback) {
     execWithCallbacks(successCallback, errorCallback, START_RECORDING, []);
@@ -218,6 +245,8 @@ exports.startRecording = function (successCallback, errorCallback) {
 
 /**
  * @description Stop SDK recording.
+ * 
+ * @SL_COMPATIBILITY_NAME("name=stopRecording;type=func")
  */
 exports.stopRecording = function (successCallback, errorCallback) {
     execWithCallbacks(successCallback, errorCallback, STOP_RECORDING, []);
@@ -234,6 +263,8 @@ exports.stopRecording = function (successCallback, errorCallback) {
  * function successCallback(value) {
  *     alert('Is smartlook recording: ' + value);
  * }
+ * 
+ * @SL_COMPATIBILITY_NAME("name=isRecording;type=func;returns=boolean")
  */
 exports.isRecording = function (successCallback, errorCallback) {
     execWithCallbacks(successCallback, errorCallback, IS_RECORING, []);
@@ -242,7 +273,9 @@ exports.isRecording = function (successCallback, errorCallback) {
 /**
  * @description Resets current session and new session in dashboard is created.
  * 
- * @param options.resetUser (Optional) If set to TRUE new visitor is created in the dashboard-
+ * @param options.resetUser (Optional) If set to TRUE new visitor is created in the dashboard.
+ * 
+ * @SL_COMPATIBILITY_NAME("name=resetSession;type=func;params=resetUser{boolean}")
  */
 exports.resetSession = function (options, successCallback, errorCallback) {
     var arguments = [];
@@ -264,6 +297,8 @@ exports.resetSession = function (options, successCallback, errorCallback) {
  * 
  * @description When you start sensitive mode SDK records blank videos (single color) but SDK still 
  *              sends Analytic events.
+ * 
+ * @SL_COMPATIBILITY_NAME("name=startFullscreenSensitiveMode;type=func;deprecated=yes")
  */
 exports.startFullscreenSensitiveMode = function (successCallback, errorCallback) {
     console.warn("Calling deprecated function!");
@@ -276,6 +311,8 @@ exports.startFullscreenSensitiveMode = function (successCallback, errorCallback)
  * Smartlook.setRenderingMode({renderingMode: Smartlook.RenderingMode.NO_RENDERING})
  * 
  * @description Stop sensitive mode -> SDK records video.
+ * 
+ * @SL_COMPATIBILITY_NAME("name=stopFullscreenSensitiveMode;type=func;deprecated=yes")
  */
 exports.stopFullscreenSensitiveMode = function (successCallback, errorCallback) {
     console.warn("Calling deprecated function!");
@@ -296,6 +333,8 @@ exports.stopFullscreenSensitiveMode = function (successCallback, errorCallback) 
  * function successCallback(value) {
  *     alert('Is smartlook in fullscreen sensitive mode: ' + value);
  * }
+ * 
+ * @SL_COMPATIBILITY_NAME("name=isFullscreenSensitiveModeActive;type=func;returns=boolean;deprecated=yes")
  */
 exports.isFullscreenSensitiveModeActive = function (successCallback, errorCallback) {
     console.warn("Calling deprecated function!");
@@ -312,6 +351,11 @@ exports.isFullscreenSensitiveModeActive = function (successCallback, errorCallba
  *                                  Id in Smartlook dashboard so you can pair records with concrete user.
  * @param options.sessionProperties (Optional) Additional properties object that will be paired with every session and can
  *                                  be viewed in Smartlook dashboard.
+ * 
+ * @SL_COMPATIBILITY_NAME("name=setUserIdentifier;type=func;params=identifier{string}")
+ * @SL_COMPATIBILITY_NAME("name=setUserProperties;type=func;params=sessionProperties{JSONObject},immutable{boolean}")
+ * @SL_COMPATIBILITY_NAME("name=setUserProperties;type=func;params=sessionProperties{Bundle},immutable{boolean}")
+ * @SL_COMPATIBILITY_NAME("name=setUserProperties;type=func;params=sessionProperties{string},immutable{boolean}")
  */
 exports.setUserIdentifier = function (options, successCallback, errorCallback) {
     var arguments = [];
@@ -337,23 +381,51 @@ exports.setUserIdentifier = function (options, successCallback, errorCallback) {
  * 
  * @param options.eventTrackingMode Can be on of:
  *                                  - EventTrackingMode.FULL_TRACKING ... track everything
- *                                  - EventTrackingMode.IGNORE_USER_INTERACTION ... will not track touches, focus, keyboard, selector events
- *                                  - EventTrackingMode.NO_TRACKING ... not gonna track any events 
+ *                                  - EventTrackingMode.IGNORE_USER_INTERACTION ... will not track touches
+ *                                    focus, keyboard, selector events
+ *                                  - EventTrackingMode.IGNORE_NAVIGATION_INTERACTION ... will not track screen names
+ *                                  - EventTrackingMode.IGNORE_RAGE_CLICKS ... will not track rage clicks
+ *                                  - EventTrackingMode.NO_TRACKING ... not gonna track any events
  */
 exports.setEventTrackingMode = function (options, successCallback, errorCallback) {
     var arguments = [];
     var allowedValues = [
         exports.EventTrackingMode.FULL_TRACKING,
         exports.EventTrackingMode.IGNORE_USER_INTERACTION,
+        exports.EventTrackingMode.IGNORE_NAVIGATION_INTERACTION,
+        exports.EventTrackingMode.IGNORE_RAGE_CLICKS,
         exports.EventTrackingMode.NO_TRACKING];
 
-    if (checkStringArrayOption("setEventTrackingMode", "eventTrackingMode", options, allowedValues, errorCallback, true)) {
-        arguments.push(options["eventTrackingMode"])
+    if (checkStringArrayOption("setEventTrackingMode", options["eventTrackingMode"], "eventTrackingMode", allowedValues, errorCallback, true)) {
+        arguments.push(options["eventTrackingMode"]);
     } else {
-        return
+        return;
     }
 
     execWithCallbacks(successCallback, errorCallback, SET_EVENT_TRACKING_MODE, arguments);
+}
+
+/**
+ * @description You can configure which events are being tracked by setting eventTrackingMode.
+ * 
+ * @param options.eventTrackingModes Array of EventTrackingMode tha can be one of:
+ *                                  - EventTrackingMode.FULL_TRACKING ... track everything
+ *                                  - EventTrackingMode.IGNORE_USER_INTERACTION ... will not track touches
+ *                                    focus, keyboard, selector events
+ *                                  - EventTrackingMode.IGNORE_NAVIGATION_INTERACTION ... will not track screen names
+ *                                  - EventTrackingMode.IGNORE_RAGE_CLICKS ... will not track rage clicks
+ *                                  - EventTrackingMode.NO_TRACKING ... not gonna track any events
+ */
+exports.setEventTrackingModes = function (options, successCallback, errorCallback) {
+    var arguments = [];
+
+    if (checkEventTrackingModeArray("setEventTrackingModes", options, errorCallback, true)) {
+        arguments.push(options["eventTrackingModes"]);
+    } else {
+        return;
+    }
+
+    execWithCallbacks(successCallback, errorCallback, SET_EVENT_TRACKING_MODES, arguments);
 }
 
 /**
@@ -361,6 +433,8 @@ exports.setEventTrackingMode = function (options, successCallback, errorCallback
  * 
  * @param options.name      Controler/Activity/Page name.
  * @param options.viewState One of Smartlook.ViewState.START or Smartlook.ViewState.STOP.
+ * 
+ * @SL_COMPATIBILITY_NAME("name=trackNavigationEvent;type=func;params=name{string},viewState{string}")
  */
 exports.trackNavigationEvent = function (options, successCallback, errorCallback) {
     var arguments = [];
@@ -374,10 +448,10 @@ exports.trackNavigationEvent = function (options, successCallback, errorCallback
         return;
     }
 
-    if (checkStringArrayOption("trackNavigationEvent", "viewState", options, allowedValues, errorCallback, true)) {
+    if (checkStringArrayOption("trackNavigationEvent", options["viewState"], "viewState", allowedValues, errorCallback, true)) {
         arguments.push(options["viewState"]);
     } else {
-        return
+        return;
     }
 
     execWithCallbacks(successCallback, errorCallback, TRACK_NAVIGATION_EVENT, arguments);
@@ -398,6 +472,11 @@ exports.trackNavigationEvent = function (options, successCallback, errorCallback
  * function successCallback(value) {
  *     alert('Timed event eventId: ' + value);
  * }
+ * 
+ * @SL_COMPATIBILITY_NAME("name=startTimedCustomEvent;type=func;params=eventName{string};returns=string")
+ * @SL_COMPATIBILITY_NAME("name=startTimedCustomEvent;type=func;params=eventName{string},eventProperties{JSONObject};returns=string")
+ * @SL_COMPATIBILITY_NAME("name=startTimedCustomEvent;type=func;params=eventName{string},bundle{Bundle};returns=string")
+ * @SL_COMPATIBILITY_NAME("name=startTimedCustomEvent;type=func;params=eventName{string},eventProperties{string};returns=string")
  */
 exports.startTimedCustomEvent = function (options, successCallback, errorCallback) {
     var arguments = [];
@@ -421,6 +500,11 @@ exports.startTimedCustomEvent = function (options, successCallback, errorCallbac
  * @param options.eventId         Unique event id that is used to identify this event. 
  * @param options.eventProperties (Optional) Event data stored in object. These are going to be merged with
  *                                data passed in start.
+ * 
+ * @SL_COMPATIBILITY_NAME("name=stopTimedCustomEvent;type=func;params=eventId{string}")
+ * @SL_COMPATIBILITY_NAME("name=stopTimedCustomEvent;type=func;params=eventId{string},eventProperties{JSONObject}")
+ * @SL_COMPATIBILITY_NAME("name=stopTimedCustomEvent;type=func;params=eventId{string},bundle{Bundle}")
+ * @SL_COMPATIBILITY_NAME("name=stopTimedCustomEvent;type=func;params=eventId{string},eventProperties{string}")
  */
 exports.stopTimedCustomEvent = function (options, successCallback, errorCallback) {
     var arguments = [];
@@ -445,6 +529,11 @@ exports.stopTimedCustomEvent = function (options, successCallback, errorCallback
  * @param options.reason          Short string description explaining why the event was canceled.
  * @param options.eventProperties (Optional) Event data stored in object. These are going to be merged with
  *                                data passed in start.
+ * 
+ * @SL_COMPATIBILITY_NAME("name=cancelTimedCustomEvent;type=func;params=eventId{string},reason{string}")
+ * @SL_COMPATIBILITY_NAME("name=cancelTimedCustomEvent;type=func;params=eventId{string},reason{string},eventProperties{JSONObject}")
+ * @SL_COMPATIBILITY_NAME("name=cancelTimedCustomEvent;type=func;params=eventId{string},reason{string},bundle{Bundle}")
+ * @SL_COMPATIBILITY_NAME("name=cancelTimedCustomEvent;type=func;params=eventId{string},reason{string},eventProperties{string}")
  */
 exports.cancelTimedCustomEvent = function (options, successCallback, errorCallback) {
     var arguments = [];
@@ -473,6 +562,11 @@ exports.cancelTimedCustomEvent = function (options, successCallback, errorCallba
  * 
  * @param options.name            String used to identify event. 
  * @param options.eventProperties (Optional) Event data stored in object.
+ * 
+ * @SL_COMPATIBILITY_NAME("name=trackCustomEvent;type=func;params=eventName{string}")
+ * @SL_COMPATIBILITY_NAME("name=trackCustomEvent;type=func;params=eventName{string},eventProperties{JSONObject}")
+ * @SL_COMPATIBILITY_NAME("name=trackCustomEvent;type=func;params=eventName{string},bundle{Bundle}")
+ * @SL_COMPATIBILITY_NAME("name=trackCustomEvent;type=func;params=eventName{string},properties{string}")
  */
 exports.trackCustomEvent = function (options, successCallback, errorCallback) {
     var arguments = [];
@@ -498,6 +592,10 @@ exports.trackCustomEvent = function (options, successCallback, errorCallback) {
  * @param options.globalEventProperties Global event properties stored in object. 
  * @param options.immutable             If set to TRUE these properties have higher priority than mutable ones
  *                                      and also they cannot be changed (only removed).
+ * 
+ * @SL_COMPATIBILITY_NAME("name=setGlobalEventProperties;type=func;params=globalEventProperties{JSONObject},immutable{boolean}")
+ * @SL_COMPATIBILITY_NAME("name=setGlobalEventProperties;type=func;params=globalEventProperties{Bundle},immutable{boolean}")
+ * @SL_COMPATIBILITY_NAME("name=setGlobalEventProperties;type=func;params=globalEventProperties{string},immutable{boolean}")
  */
 exports.setGlobalEventProperties = function (options, successCallback, errorCallback) {
     var arguments = [];
@@ -511,7 +609,7 @@ exports.setGlobalEventProperties = function (options, successCallback, errorCall
     if (checkBooleanOption("setGlobalEventProperties", "immutable", options, errorCallback, true)) {
         arguments.push(options["immutable"]);
     } else {
-        return
+        return;
     }
 
     execWithCallbacks(successCallback, errorCallback, SET_GLOBAL_EVENT_PROPERTIES, arguments);
@@ -524,6 +622,8 @@ exports.setGlobalEventProperties = function (options, successCallback, errorCall
  * @param options.value      Global event property value.
  * @param options.immutable  If set to TRUE this property has higher priority than mutable ones and also it 
  *                           cannot be changed (only removed).
+ * 
+ * @SL_COMPATIBILITY_NAME("name=setGlobalEventProperty;type=func;params=key{string},value{string},immutable{boolean}")
  */
 exports.setGlobalEventProperty = function (options, successCallback, errorCallback) {
     var arguments = [];
@@ -538,7 +638,7 @@ exports.setGlobalEventProperty = function (options, successCallback, errorCallba
     if (checkBooleanOption("setGlobalEventProperty", "immutable", options, errorCallback, true)) {
         arguments.push(options["immutable"]);
     } else {
-        return
+        return;
     }
 
     execWithCallbacks(successCallback, errorCallback, SET_GLOBAL_EVENT_PROPERTY, arguments);
@@ -548,6 +648,8 @@ exports.setGlobalEventProperty = function (options, successCallback, errorCallba
  * @description Remove property from global event properties.
  * 
  * @param options.key Key of global event property that needs to be removed.
+ * 
+ * @SL_COMPATIBILITY_NAME("name=removeGlobalEventProperty;type=func;params=key{string}")
  */
 exports.removeGlobalEventProperty = function (options, successCallback, errorCallback) {
     var arguments = [];
@@ -555,7 +657,7 @@ exports.removeGlobalEventProperty = function (options, successCallback, errorCal
     if (checkStringOption("removeGlobalEventProperty", "key", options, errorCallback, true)) {
         arguments.push(options["key"]);
     } else {
-        return
+        return;
     }
 
     execWithCallbacks(successCallback, errorCallback, REMOVE_GLOBAL_EVENT_PROPERTY, arguments);
@@ -563,6 +665,8 @@ exports.removeGlobalEventProperty = function (options, successCallback, errorCal
 
 /**
  * @description Remove all properties from global event properties.
+ * 
+ * @SL_COMPATIBILITY_NAME("name=removeAllGlobalEventProperties;type=func")
  */
 exports.removeAllGlobalEventProperties = function (successCallback, errorCallback) {
     execWithCallbacks(successCallback, errorCallback, REMOVE_ALL_GLOBAL_EVENT_PROPERTIES, []);
@@ -577,6 +681,8 @@ exports.removeAllGlobalEventProperties = function (successCallback, errorCallbac
  * 
  * @param referrer Desired referrer value
  * @param source   Desired source, i.e. com.android.vending or com.amazon.venezia
+ * 
+ * @SL_COMPATIBILITY_NAME("name=setReferrer;type=func;params=referrer{string},source{string}")
  */
 exports.setReferrer = function (options, successCallback, errorCallback) {
     var arguments = [];
@@ -607,6 +713,8 @@ exports.setReferrer = function (options, successCallback, errorCallback) {
  * function successCallback(value) {
  *     alert('Shareable dashboard session URL: ' + value);
  * }
+ * 
+ * @SL_COMPATIBILITY_NAME("name=getDashboardSessionUrl;type=func;params=withCurrentTimestamp{boolean};returns=string")
  */
 exports.getDashboardSessionUrl = function (options, successCallback, errorCallback) {
     var arguments = [];
@@ -629,6 +737,8 @@ exports.getDashboardSessionUrl = function (options, successCallback, errorCallba
  * function successCallback(value) {
  *     alert('Shareable dashboard visitor URL: ' + value);
  * }
+ * 
+ * @SL_COMPATIBILITY_NAME("name=getDashboardVisitorUrl;type=func;returns=string")
  */
 exports.getDashboardVisitorUrl = function (successCallback, errorCallback) {
     execWithCallbacks(successCallback, errorCallback, GET_DASHBOARD_VISITOR_URL, []);
@@ -663,6 +773,8 @@ exports.unregisterLogListener = function(successCallback, errorCallback) {
  * @param options.renderingMode       Mode defining the video output of recording. Curently only
  *                                    RenderingMode.NO_RENDERING and RenderingMode.NATIVE available.
  * @param options.renderingModeOption [NOT IMPLEMENTED]  
+ * 
+ * @SL_COMPATIBILITY_NAME("name=setRenderingMode;type=func;params=renderingMode{string}")
  */
 exports.setRenderingMode = function(options, successCallback, errorCallback) {
     var arguments = [];
@@ -671,7 +783,7 @@ exports.setRenderingMode = function(options, successCallback, errorCallback) {
         exports.RenderingMode.NO_RENDERING,
         exports.RenderingMode.NATIVE];
 
-    if (checkStringArrayOption("setRenderingMode", "renderingMode", options, allowedValues, errorCallback, true)) {
+    if (checkStringArrayOption("setRenderingMode", options["renderingMode"], "renderingMode", allowedValues, errorCallback, true)) {
         arguments.push(options["renderingMode"]);
     } else {
         return;
@@ -698,6 +810,9 @@ exports.setRenderingMode = function(options, successCallback, errorCallback) {
  *      onVisitorReady: function (dashboardVisitorUrl) { alert("Visitor: " + dashboardVisitorUrl); }
  *   });
  * }
+ * 
+ * @SL_COMPATIBILITY_NAME("name=registerIntegrationListener;type=func;params=integrationListener{IntegrationListener}")
+ * @SL_COMPATIBILITY_NAME("name=IntegrationListener;type=callback;members=onSessionReady,onVisitorReady")
  */
 exports.registerIntegrationListener = function(options, successCallback, errorCallback) {
     var integrationCallback = function(callbackData) { 
@@ -716,6 +831,8 @@ exports.registerIntegrationListener = function(options, successCallback, errorCa
 
 /**
  * @description Unregister Integration listener (@see registerIntegrationListener())
+ * 
+ * @SL_COMPATIBILITY_NAME("name=unregisterIntegrationListener;type=func")
  */
 exports.unregisterIntegrationListener = function(successCallback, errorCallback) {
     execWithCallbacks(successCallback, errorCallback, UNREGISTER_INTEGRATION_LISTENER, []);
@@ -724,7 +841,7 @@ exports.unregisterIntegrationListener = function(successCallback, errorCallback)
 // Internal logic
 
 function setPluginVersion() {
-    exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, SET_PLUGIN_VERISION, [SMARTLOOK_PLUGIN_VERSION]);
+    exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, SET_PLUGIN_VERISION, [SMARTLOOK_FRAMEWORK, SMARTLOOK_FRAMEWORK_VERSION, SMARTLOOK_FRAMEWORK_PLUGIN_VERSION]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -733,7 +850,7 @@ function setPluginVersion() {
 // Check functions
 
 function checkStringOption(method, option, options, errorCallback, isMandatory) {
-    var toCheck = options[option]
+    var toCheck = options[option];
 
     if (toCheck == undefined || toCheck == null) {
         if (isMandatory != undefined && isMandatory === true) {
@@ -745,14 +862,13 @@ function checkStringOption(method, option, options, errorCallback, isMandatory) 
 
     if (typeof toCheck !== 'string' || toCheck.length < 1) {
         logError(errorCallback, method + "(): " + option + " must be non-empty string!");
-        return false
+        return false;
     }
 
     return true;
 }
 
-function checkStringArrayOption(method, option, options, possibleValueArray, errorCallback, isMandatory) {
-    var toCheck = options[option];
+function checkStringArrayOption(method, toCheck, option, possibleValueArray, errorCallback, isMandatory) {
 
     if (toCheck == undefined || toCheck == null) {
         if (isMandatory != undefined && isMandatory === true) {
@@ -770,10 +886,10 @@ function checkStringArrayOption(method, option, options, possibleValueArray, err
                 found = true;
             }
 
-            errorMessagePossibilities += possibleValueArray[i] + " "
+            errorMessagePossibilities += possibleValueArray[i] + " ";
         }
         
-        errorMessagePossibilities.trim()
+        errorMessagePossibilities.trim();
 
         if (!found) {
             logError(errorCallback, method + "(): " + option + " must be one of: " + errorMessagePossibilities);
@@ -788,7 +904,7 @@ function checkStringArrayOption(method, option, options, possibleValueArray, err
 }
 
 function checkBooleanOption(method, option, options, errorCallback, isMandatory) {
-    var toCheck = options[option]
+    var toCheck = options[option];
 
     if (toCheck == undefined || toCheck == null) {
         if (isMandatory != undefined && isMandatory === true) {
@@ -800,14 +916,14 @@ function checkBooleanOption(method, option, options, errorCallback, isMandatory)
 
     if (typeof toCheck !== 'boolean') {
         logError(errorCallback, method + "(): " + option + " must be boolean!");
-        return false
+        return false;
     }
 
     return true;
 }
 
 function checkProperties(method, option, options, errorCallback, isMandatory) {
-    var toCheck = options[option]
+    var toCheck = options[option];
 
     if (toCheck == undefined || toCheck == null) {
         if (isMandatory != undefined && isMandatory === true) {
@@ -829,7 +945,7 @@ function checkKeyValueOptions(method, options, errorCallback, isMandatory) {
             logError(errorCallback, method + "(): must be called with key value options!");     
         }
         
-        return false
+        return false;
     }
 
     if (typeof key !== 'string' || key.length < 1 || typeof value !== 'string') {
@@ -862,6 +978,35 @@ function checkFpsOption(method, options, errorCallback, isMandatory) {
     }
 
     return true;
+}
+
+function checkEventTrackingModeArray(method, options, errorCallback, isMandatory) {
+    var allowedValues = [
+        exports.EventTrackingMode.FULL_TRACKING,
+        exports.EventTrackingMode.IGNORE_USER_INTERACTION,
+        exports.EventTrackingMode.IGNORE_NAVIGATION_INTERACTION,
+        exports.EventTrackingMode.IGNORE_RAGE_CLICKS,
+        exports.EventTrackingMode.NO_TRACKING];
+
+    var eventTrackingModeArray = options["eventTrackingModes"];
+    var noneFailed = true;    
+
+    if (eventTrackingModeArray == undefined || eventTrackingModeArray == null || !Array.isArray(eventTrackingModeArray)) {
+        if (isMandatory != undefined && isMandatory === true) {
+            logError(errorCallback, method + "(): must be called with eventTrackingModes array option!");     
+        }
+
+        return false;
+    } 
+
+    for (var i = 0; i < eventTrackingModeArray.length; i++) {
+        console.log("checkEventTrackingModeArray(): gonna check: " + eventTrackingModeArray[i]);
+        if (!checkStringArrayOption(method, eventTrackingModeArray[i], "eventTrackingMode", allowedValues, errorCallback, isMandatory)) {
+            noneFailed = false;
+        }
+    }
+
+    return noneFailed;
 }
 
 // Utility methods

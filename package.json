@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-smartlook",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "description": "Official Smartlook Cordova android plugin",
   "cordova": {
     "id": "cordova-plugin-smartlook",
