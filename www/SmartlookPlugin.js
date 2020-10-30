@@ -6,7 +6,7 @@ const SMARTLOOK_PLUGIN = "SmartlookPlugin"
 // Smartlook framework info
 const SMARTLOOK_FRAMEWORK = "CORDOVA";
 const SMARTLOOK_FRAMEWORK_VERSION = "-";
-const SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = "1.7.2"
+const SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = "1.7.3"
 
 // API methods names
 
