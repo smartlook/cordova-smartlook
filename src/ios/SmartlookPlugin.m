@@ -1,5 +1,6 @@
 #import "SmartlookPlugin.h"
 #import <Smartlook/Smartlook.h>
+#import <WebKit/WebKit.h>
 
 #ifdef DEBUG
 //#   define DLog(fmt, ...) NSLog((@"Smartlook: %s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__);
