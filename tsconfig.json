@@ -1,0 +1,11 @@
+{
+	"compilerOptions": {
+		"target": "es5",
+		"module": "CommonJS",
+		"outDir": "www/",
+		"types": ["cordova", "node"],
+		"declaration": true,
+	},
+	"compileOnSave": true,
+	"files": ["src/js/cordova-plugin-smartlook.ts"]
+}
