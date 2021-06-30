@@ -819,10 +819,7 @@ function checkStringArrayOption(toCheck, option, possibleValueArray, errorCallba
     return true;
 }
 function checkBooleanOption(option, options, errorCallback, isMandatory) {
-    // TODO: simple hack to handle broken ionic smartlook typescript type definitions.
-    // Please remove when fixed.
-    // Link to broken types: https://bit.ly/3zUIfsj.
-    var toCheck = String(options[option]).toLowerCase() == 'true';
+    var toCheck = options[option];
     if (toCheck == undefined || toCheck == null) {
         if (isMandatory != undefined && isMandatory === true) {
             logError(errorCallback, option + ' option is mandatory!');
