@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-smartlook",
-  "version": "1.7.4",
+  "version": "1.8.0",
   "description": "Official Smartlook Cordova android plugin",
   "cordova": {
     "id": "cordova-plugin-smartlook",
@@ -24,8 +24,15 @@
     "url": "https://github.com/smartlook/cordova-smartlook-plugin"
   },
   "homepage": "https://www.smartlook.com",
-  "main": "index.js",
+  "types": "./www/cordova-plugin-smartlook.d.ts",
+  "main": "./www/cordova-plugin-smartlook.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsc -w",
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@types/cordova": "^0.0.34",
+    "@types/node": "^15.6.1"
   }
 }

@@ -5,7 +5,7 @@
    <name>Smartlook</name>
 
    <!--Modules-->
-   <js-module name="SmartlookPlugin" src="www/SmartlookPlugin.js">
+   <js-module name="SmartlookPlugin" src="www/cordova-plugin-smartlook.js">
       <clobbers target="cordova.plugins.SmartlookPlugin" /> <!--Legacy targed-->
       <clobbers target="Smartlook" />
    </js-module>
