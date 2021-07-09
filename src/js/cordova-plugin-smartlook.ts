@@ -6,7 +6,7 @@ const SMARTLOOK_PLUGIN = 'SmartlookPlugin';
 // Smartlook framework info
 const SMARTLOOK_FRAMEWORK = 'CORDOVA';
 const SMARTLOOK_FRAMEWORK_VERSION = '-';
-const SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = '1.8.0';
+const SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = '1.9.0';
 
 // API methods names
 export enum Command {
@@ -207,46 +207,6 @@ export interface Smartlook {
 	 *              sends Analytic events.
 	 *
 	 * @SL_COMPATIBILITY_NAME("name=startFullscreenSensitiveMode;type=func;deprecated=yes")
-	 */
-	startFullscreenSensitiveMode(successCallback: SuccessCallback, errorCallback: ErrorCallback): void;
-	/**
-	 * @deprecated This method is deprecated and should not be further used. Please use:
-	 * Smartlook.setRenderingMode({renderingMode: Smartlook.RenderingMode.NO_RENDERING})
-	 *
-	 * @description Stop sensitive mode -> SDK records video.
-	 *
-	 * @SL_COMPATIBILITY_NAME("name=stopFullscreenSensitiveMode;type=func;deprecated=yes")
-	 */
-	stopFullscreenSensitiveMode(successCallback: SuccessCallback, errorCallback: ErrorCallback): void;
-	/**
-	 * @deprecated This method is deprecated and should not be further used.
-	 *
-	 * @description Check if SDK is running in fullscreen sensitive mode.
-	 *
-	 * @callback successCallback Callback value set to true if SDK is currently in fullscreen sensitive mode.
-	 *
-	 * @example
-	 * Smartlook.isFullscreenSensitiveModeActive(successCallback, ...);
-	 *
-	 * function successCallback(value) {
-	 *     alert('Is smartlook in fullscreen sensitive mode: ' + value);
-	 * }
-	 *
-	 * @SL_COMPATIBILITY_NAME("name=isFullscreenSensitiveModeActive;type=func;returns=boolean;deprecated=yes")
-	 */
-	isFullscreenSensitiveModeActive(successCallback: SuccessCallback, _errorCallback: ErrorCallback): void;
-	/**
-	 * @description Identify user with identifier and optional properties.
-	 *
-	 * @param options.identifier        String Id that can be used to identify user and his records. You will see this
-	 *                                  Id in Smartlook dashboard so you can pair records with concrete user.
-	 * @param options.sessionProperties (Optional) Additional properties object that will be paired with every session and can
-	 *                                  be viewed in Smartlook dashboard.
-	 *
-	 * @SL_COMPATIBILITY_NAME("name=setUserIdentifier;type=func;params=identifier{string}")
-	 * @SL_COMPATIBILITY_NAME("name=setUserProperties;type=func;params=sessionProperties{JSONObject},immutable{boolean}")
-	 * @SL_COMPATIBILITY_NAME("name=setUserProperties;type=func;params=sessionProperties{Bundle},immutable{boolean}")
-	 * @SL_COMPATIBILITY_NAME("name=setUserProperties;type=func;params=sessionProperties{string},immutable{boolean}")
 	 */
 	setUserIdentifier(
 		options: { identifier: string; sessionProperties: Dictionary<any> },
@@ -730,58 +690,6 @@ export function resetSession(
 	}
 
 	execWithCallbacks(successCallback, errorCallback, Command.RESET_SESSION, args);
-}
-
-// @deprecated Should be removed in next release Fullscreen sensitive mode
-
-/**
- * @deprecated This method is deprecated and should not be further used. Please use:
- * Smartlook.setRenderingMode({renderingMode: Smartlook.RenderingMode.NO_RENDERING})
- *
- * @description When you start sensitive mode SDK records blank videos (single color) but SDK still
- *              sends Analytic events.
- *
- * @SL_COMPATIBILITY_NAME("name=startFullscreenSensitiveMode;type=func;deprecated=yes")
- */
-export function startFullscreenSensitiveMode(successCallback: SuccessCallback, errorCallback: ErrorCallback) {
-	console.warn('Calling deprecated function!');
-	fullscreenModeActive = true;
-	setRenderingMode({ renderingMode: RenderingMode.NO_RENDERING }, successCallback, errorCallback);
-}
-
-/**
- * @deprecated This method is deprecated and should not be further used. Please use:
- * Smartlook.setRenderingMode({renderingMode: Smartlook.RenderingMode.NO_RENDERING})
- *
- * @description Stop sensitive mode -> SDK records video.
- *
- * @SL_COMPATIBILITY_NAME("name=stopFullscreenSensitiveMode;type=func;deprecated=yes")
- */
-export function stopFullscreenSensitiveMode(successCallback: SuccessCallback, errorCallback: ErrorCallback) {
-	console.warn('Calling deprecated function!');
-	fullscreenModeActive = false;
-	setRenderingMode({ renderingMode: RenderingMode.NATIVE }, successCallback, errorCallback);
-}
-
-/**
- * @deprecated This method is deprecated and should not be further used.
- *
- * @description Check if SDK is running in fullscreen sensitive mode.
- *
- * @callback successCallback Callback value set to true if SDK is currently in fullscreen sensitive mode.
- *
- * @example
- * Smartlook.isFullscreenSensitiveModeActive(successCallback, ...);
- *
- * function successCallback(value) {
- *     alert('Is smartlook in fullscreen sensitive mode: ' + value);
- * }
- *
- * @SL_COMPATIBILITY_NAME("name=isFullscreenSensitiveModeActive;type=func;returns=boolean;deprecated=yes")
- */
-export function isFullscreenSensitiveModeActive(successCallback: SuccessCallback, _errorCallback: ErrorCallback) {
-	console.warn('Calling deprecated function!');
-	successCallback(fullscreenModeActive);
 }
 
 // User identification
