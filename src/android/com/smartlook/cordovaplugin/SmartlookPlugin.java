@@ -1,14 +1,12 @@
 package com.smartlook.cordovaplugin;
 
-import android.app.Activity;
+import android.webkit.WebView;
 
 import com.smartlook.sdk.smartlook.Smartlook;
-import com.smartlook.sdk.smartlook.LogListener;
-import com.smartlook.sdk.smartlook.IntegrationListener;
-import com.smartlook.sdk.smartlook.analytics.event.annotations.EventTrackingMode;
-import com.smartlook.sdk.smartlook.analytics.video.model.annotation.ViewState;
-import com.smartlook.sdk.smartlook.analytics.video.annotations.RenderingMode;
-import com.smartlook.sdk.smartlook.util.annotations.LogAspect;
+import com.smartlook.sdk.smartlook.analytic.api.EventTrackingMode;
+import com.smartlook.sdk.smartlook.analytic.automatic.annotation.ViewState;
+import com.smartlook.sdk.smartlook.core.api.annotation.RenderingMode;
+import com.smartlook.sdk.smartlook.integration.IntegrationListener;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -17,13 +15,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
-
-import java.security.InvalidParameterException;
-
-import android.util.Log;
-import android.webkit.WebView;
 
 public class SmartlookPlugin extends CordovaPlugin {
 
@@ -131,10 +125,10 @@ public class SmartlookPlugin extends CordovaPlugin {
                 resetSession(args, callbackContext);
             } else if (action.equals(SET_USER_IDENTIFIER)) {
                 setUserIdentifier(args, callbackContext);
-            } else if (action.equals(SET_EVENT_TRACKING_MODE)) {        
-                setEventTrackingMode(args, callbackContext); 
-            } else if (action.equals(SET_EVENT_TRACKING_MODES)) {        
-                setEventTrackingModes(args, callbackContext); 
+            } else if (action.equals(SET_EVENT_TRACKING_MODE)) {
+                setEventTrackingMode(args, callbackContext);
+            } else if (action.equals(SET_EVENT_TRACKING_MODES)) {
+                setEventTrackingModes(args, callbackContext);
             } else if (action.equals(TRACK_NAVIGATION_EVENT)) {
                 trackNavigationEvent(args, callbackContext);
             } else if (action.equals(START_TIMED_CUSTOM_EVENT)) {
@@ -161,8 +155,8 @@ public class SmartlookPlugin extends CordovaPlugin {
                 getDashboardVisitorUrl(callbackContext);
             } else if (action.equals(REGISTER_LOG_LISTENER)) {
                 registerLogListener(callbackContext);
-            } else if (action.equals(UNREGISTER_LOG_LISTENER)){
-                unregisterLogListener(callbackContext);    
+            } else if (action.equals(UNREGISTER_LOG_LISTENER)) {
+                unregisterLogListener(callbackContext);
             } else if (action.equals(SET_RENDERING_MODE)) {
                 setRenderingMode(args, callbackContext);
             } else if (action.equals(REGISTER_INTEGRATION_LISTENER)) {
@@ -177,7 +171,7 @@ public class SmartlookPlugin extends CordovaPlugin {
             }
         } catch (JSONException e) {
             callbackContext.error("JsonException: " + e.getMessage());
-        }  
+        }
 
         return true;
     }
@@ -212,11 +206,11 @@ public class SmartlookPlugin extends CordovaPlugin {
             if (!args.isNull(SETUP_EVENT_TRACKING_MODES) && args.getJSONArray(SETUP_EVENT_TRACKING_MODES).length() > 0) {
                 List<String> eventTrackingModeStringList = jsonArrayToStringList(args.getJSONArray(SETUP_EVENT_TRACKING_MODES));
                 List<EventTrackingMode> eventTrackingModeList = new ArrayList<>();
-    
-                for(String event: eventTrackingModeStringList) {
+
+                for (String event : eventTrackingModeStringList) {
                     eventTrackingModeList.add(stringToEventTrackingMode(event));
                 }
-    
+
                 builder.setEventTrackingModes(eventTrackingModeList);
             } else {
                 //todo this should be removed, investigate firther
@@ -262,11 +256,11 @@ public class SmartlookPlugin extends CordovaPlugin {
             if (!args.isNull(SETUP_EVENT_TRACKING_MODES) && args.getJSONArray(SETUP_EVENT_TRACKING_MODES).length() > 0) {
                 List<String> eventTrackingModeStringList = jsonArrayToStringList(args.getJSONArray(SETUP_EVENT_TRACKING_MODES));
                 List<EventTrackingMode> eventTrackingModeList = new ArrayList<>();
-    
-                for(String event: eventTrackingModeStringList) {
+
+                for (String event : eventTrackingModeStringList) {
                     eventTrackingModeList.add(stringToEventTrackingMode(event));
                 }
-    
+
                 builder.setEventTrackingModes(eventTrackingModeList);
             } else {
                 //todo this should be removed, investigate firther
@@ -307,22 +301,6 @@ public class SmartlookPlugin extends CordovaPlugin {
         callbackContext.error("Invalid resetSession parameters!");
     }
 
-    // Fullscreen sensitive mode
-
-    private void startFullscreenSensitiveMode(CallbackContext callbackContext) throws JSONException {
-        Smartlook.startFullscreenSensitiveMode();
-        callbackContext.success();
-    }
-
-    private void stopFullscreenSensitiveMode(CallbackContext callbackContext) throws JSONException {
-        Smartlook.stopFullscreenSensitiveMode();
-        callbackContext.success();
-    }
-
-    private void isFullscreenSensitiveModeActive(CallbackContext callbackContext) throws JSONException {
-        callbackContext.success(Smartlook.isFullscreenSensitiveModeActive() ? "true" : "false");
-    }
-
     // User identification
 
     private void setUserIdentifier(JSONArray args, CallbackContext callbackContext) throws JSONException {
@@ -357,7 +335,7 @@ public class SmartlookPlugin extends CordovaPlugin {
             List<String> eventTrackingModeStringList = jsonArrayToStringList(args.getJSONArray(EVENT_TRACKING_MODES));
             List<EventTrackingMode> eventTrackingModeList = new ArrayList<>();
 
-            for(String event: eventTrackingModeStringList) {
+            for (String event : eventTrackingModeStringList) {
                 eventTrackingModeList.add(stringToEventTrackingMode(event));
             }
 
@@ -410,9 +388,9 @@ public class SmartlookPlugin extends CordovaPlugin {
     private void cancelTimedCustomEvent(JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (!args.isNull(EVENT_ID) && !args.isNull(REASON) && !args.isNull(CANCEL_TIMED_EVENT_PROPERTIES)) {
             Smartlook.cancelTimedCustomEvent(
-                args.getString(EVENT_NAME),
-                args.getString(REASON),
-                args.getJSONObject(CANCEL_TIMED_EVENT_PROPERTIES));
+                    args.getString(EVENT_NAME),
+                    args.getString(REASON),
+                    args.getJSONObject(CANCEL_TIMED_EVENT_PROPERTIES));
             callbackContext.success();
             return;
         } else if (!args.isNull(EVENT_ID) && !args.isNull(REASON)) {
@@ -493,9 +471,9 @@ public class SmartlookPlugin extends CordovaPlugin {
 
     private void getDashboardSessionUrl(JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (args.isNull(WITH_CURRENT_TIMESTAMP)) {
-            callbackContext.success(Smartlook.getDashboardSessionUrl(false));    
+            callbackContext.success(Smartlook.getDashboardSessionUrl(false));
         } else {
-            callbackContext.success(Smartlook.getDashboardSessionUrl(args.getBoolean(WITH_CURRENT_TIMESTAMP)));    
+            callbackContext.success(Smartlook.getDashboardSessionUrl(args.getBoolean(WITH_CURRENT_TIMESTAMP)));
         }
     }
 
@@ -504,12 +482,7 @@ public class SmartlookPlugin extends CordovaPlugin {
     }
 
     private void registerLogListener(final CallbackContext callbackContext) throws JSONException {
-        Smartlook.registerLogListener(new LogListener() {
-            @Override
-            public void onLog(String logSeverity, String tag, String message) {
-                callbackContext.success(tag + "[" + logSeverity + "]: " + message);
-            }
-        });
+        Smartlook.registerLogListener((logAspect, logSeverity, tag, message) -> callbackContext.success(tag + "[" + logSeverity + "]: " + message));
     }
 
     private void unregisterLogListener(CallbackContext callbackContext) throws JSONException {
@@ -608,36 +581,37 @@ public class SmartlookPlugin extends CordovaPlugin {
             return PluginResult.Status.OK;
         } else {
             return PluginResult.Status.ERROR;
-        }    
+        }
     }
 
     // Utils
 
     private List<String> jsonArrayToStringList(JSONArray jsonArray) {
         List<String> list = new ArrayList<>();
-        for (int i=0; i<jsonArray.length(); i++) { 
+        for (int i = 0; i < jsonArray.length(); i++) {
             try {
                 list.add(jsonArray.getString(i));
-            } catch(JSONException e) {}
+            } catch (JSONException e) {
+            }
         }
         return list;
     }
 
     private EventTrackingMode stringToEventTrackingMode(String mode) {
-            switch (mode) {
-                case "full_tracking":
-                    return EventTrackingMode.FULL_TRACKING;
-                case "ignore_user_interaction":
-                    return EventTrackingMode.IGNORE_USER_INTERACTION;
-                case "ignore_navigation_interaction":
-                    return EventTrackingMode.IGNORE_NAVIGATION_INTERACTION;
-                case "ignore_rage_clicks":
-                    return EventTrackingMode.IGNORE_RAGE_CLICKS;                
-                case "no_tracking":
-                    return EventTrackingMode.NO_TRACKING;             
-                default:
-                    throw new InvalidParameterException();
-            }
+        switch (mode) {
+            case "full_tracking":
+                return EventTrackingMode.FULL_TRACKING;
+            case "ignore_user_interaction":
+                return EventTrackingMode.IGNORE_USER_INTERACTION;
+            case "ignore_navigation_interaction":
+                return EventTrackingMode.IGNORE_NAVIGATION_INTERACTION;
+            case "ignore_rage_clicks":
+                return EventTrackingMode.IGNORE_RAGE_CLICKS;
+            case "no_tracking":
+                return EventTrackingMode.NO_TRACKING;
+            default:
+                throw new InvalidParameterException();
+        }
     }
 
     private ViewState stringToViewState(String state) {
@@ -645,7 +619,7 @@ public class SmartlookPlugin extends CordovaPlugin {
             case "start":
                 return ViewState.START;
             case "stop":
-                return ViewState.STOP;          
+                return ViewState.STOP;
             default:
                 throw new InvalidParameterException();
         }
@@ -656,7 +630,7 @@ public class SmartlookPlugin extends CordovaPlugin {
             case "no_rendering":
                 return RenderingMode.NO_RENDERING;
             case "native":
-                return RenderingMode.NATIVE;          
+                return RenderingMode.NATIVE;
             default:
                 throw new InvalidParameterException();
         }

@@ -13,11 +13,6 @@
 
 - (void)resetSession:(CDVInvokedUrlCommand*)command;
 
-// Full screen sensitive mode
-- (void)startFullscreenSensitiveMode:(CDVInvokedUrlCommand*)command;
-- (void)stopFullscreenSensitiveMode:(CDVInvokedUrlCommand*)command;
-- (void)isFullscreenSensitiveModeActive:(CDVInvokedUrlCommand*)command;
-
 // User identifier
 - (void)setUserIdentifier:(CDVInvokedUrlCommand*)command;
 

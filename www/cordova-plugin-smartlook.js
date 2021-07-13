@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.unregisterIntegrationListener = exports.registerIntegrationListener = exports.setRenderingMode = exports.unregisterLogListener = exports.registerLogListener = exports.getDashboardVisitorUrl = exports.getDashboardSessionUrl = exports.setReferrer = exports.removeAllGlobalEventProperties = exports.removeGlobalEventProperty = exports.setGlobalEventProperty = exports.setGlobalEventProperties = exports.trackCustomEvent = exports.cancelTimedCustomEvent = exports.stopTimedCustomEvent = exports.startTimedCustomEvent = exports.trackNavigationEvent = exports.setEventTrackingModes = exports.setEventTrackingMode = exports.setUserIdentifier = exports.isFullscreenSensitiveModeActive = exports.stopFullscreenSensitiveMode = exports.startFullscreenSensitiveMode = exports.resetSession = exports.isRecording = exports.stopRecording = exports.startRecording = exports.setup = exports.setupAndStartRecording = exports.RenderingMode = exports.EventTrackingMode = exports.ViewState = exports.Command = void 0;
+exports.unregisterIntegrationListener = exports.registerIntegrationListener = exports.setRenderingMode = exports.unregisterLogListener = exports.registerLogListener = exports.getDashboardVisitorUrl = exports.getDashboardSessionUrl = exports.setReferrer = exports.removeAllGlobalEventProperties = exports.removeGlobalEventProperty = exports.setGlobalEventProperty = exports.setGlobalEventProperties = exports.trackCustomEvent = exports.cancelTimedCustomEvent = exports.stopTimedCustomEvent = exports.startTimedCustomEvent = exports.trackNavigationEvent = exports.setEventTrackingModes = exports.setEventTrackingMode = exports.setUserIdentifier = exports.resetSession = exports.isRecording = exports.stopRecording = exports.startRecording = exports.setup = exports.setupAndStartRecording = exports.RenderingMode = exports.EventTrackingMode = exports.ViewState = exports.Command = void 0;
 var cordova = window.cordova;
 // Plugin name
 var SMARTLOOK_PLUGIN = 'SmartlookPlugin';
 // Smartlook framework info
 var SMARTLOOK_FRAMEWORK = 'CORDOVA';
 var SMARTLOOK_FRAMEWORK_VERSION = '-';
-var SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = '1.8.0';
+var SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = '1.9.0';
 // API methods names
 var Command;
 (function (Command) {
@@ -249,57 +249,6 @@ function resetSession(options, successCallback, errorCallback) {
     execWithCallbacks(successCallback, errorCallback, Command.RESET_SESSION, args);
 }
 exports.resetSession = resetSession;
-// @deprecated Should be removed in next release Fullscreen sensitive mode
-/**
- * @deprecated This method is deprecated and should not be further used. Please use:
- * Smartlook.setRenderingMode({renderingMode: Smartlook.RenderingMode.NO_RENDERING})
- *
- * @description When you start sensitive mode SDK records blank videos (single color) but SDK still
- *              sends Analytic events.
- *
- * @SL_COMPATIBILITY_NAME("name=startFullscreenSensitiveMode;type=func;deprecated=yes")
- */
-function startFullscreenSensitiveMode(successCallback, errorCallback) {
-    console.warn('Calling deprecated function!');
-    fullscreenModeActive = true;
-    setRenderingMode({ renderingMode: RenderingMode.NO_RENDERING }, successCallback, errorCallback);
-}
-exports.startFullscreenSensitiveMode = startFullscreenSensitiveMode;
-/**
- * @deprecated This method is deprecated and should not be further used. Please use:
- * Smartlook.setRenderingMode({renderingMode: Smartlook.RenderingMode.NO_RENDERING})
- *
- * @description Stop sensitive mode -> SDK records video.
- *
- * @SL_COMPATIBILITY_NAME("name=stopFullscreenSensitiveMode;type=func;deprecated=yes")
- */
-function stopFullscreenSensitiveMode(successCallback, errorCallback) {
-    console.warn('Calling deprecated function!');
-    fullscreenModeActive = false;
-    setRenderingMode({ renderingMode: RenderingMode.NATIVE }, successCallback, errorCallback);
-}
-exports.stopFullscreenSensitiveMode = stopFullscreenSensitiveMode;
-/**
- * @deprecated This method is deprecated and should not be further used.
- *
- * @description Check if SDK is running in fullscreen sensitive mode.
- *
- * @callback successCallback Callback value set to true if SDK is currently in fullscreen sensitive mode.
- *
- * @example
- * Smartlook.isFullscreenSensitiveModeActive(successCallback, ...);
- *
- * function successCallback(value) {
- *     alert('Is smartlook in fullscreen sensitive mode: ' + value);
- * }
- *
- * @SL_COMPATIBILITY_NAME("name=isFullscreenSensitiveModeActive;type=func;returns=boolean;deprecated=yes")
- */
-function isFullscreenSensitiveModeActive(successCallback, _errorCallback) {
-    console.warn('Calling deprecated function!');
-    successCallback(fullscreenModeActive);
-}
-exports.isFullscreenSensitiveModeActive = isFullscreenSensitiveModeActive;
 // User identification
 /**
  * @description Identify user with identifier and optional properties.
