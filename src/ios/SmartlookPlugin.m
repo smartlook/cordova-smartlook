@@ -87,46 +87,48 @@ static NSString *__smartlookPluginVersion = @"unknown";
     if (key == nil) {
         return NO;
     }
-    
-    NSMutableDictionary *options = [NSMutableDictionary new];
-    options[SLSetupOptionUseAdaptiveFramerateKey] = @NO;
-    
+
+    SLSetupConfiguration *configuration = [[SLSetupConfiguration alloc] initWithKey:key];
+    configuration.enableAdaptiveFramerate = NO;
+
     id fps = [command argumentAtIndex:1];
-    if (fps != nil && [fps isKindOfClass:[NSNumber class]]) {
-        options[SLSetupOptionFramerateKey] = fps;
+    if (fps != nil && [fps respondsToSelector:@selector(integerValue)]) {
+        configuration.framerate = [(NSNumber *)fps integerValue];
     }
 
     id renderingMode = [command argumentAtIndex:2];
     if ([renderingMode respondsToSelector:@selector(isEqualToString:)]) {
         SLRenderingMode smartlookRenderingMode = cordovaRenderingModeToNative[renderingMode];
         if (smartlookRenderingMode != nil) {
-            options[SLSetupOptionRenderingModeKey] = smartlookRenderingMode;
+            configuration.renderingMode = smartlookRenderingMode;
         }
     }
 
     id startNewSession = [command argumentAtIndex:3];
     if ([startNewSession respondsToSelector:@selector(boolValue)]) {
-        if ([startNewSession boolValue]) {
-            options[SLSetupOptionStartNewSessionKey] = @YES;
-        }
+        configuration.resetSession = [startNewSession boolValue];
     }
 
     id startNewSessionAndUser = [command argumentAtIndex:4];
     if ([startNewSessionAndUser respondsToSelector:@selector(boolValue)]) {
         if ([startNewSessionAndUser boolValue]) {
-            options[SLSetupOptionStartNewSessionKey] = @NO; // not needed if accidentally set, too
-            options[SLSetupOptionStartNewSessionAndResetUserKey] = @YES;
+            configuration.resetSession = false;
+            configuration.resetSessionAndUser = true;
         }
     }
 
-    options[@"__sdk_framework"] = @"CORDOVA";
-    options[@"__sdk_framework_version"] = CDV_VERSION;
-    options[@"__sdk_framework_plugin_version"] = __smartlookPluginVersion;
-        
-    DLog(@"STARTUP ARGUMENTS %@", [command arguments]);
-    DLog(@"STARTUP OPTIONS %@", options);
+    NSMutableDictionary *internalProperties = [NSMutableDictionary new];
 
-    [Smartlook setupWithKey:key options:options];
+    internalProperties[@"framework"] = @"CORDOVA";
+    internalProperties[@"frameworkVersion"] = CDV_VERSION;
+    internalProperties[@"frameworkPluginVersion"] = __smartlookPluginVersion;
+
+    [configuration setInternalProps:internalProperties];
+
+    DLog(@"STARTUP ARGUMENTS %@", [command arguments]);
+    DLog(@"STARTUP OPTIONS %@", configuration);
+
+    [Smartlook setupWithConfiguration:configuration];
     
     [Smartlook registerWhitelistedObject:[WKWebView class]];
     
