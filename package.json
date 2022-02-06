@@ -18,7 +18,7 @@
     "cordova-android",
     "cordova-ios"
   ],
-  "author": "Frantisek Spurny",
+  "author": "smartlook",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/smartlook/cordova-smartlook-plugin"
