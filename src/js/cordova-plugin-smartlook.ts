@@ -6,7 +6,7 @@ const SMARTLOOK_PLUGIN = 'SmartlookPlugin';
 // Smartlook framework info
 const SMARTLOOK_FRAMEWORK = 'CORDOVA';
 const SMARTLOOK_FRAMEWORK_VERSION = '-';
-const SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = '1.9.0';
+const SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = '1.9.4';
 
 // API methods names
 export enum Command {
@@ -143,10 +143,6 @@ export interface Smartlook {
 	 * @param options.startNewSession        (Optional) If true new session is going to be created.
 	 * @param options.startNewSessionAndUser (Optional) If true new session and visitor is going to be created.
 	 * @param options.eventTrackingModes     (Optional) Array of EventTrackingModes that should be applied to recording.
-	 *
-	 * @SL_COMPATIBILITY_NAME("name=setup;type=func;params=smartlookAPIKey{string}")
-	 * @SL_COMPATIBILITY_NAME("name=setup;type=func;params=setupOptions{SetupOptions}")
-	 * @SL_COMPATIBILITY_NAME("name=SetupOptions;type=builder;members=smartlookAPIKey,fps,renderingMode,startNewSession,startNewSessionAndUser,eventTrackingModes")
 	 */
 	setupAndStartRecording(options: SetupOptions, successCallback: SuccessCallback, errorCallback: ErrorCallback): void;
 	/**
@@ -159,21 +155,14 @@ export interface Smartlook {
 	 * @param options.startNewSession        (Optional) If true new session is going to be created.
 	 * @param options.startNewSessionAndUser (Optional) If true new session and visitor is going to be created.
 	 * @param options.eventTrackingModes     (Optional) Array of EventTrackingModes that should be applied to recording.
-	 *
-	 * @SL_COMPATIBILITY_NAME("name=setup;type=func;params=smartlookAPIKey{string}")
-	 * @SL_COMPATIBILITY_NAME("name=setup;type=func;params=setupOptions{SetupOptions}")
 	 */
 	setup(options: SetupOptions, successCallback: SuccessCallback, errorCallback: ErrorCallback): void;
 	/**
 	 * @description Start SDK recording.
-	 *
-	 * @SL_COMPATIBILITY_NAME("name=startRecording;type=func")
 	 */
 	startRecording(successCallback: SuccessCallback, errorCallback: ErrorCallback): void;
 	/**
 	 * @description Stop SDK recording.
-	 *
-	 * @SL_COMPATIBILITY_NAME("name=stopRecording;type=func")
 	 */
 	stopRecording(successCallback: SuccessCallback, errorCallback: ErrorCallback): void;
 	/**
@@ -187,16 +176,12 @@ export interface Smartlook {
 	 * function successCallback(value) {
 	 *     alert('Is smartlook recording: ' + value);
 	 * }
-	 *
-	 * @SL_COMPATIBILITY_NAME("name=isRecording;type=func;returns=boolean")
 	 */
 	isRecording(successCallback: SuccessCallback, errorCallback: ErrorCallback): void;
 	/**
 	 * @description Resets current session and new session in dashboard is created.
 	 *
 	 * @param options.resetUser (Optional) If set to TRUE new visitor is created in the dashboard.
-	 *
-	 * @SL_COMPATIBILITY_NAME("name=resetSession;type=func;params=resetUser{boolean}")
 	 */
 	resetSession(options: { resetUser: boolean }, successCallback: SuccessCallback, errorCallback: ErrorCallback): void;
 	/**
@@ -205,8 +190,6 @@ export interface Smartlook {
 	 *
 	 * @description When you start sensitive mode SDK records blank videos (single color) but SDK still
 	 *              sends Analytic events.
-	 *
-	 * @SL_COMPATIBILITY_NAME("name=startFullscreenSensitiveMode;type=func;deprecated=yes")
 	 */
 	setUserIdentifier(
 		options: { identifier: string; sessionProperties: Dictionary<any> },
@@ -250,8 +233,6 @@ export interface Smartlook {
 	 *
 	 * @param options.name      Controller/Activity/Page name.
 	 * @param options.viewState One of Smartlook.ViewState.START or Smartlook.ViewState.STOP.
-	 *
-	 * @SL_COMPATIBILITY_NAME("name=trackNavigationEvent;type=func;params=name{string},viewState{string}")
 	 */
 	trackNavigationEvent(
 		options: { name: string; viewState: ViewState },
@@ -273,11 +254,6 @@ export interface Smartlook {
 	 * function successCallback(value) {
 	 *     alert('Timed event eventId: ' + value);
 	 * }
-	 *
-	 * @SL_COMPATIBILITY_NAME("name=startTimedCustomEvent;type=func;params=eventName{string};returns=string")
-	 * @SL_COMPATIBILITY_NAME("name=startTimedCustomEvent;type=func;params=eventName{string},eventProperties{JSONObject};returns=string")
-	 * @SL_COMPATIBILITY_NAME("name=startTimedCustomEvent;type=func;params=eventName{string},bundle{Bundle};returns=string")
-	 * @SL_COMPATIBILITY_NAME("name=startTimedCustomEvent;type=func;params=eventName{string},eventProperties{string};returns=string")
 	 */
 	startTimedCustomEvent(
 		options: { name: string; eventProperties?: Dictionary<string> },
@@ -290,11 +266,6 @@ export interface Smartlook {
 	 * @param options.eventId         Unique event id that is used to identify this event.
 	 * @param options.eventProperties (Optional) Event data stored in object. These are going to be merged with
 	 *                                data passed in start.
-	 *
-	 * @SL_COMPATIBILITY_NAME("name=stopTimedCustomEvent;type=func;params=eventId{string}")
-	 * @SL_COMPATIBILITY_NAME("name=stopTimedCustomEvent;type=func;params=eventId{string},eventProperties{JSONObject}")
-	 * @SL_COMPATIBILITY_NAME("name=stopTimedCustomEvent;type=func;params=eventId{string},bundle{Bundle}")
-	 * @SL_COMPATIBILITY_NAME("name=stopTimedCustomEvent;type=func;params=eventId{string},eventProperties{string}")
 	 */
 	stopTimedCustomEvent(
 		options: { eventId: string; eventProperties?: Dictionary<string> },
@@ -308,11 +279,6 @@ export interface Smartlook {
 	 * @param options.reason          Short string description explaining why the event was canceled.
 	 * @param options.eventProperties (Optional) Event data stored in object. These are going to be merged with
 	 *                                data passed in start.
-	 *
-	 * @SL_COMPATIBILITY_NAME("name=cancelTimedCustomEvent;type=func;params=eventId{string},reason{string}")
-	 * @SL_COMPATIBILITY_NAME("name=cancelTimedCustomEvent;type=func;params=eventId{string},reason{string},eventProperties{JSONObject}")
-	 * @SL_COMPATIBILITY_NAME("name=cancelTimedCustomEvent;type=func;params=eventId{string},reason{string},bundle{Bundle}")
-	 * @SL_COMPATIBILITY_NAME("name=cancelTimedCustomEvent;type=func;params=eventId{string},reason{string},eventProperties{string}")
 	 */
 	cancelTimedCustomEvent(
 		options: { eventId: string; reason: string; eventProperties?: Dictionary<string> },
@@ -324,11 +290,6 @@ export interface Smartlook {
 	 *
 	 * @param options.name            String used to identify event.
 	 * @param options.eventProperties (Optional) Event data stored in object.
-	 *
-	 * @SL_COMPATIBILITY_NAME("name=trackCustomEvent;type=func;params=eventName{string}")
-	 * @SL_COMPATIBILITY_NAME("name=trackCustomEvent;type=func;params=eventName{string},eventProperties{JSONObject}")
-	 * @SL_COMPATIBILITY_NAME("name=trackCustomEvent;type=func;params=eventName{string},bundle{Bundle}")
-	 * @SL_COMPATIBILITY_NAME("name=trackCustomEvent;type=func;params=eventName{string},properties{string}")
 	 */
 	trackCustomEvent(
 		options: { name: string; eventProperties: Dictionary<any> },
@@ -341,10 +302,6 @@ export interface Smartlook {
 	 * @param options.globalEventProperties Global event properties stored in object.
 	 * @param options.immutable             If set to TRUE these properties have higher priority than mutable ones
 	 *                                      and also they cannot be changed (only removed).
-	 *
-	 * @SL_COMPATIBILITY_NAME("name=setGlobalEventProperties;type=func;params=globalEventProperties{JSONObject},immutable{boolean}")
-	 * @SL_COMPATIBILITY_NAME("name=setGlobalEventProperties;type=func;params=globalEventProperties{Bundle},immutable{boolean}")
-	 * @SL_COMPATIBILITY_NAME("name=setGlobalEventProperties;type=func;params=globalEventProperties{string},immutable{boolean}")
 	 */
 	setGlobalEventProperties(
 		options: { globalEventProperties: Dictionary<string>; immutable?: boolean },
@@ -358,8 +315,6 @@ export interface Smartlook {
 	 * @param options.value      Global event property value.
 	 * @param options.immutable  If set to TRUE this property has higher priority than mutable ones and also it
 	 *                           cannot be changed (only removed).
-	 *
-	 * @SL_COMPATIBILITY_NAME("name=setGlobalEventProperty;type=func;params=key{string},value{string},immutable{boolean}")
 	 */
 	setGlobalEventProperty(
 		options: { key: string; value: string; immutable?: boolean },
@@ -370,8 +325,6 @@ export interface Smartlook {
 	 * @description Remove property from global event properties.
 	 *
 	 * @param options.key Key of global event property that needs to be removed.
-	 *
-	 * @SL_COMPATIBILITY_NAME("name=removeGlobalEventProperty;type=func;params=key{string}")
 	 */
 	removeGlobalEventProperty(
 		options: { key: string },
@@ -380,8 +333,6 @@ export interface Smartlook {
 	): void;
 	/**
 	 * @description Remove all properties from global event properties.
-	 *
-	 * @SL_COMPATIBILITY_NAME("name=removeAllGlobalEventProperties;type=func")
 	 */
 	removeAllGlobalEventProperties(successCallback: SuccessCallback, errorCallback: ErrorCallback): void;
 	/**
@@ -390,8 +341,6 @@ export interface Smartlook {
 	 *
 	 * @param referrer Desired referrer value
 	 * @param source   Desired source, i.e. com.android.vending or com.amazon.venezia
-	 *
-	 * @SL_COMPATIBILITY_NAME("name=setReferrer;type=func;params=referrer{string},source{string}")
 	 */
 	setReferrer(
 		options: { referrer: string; source: string },
@@ -409,8 +358,6 @@ export interface Smartlook {
 	 * function successCallback(value) {
 	 *     alert('Shareable dashboard session URL: ' + value);
 	 * }
-	 *
-	 * @SL_COMPATIBILITY_NAME("name=getDashboardSessionUrl;type=func;params=withCurrentTimestamp{boolean};returns=string")
 	 */
 	getDashboardSessionUrl(
 		options: { withCurrentTimestamp?: boolean },
@@ -428,8 +375,6 @@ export interface Smartlook {
 	 * function successCallback(value) {
 	 *     alert('Shareable dashboard visitor URL: ' + value);
 	 * }
-	 *
-	 * @SL_COMPATIBILITY_NAME("name=getDashboardVisitorUrl;type=func;returns=string")
 	 */
 	getDashboardVisitorUrl(successCallback: SuccessCallback, errorCallback: ErrorCallback): void;
 	/**
@@ -455,8 +400,6 @@ export interface Smartlook {
 	 * @param options.renderingMode       Mode defining the video output of recording. Currently only
 	 *                                    RenderingMode.NO_RENDERING and RenderingMode.NATIVE available.
 	 * @param options.renderingModeOption [NOT IMPLEMENTED]
-	 *
-	 * @SL_COMPATIBILITY_NAME("name=setRenderingMode;type=func;params=renderingMode{string}")
 	 */
 	setRenderingMode(
 		options: { renderingMode: RenderingMode[] },
@@ -479,9 +422,6 @@ export interface Smartlook {
 	 *      onVisitorReady: function (dashboardVisitorUrl) { alert("Visitor: " + dashboardVisitorUrl); }
 	 *   });
 	 * }
-	 *
-	 * @SL_COMPATIBILITY_NAME("name=registerIntegrationListener;type=func;params=integrationListener{IntegrationListener}")
-	 * @SL_COMPATIBILITY_NAME("name=IntegrationListener;type=callback;members=onSessionReady,onVisitorReady")
 	 */
 	registerIntegrationListener(
 		options: {
@@ -493,8 +433,6 @@ export interface Smartlook {
 	): void;
 	/**
 	 * @description Unregister Integration listener (@see registerIntegrationListener())
-	 *
-	 * @SL_COMPATIBILITY_NAME("name=unregisterIntegrationListener;type=func")
 	 */
 	unregisterIntegrationListener(successCallback: SuccessCallback, errorCallback: ErrorCallback): void;
 }
@@ -516,10 +454,6 @@ var fullscreenModeActive = false;
  * @param options.startNewSession        (Optional) If true new session is going to be created.
  * @param options.startNewSessionAndUser (Optional) If true new session and visitor is going to be created.
  * @param options.eventTrackingModes     (Optional) Array of EventTrackingModes that should be applied to recording.
- *
- * @SL_COMPATIBILITY_NAME("name=setup;type=func;params=smartlookAPIKey{string}")
- * @SL_COMPATIBILITY_NAME("name=setup;type=func;params=setupOptions{SetupOptions}")
- * @SL_COMPATIBILITY_NAME("name=SetupOptions;type=builder;members=smartlookAPIKey,fps,renderingMode,startNewSession,startNewSessionAndUser,eventTrackingModes")
  */
 export function setupAndStartRecording(
 	options: SetupOptions,
@@ -582,9 +516,6 @@ export function setupAndStartRecording(
  * @param options.startNewSession        (Optional) If true new session is going to be created.
  * @param options.startNewSessionAndUser (Optional) If true new session and visitor is going to be created.
  * @param options.eventTrackingModes     (Optional) Array of EventTrackingModes that should be applied to recording.
- *
- * @SL_COMPATIBILITY_NAME("name=setup;type=func;params=smartlookAPIKey{string}")
- * @SL_COMPATIBILITY_NAME("name=setup;type=func;params=setupOptions{SetupOptions}")
  */
 export function setup(options: SetupOptions, successCallback: SuccessCallback, errorCallback: ErrorCallback) {
 	setPluginVersion();
@@ -635,8 +566,6 @@ export function setup(options: SetupOptions, successCallback: SuccessCallback, e
 
 /**
  * @description Start SDK recording.
- *
- * @SL_COMPATIBILITY_NAME("name=startRecording;type=func")
  */
 export function startRecording(successCallback: SuccessCallback, errorCallback: ErrorCallback) {
 	execWithCallbacks(successCallback, errorCallback, Command.START_RECORDING, []);
@@ -644,8 +573,6 @@ export function startRecording(successCallback: SuccessCallback, errorCallback: 
 
 /**
  * @description Stop SDK recording.
- *
- * @SL_COMPATIBILITY_NAME("name=stopRecording;type=func")
  */
 export function stopRecording(successCallback: SuccessCallback, errorCallback: ErrorCallback) {
 	execWithCallbacks(successCallback, errorCallback, Command.STOP_RECORDING, []);
@@ -662,8 +589,6 @@ export function stopRecording(successCallback: SuccessCallback, errorCallback: E
  * function successCallback(value) {
  *     alert('Is smartlook recording: ' + value);
  * }
- *
- * @SL_COMPATIBILITY_NAME("name=isRecording;type=func;returns=boolean")
  */
 export function isRecording(successCallback: SuccessCallback, errorCallback: ErrorCallback) {
 	execWithCallbacks(successCallback, errorCallback, Command.IS_RECORDING, []);
@@ -673,8 +598,6 @@ export function isRecording(successCallback: SuccessCallback, errorCallback: Err
  * @description Resets current session and new session in dashboard is created.
  *
  * @param options.resetUser (Optional) If set to TRUE new visitor is created in the dashboard.
- *
- * @SL_COMPATIBILITY_NAME("name=resetSession;type=func;params=resetUser{boolean}")
  */
 export function resetSession(
 	options: { resetUser: boolean },
@@ -701,11 +624,6 @@ export function resetSession(
  *                                  Id in Smartlook dashboard so you can pair records with concrete user.
  * @param options.sessionProperties (Optional) Additional properties object that will be paired with every session and can
  *                                  be viewed in Smartlook dashboard.
- *
- * @SL_COMPATIBILITY_NAME("name=setUserIdentifier;type=func;params=identifier{string}")
- * @SL_COMPATIBILITY_NAME("name=setUserProperties;type=func;params=sessionProperties{JSONObject},immutable{boolean}")
- * @SL_COMPATIBILITY_NAME("name=setUserProperties;type=func;params=sessionProperties{Bundle},immutable{boolean}")
- * @SL_COMPATIBILITY_NAME("name=setUserProperties;type=func;params=sessionProperties{string},immutable{boolean}")
  */
 export function setUserIdentifier(
 	options: { identifier: string; sessionProperties: Dictionary<any> },
@@ -787,8 +705,6 @@ export function setEventTrackingModes(options, successCallback: SuccessCallback,
  *
  * @param options.name      Controller/Activity/Page name.
  * @param options.viewState One of Smartlook.ViewState.START or Smartlook.ViewState.STOP.
- *
- * @SL_COMPATIBILITY_NAME("name=trackNavigationEvent;type=func;params=name{string},viewState{string}")
  */
 export function trackNavigationEvent(options, successCallback: SuccessCallback, errorCallback: ErrorCallback) {
 	const args = [];
@@ -824,11 +740,6 @@ export function trackNavigationEvent(options, successCallback: SuccessCallback, 
  * function successCallback(value) {
  *     alert('Timed event eventId: ' + value);
  * }
- *
- * @SL_COMPATIBILITY_NAME("name=startTimedCustomEvent;type=func;params=eventName{string};returns=string")
- * @SL_COMPATIBILITY_NAME("name=startTimedCustomEvent;type=func;params=eventName{string},eventProperties{JSONObject};returns=string")
- * @SL_COMPATIBILITY_NAME("name=startTimedCustomEvent;type=func;params=eventName{string},bundle{Bundle};returns=string")
- * @SL_COMPATIBILITY_NAME("name=startTimedCustomEvent;type=func;params=eventName{string},eventProperties{string};returns=string")
  */
 export function startTimedCustomEvent(options, successCallback: SuccessCallback, errorCallback: ErrorCallback) {
 	const args = [];
@@ -852,11 +763,6 @@ export function startTimedCustomEvent(options, successCallback: SuccessCallback,
  * @param options.eventId         Unique event id that is used to identify this event.
  * @param options.eventProperties (Optional) Event data stored in object. These are going to be merged with
  *                                data passed in start.
- *
- * @SL_COMPATIBILITY_NAME("name=stopTimedCustomEvent;type=func;params=eventId{string}")
- * @SL_COMPATIBILITY_NAME("name=stopTimedCustomEvent;type=func;params=eventId{string},eventProperties{JSONObject}")
- * @SL_COMPATIBILITY_NAME("name=stopTimedCustomEvent;type=func;params=eventId{string},bundle{Bundle}")
- * @SL_COMPATIBILITY_NAME("name=stopTimedCustomEvent;type=func;params=eventId{string},eventProperties{string}")
  */
 export function stopTimedCustomEvent(options, successCallback: SuccessCallback, errorCallback: ErrorCallback) {
 	const args = [];
@@ -881,11 +787,6 @@ export function stopTimedCustomEvent(options, successCallback: SuccessCallback, 
  * @param options.reason          Short string description explaining why the event was canceled.
  * @param options.eventProperties (Optional) Event data stored in object. These are going to be merged with
  *                                data passed in start.
- *
- * @SL_COMPATIBILITY_NAME("name=cancelTimedCustomEvent;type=func;params=eventId{string},reason{string}")
- * @SL_COMPATIBILITY_NAME("name=cancelTimedCustomEvent;type=func;params=eventId{string},reason{string},eventProperties{JSONObject}")
- * @SL_COMPATIBILITY_NAME("name=cancelTimedCustomEvent;type=func;params=eventId{string},reason{string},bundle{Bundle}")
- * @SL_COMPATIBILITY_NAME("name=cancelTimedCustomEvent;type=func;params=eventId{string},reason{string},eventProperties{string}")
  */
 export function cancelTimedCustomEvent(options, successCallback: SuccessCallback, errorCallback: ErrorCallback) {
 	const args = [];
@@ -914,11 +815,6 @@ export function cancelTimedCustomEvent(options, successCallback: SuccessCallback
  *
  * @param options.name            String used to identify event.
  * @param options.eventProperties (Optional) Event data stored in object.
- *
- * @SL_COMPATIBILITY_NAME("name=trackCustomEvent;type=func;params=eventName{string}")
- * @SL_COMPATIBILITY_NAME("name=trackCustomEvent;type=func;params=eventName{string},eventProperties{JSONObject}")
- * @SL_COMPATIBILITY_NAME("name=trackCustomEvent;type=func;params=eventName{string},bundle{Bundle}")
- * @SL_COMPATIBILITY_NAME("name=trackCustomEvent;type=func;params=eventName{string},properties{string}")
  */
 export function trackCustomEvent(options, successCallback: SuccessCallback, errorCallback: ErrorCallback) {
 	const args = [];
@@ -944,10 +840,6 @@ export function trackCustomEvent(options, successCallback: SuccessCallback, erro
  * @param options.globalEventProperties Global event properties stored in object.
  * @param options.immutable             If set to TRUE these properties have higher priority than mutable ones
  *                                      and also they cannot be changed (only removed).
- *
- * @SL_COMPATIBILITY_NAME("name=setGlobalEventProperties;type=func;params=globalEventProperties{JSONObject},immutable{boolean}")
- * @SL_COMPATIBILITY_NAME("name=setGlobalEventProperties;type=func;params=globalEventProperties{Bundle},immutable{boolean}")
- * @SL_COMPATIBILITY_NAME("name=setGlobalEventProperties;type=func;params=globalEventProperties{string},immutable{boolean}")
  */
 export function setGlobalEventProperties(options, successCallback: SuccessCallback, errorCallback: ErrorCallback) {
 	const args = [];
@@ -974,8 +866,6 @@ export function setGlobalEventProperties(options, successCallback: SuccessCallba
  * @param options.value      Global event property value.
  * @param options.immutable  If set to TRUE this property has higher priority than mutable ones and also it
  *                           cannot be changed (only removed).
- *
- * @SL_COMPATIBILITY_NAME("name=setGlobalEventProperty;type=func;params=key{string},value{string},immutable{boolean}")
  */
 export function setGlobalEventProperty(options, successCallback: SuccessCallback, errorCallback: ErrorCallback) {
 	const args = [];
@@ -1000,8 +890,6 @@ export function setGlobalEventProperty(options, successCallback: SuccessCallback
  * @description Remove property from global event properties.
  *
  * @param options.key Key of global event property that needs to be removed.
- *
- * @SL_COMPATIBILITY_NAME("name=removeGlobalEventProperty;type=func;params=key{string}")
  */
 export function removeGlobalEventProperty(options, successCallback: SuccessCallback, errorCallback: ErrorCallback) {
 	const args = [];
@@ -1017,8 +905,6 @@ export function removeGlobalEventProperty(options, successCallback: SuccessCallb
 
 /**
  * @description Remove all properties from global event properties.
- *
- * @SL_COMPATIBILITY_NAME("name=removeAllGlobalEventProperties;type=func")
  */
 export function removeAllGlobalEventProperties(successCallback: SuccessCallback, errorCallback: ErrorCallback) {
 	execWithCallbacks(successCallback, errorCallback, Command.REMOVE_ALL_GLOBAL_EVENT_PROPERTIES, []);
@@ -1032,8 +918,6 @@ export function removeAllGlobalEventProperties(successCallback: SuccessCallback,
  *
  * @param referrer Desired referrer value
  * @param source   Desired source, i.e. com.android.vending or com.amazon.venezia
- *
- * @SL_COMPATIBILITY_NAME("name=setReferrer;type=func;params=referrer{string},source{string}")
  */
 export function setReferrer(options, successCallback: SuccessCallback, errorCallback: ErrorCallback) {
 	const args = [];
@@ -1064,8 +948,6 @@ export function setReferrer(options, successCallback: SuccessCallback, errorCall
  * function successCallback(value) {
  *     alert('Shareable dashboard session URL: ' + value);
  * }
- *
- * @SL_COMPATIBILITY_NAME("name=getDashboardSessionUrl;type=func;params=withCurrentTimestamp{boolean};returns=string")
  */
 export function getDashboardSessionUrl(options, successCallback: SuccessCallback, errorCallback: ErrorCallback) {
 	const args = [];
@@ -1088,8 +970,6 @@ export function getDashboardSessionUrl(options, successCallback: SuccessCallback
  * function successCallback(value) {
  *     alert('Shareable dashboard visitor URL: ' + value);
  * }
- *
- * @SL_COMPATIBILITY_NAME("name=getDashboardVisitorUrl;type=func;returns=string")
  */
 export function getDashboardVisitorUrl(successCallback: SuccessCallback, errorCallback: ErrorCallback) {
 	execWithCallbacks(successCallback, errorCallback, Command.GET_DASHBOARD_VISITOR_URL, []);
@@ -1124,8 +1004,6 @@ export function unregisterLogListener(successCallback: SuccessCallback, errorCal
  * @param options.renderingMode       Mode defining the video output of recording. Currently only
  *                                    RenderingMode.NO_RENDERING and RenderingMode.NATIVE available.
  * @param options.renderingModeOption [NOT IMPLEMENTED]
- *
- * @SL_COMPATIBILITY_NAME("name=setRenderingMode;type=func;params=renderingMode{string}")
  */
 export function setRenderingMode(
 	options: { renderingMode: RenderingMode },
@@ -1163,9 +1041,6 @@ export function setRenderingMode(
  *      onVisitorReady: function (dashboardVisitorUrl) { alert("Visitor: " + dashboardVisitorUrl); }
  *   });
  * }
- *
- * @SL_COMPATIBILITY_NAME("name=registerIntegrationListener;type=func;params=integrationListener{IntegrationListener}")
- * @SL_COMPATIBILITY_NAME("name=IntegrationListener;type=callback;members=onSessionReady,onVisitorReady")
  */
 export function registerIntegrationListener(options, successCallback: SuccessCallback, errorCallback: ErrorCallback) {
 	const integrationCallback = (callbackData) => {
@@ -1184,8 +1059,6 @@ export function registerIntegrationListener(options, successCallback: SuccessCal
 
 /**
  * @description Unregister Integration listener (@see registerIntegrationListener())
- *
- * @SL_COMPATIBILITY_NAME("name=unregisterIntegrationListener;type=func")
  */
 export function unregisterIntegrationListener(successCallback: SuccessCallback, errorCallback: ErrorCallback) {
 	execWithCallbacks(successCallback, errorCallback, Command.UNREGISTER_INTEGRATION_LISTENER, []);
