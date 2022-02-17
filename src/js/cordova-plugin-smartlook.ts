@@ -6,7 +6,7 @@ const SMARTLOOK_PLUGIN = 'SmartlookPlugin';
 // Smartlook framework info
 const SMARTLOOK_FRAMEWORK = 'CORDOVA';
 const SMARTLOOK_FRAMEWORK_VERSION = '-';
-const SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = '1.9.4';
+const SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = '1.9.5';
 
 // API methods names
 export enum Command {

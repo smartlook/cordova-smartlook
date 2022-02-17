@@ -7,7 +7,7 @@ var SMARTLOOK_PLUGIN = 'SmartlookPlugin';
 // Smartlook framework info
 var SMARTLOOK_FRAMEWORK = 'CORDOVA';
 var SMARTLOOK_FRAMEWORK_VERSION = '-';
-var SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = '1.9.4';
+var SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = '1.9.5';
 // API methods names
 var Command;
 (function (Command) {

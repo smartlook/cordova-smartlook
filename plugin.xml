@@ -36,7 +36,7 @@
             <source url="https://github.com/CocoaPods/Specs.git"/>
          </config>
          <pods use-frameworks="true">
-            <pod name="Smartlook" spec="1.8.0"/>
+            <pod name="Smartlook" spec="1.8.5"/>
          </pods>
       </podspec>   
     </platform>
