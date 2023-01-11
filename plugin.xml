@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="cordova-plugin-smartlook" version="1.7.4">
 
-   <!--Plugin info-->
    <name>Smartlook</name>
+   <description>Official Smartlook SDK plugin for Cordova Android & iOS applications.</description>
 
-   <!--Modules-->
    <js-module name="SmartlookPlugin" src="www/cordova-plugin-smartlook.js">
-      <clobbers target="cordova.plugins.SmartlookPlugin" /> <!--Legacy targed-->
+      <clobbers target="cordova.plugins.SmartlookPlugin" />
       <clobbers target="Smartlook" />
    </js-module>
 
-   <!--Android-->
    <platform name="android">
       <config-file parent="/*" target="res/xml/config.xml">
          <feature name="SmartlookPlugin">
@@ -22,7 +20,6 @@
       <framework src="src/android/plugin.gradle" custom="true" type="gradleReference" />
    </platform>
 
-   <!--iOS-->
    <platform name="ios">
       <config-file parent="/*" target="config.xml">
           <feature name="SmartlookPlugin">
