@@ -1,7 +1,11 @@
 {
   "name": "cordova-plugin-smartlook",
   "version": "1.9.5",
-  "description": "Official Smartlook Cordova android plugin",
+  "description": "Official Smartlook SDK plugin for Cordova Android & iOS applications.",
+  "platforms": [
+    "android",
+    "ios"
+  ],
   "cordova": {
     "id": "cordova-plugin-smartlook",
     "platforms": [
@@ -18,7 +22,7 @@
     "cordova-android",
     "cordova-ios"
   ],
-  "author": "smartlook",
+  "author": "c0mtru1se <martin.budinsky@smartlook.com> (https://www.smartlook.com)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/smartlook/cordova-smartlook-plugin"
