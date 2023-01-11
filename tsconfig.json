@@ -1,11 +1,13 @@
 {
 	"compilerOptions": {
-		"target": "ESNext",
+		"target": "ES5",
 		"module": "CommonJS",
 		"outDir": "www/",
-		"types": ["cordova", "node"],
+		"types": ["cordova"],
+    "lib": ["ES5", "DOM"],
 		"declaration": true,
 	},
 	"compileOnSave": true,
+  "exclude": ["node_modules"],
 	"files": ["src/js/cordova-plugin-smartlook.ts"]
 }

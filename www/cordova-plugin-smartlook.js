@@ -790,5 +790,5 @@ function execWithCallbacks(successCallback, errorCallback, method, args) {
     cordova.exec(successCallback, errorCallback, SMARTLOOK_PLUGIN, method, args);
 }
 function logError(errorCallback, message) {
-    errorCallback === null || errorCallback === void 0 ? void 0 : errorCallback("" + new Error(message).stack);
+    errorCallback === null || errorCallback === void 0 ? void 0 : errorCallback("".concat(new Error(message).stack));
 }

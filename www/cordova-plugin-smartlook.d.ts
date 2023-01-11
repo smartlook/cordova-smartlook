@@ -46,9 +46,9 @@ export declare enum RenderingMode {
     NO_RENDERING = "no_rendering",
     NATIVE = "native"
 }
-export declare type SuccessCallback = (value: any) => void;
-export declare type ErrorCallback = (message: string) => void;
-export declare type SetupOptions = {
+export type SuccessCallback = (value: any) => void;
+export type ErrorCallback = (message: string) => void;
+export type SetupOptions = {
     smartlookAPIKey: string;
     fps?: number;
     renderingMode?: RenderingMode;
