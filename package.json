@@ -13,6 +13,14 @@
       "ios"
     ]
   },
+  "engines": {
+    "cordovaDependencies": {
+      "1.9.5": {
+        "cordova": ">=10.0.0",
+        "cordova-android": ">=10.1.1"
+      }
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/smartlook/cordova-smartlook-plugin.git"
