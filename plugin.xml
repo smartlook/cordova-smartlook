@@ -2,7 +2,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="cordova-plugin-smartlook" version="1.7.4">
 
    <name>Smartlook</name>
-   <description>Official Smartlook SDK plugin for Cordova Android & iOS applications.</description>
+   <description>Official Smartlook SDK plugin for Cordova Android and iOS applications.</description>
 
    <js-module name="SmartlookPlugin" src="www/cordova-plugin-smartlook.js">
       <clobbers target="cordova.plugins.SmartlookPlugin" />
@@ -21,14 +21,16 @@
    </platform>
 
    <platform name="ios">
+      <!--<dependency id="cordova-plugin-add-swift-support" version="2.0.2"/> !-->
       <config-file parent="/*" target="config.xml">
           <feature name="SmartlookPlugin">
              <param name="ios-package" value="SmartlookPlugin" />
          </feature>
       </config-file>
-      <header-file src="src/ios/SmartlookPlugin.h" />
-      <source-file src="src/ios/SmartlookPlugin.m" />
       
       <framework src="src/ios/SmartlookAnalytics.xcframework" custom="true"/>  
+
+      <header-file src="src/ios/SmartlookPlugin-Bridging-Header.h" type="BridgingHeader" />
+      <source-file src="src/ios/SmartlookPlugin.swift" />
     </platform>
 </plugin>
