@@ -8,6 +8,6 @@
 		"declaration": true,
 	},
 	"compileOnSave": true,
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "src/js/cordova-plugin-smartlook-legacy.ts"],
 	"files": ["src/js/cordova-plugin-smartlook.ts"]
 }
