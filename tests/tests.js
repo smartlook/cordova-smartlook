@@ -1,8 +1,6 @@
 exports.defineAutoTests = function () {
 	describe('Smartlook', function () {
-		beforeAll(function () {
-
-		});
+		beforeAll(function () {});
 
 		it('should exist', function () {
 			expect(Smartlook).toBeDefined();
