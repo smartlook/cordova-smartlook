@@ -6,7 +6,7 @@
 	<dict>
 		<key>Resources/Info.plist</key>
 		<data>
-		ieVGOAohazFQNASyOUAPVs/F0NE=
+		MwLKvpKSZVJxYcqPYpvFGKPjbRg=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -15,91 +15,77 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			6Oa/uJHd8DtYCVu5MB+QQ7ixzHwFkI5ZYLh0bhD68Ho=
+			TRJIuXVxYgaqtK36oF3WTFXrqye2/5SCNsZJormYwXU=
+			</data>
+		</dict>
+		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios-macabi.abi.json</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			GmZQWtSmezQnGL17ne14LGIC6Q4J1wmeP6lt/oo0HB8=
+			</data>
+		</dict>
+		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios-macabi.private.swiftinterface</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			ETPPJj3my4VnBO6XVx0orEeO7WySTBgVPeo8tblAvIc=
 			</data>
 		</dict>
 		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios-macabi.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			w4ypBbx7k1vBdPYZlSKVZgZmtzYdu5mcjUrX5p+1Fyo=
+			mscgNzqjiejq/9ohHsxP2K3Kuota43eJXy6uqCNrUxw=
 			</data>
 		</dict>
 		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios-macabi.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			1XJnYpqDN4HcMRop98OCbtXINFfUwD8nbrN/UlO7ZPk=
+			ETPPJj3my4VnBO6XVx0orEeO7WySTBgVPeo8tblAvIc=
 			</data>
 		</dict>
 		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios-macabi.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			BGP5HQ3YjuJOEewYPcNacw+ef64/XeoGBWDcGamlxvY=
+			ru8BDUjQRDRUyv0NozhLyd5vgYo1tyq6FtwQnEPIpMY=
 			</data>
 		</dict>
-		<key>Modules/SmartlookAnalytics.swiftmodule/arm64.swiftdoc</key>
+		<key>Modules/SmartlookAnalytics.swiftmodule/x86_64-apple-ios-macabi.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			w4ypBbx7k1vBdPYZlSKVZgZmtzYdu5mcjUrX5p+1Fyo=
+			GmZQWtSmezQnGL17ne14LGIC6Q4J1wmeP6lt/oo0HB8=
 			</data>
 		</dict>
-		<key>Modules/SmartlookAnalytics.swiftmodule/arm64.swiftinterface</key>
+		<key>Modules/SmartlookAnalytics.swiftmodule/x86_64-apple-ios-macabi.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			1XJnYpqDN4HcMRop98OCbtXINFfUwD8nbrN/UlO7ZPk=
-			</data>
-		</dict>
-		<key>Modules/SmartlookAnalytics.swiftmodule/arm64.swiftmodule</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			BGP5HQ3YjuJOEewYPcNacw+ef64/XeoGBWDcGamlxvY=
+			nmAY/HIKzcA2yaVAWX3CoGSy5OQq2nHpv5gDkfZGcHc=
 			</data>
 		</dict>
 		<key>Modules/SmartlookAnalytics.swiftmodule/x86_64-apple-ios-macabi.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			wDgiYyl4z0SHLeBdCC4UVp6XkFbBHFt+Z/wMM1Jc2Tw=
+			V4nbNSYvLkClkDnDBs7Ghl6OtafVPanszbF1njoipNE=
 			</data>
 		</dict>
 		<key>Modules/SmartlookAnalytics.swiftmodule/x86_64-apple-ios-macabi.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			5Tv46S56d+AkyVkLJw9qm9sYmWZLS8CMtRrQtlRXYdA=
+			nmAY/HIKzcA2yaVAWX3CoGSy5OQq2nHpv5gDkfZGcHc=
 			</data>
 		</dict>
 		<key>Modules/SmartlookAnalytics.swiftmodule/x86_64-apple-ios-macabi.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			iA+kBHeSeTjur75Tm25IxqIR3qYFNS4RQJ1JqBYqWso=
-			</data>
-		</dict>
-		<key>Modules/SmartlookAnalytics.swiftmodule/x86_64.swiftdoc</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			wDgiYyl4z0SHLeBdCC4UVp6XkFbBHFt+Z/wMM1Jc2Tw=
-			</data>
-		</dict>
-		<key>Modules/SmartlookAnalytics.swiftmodule/x86_64.swiftinterface</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			5Tv46S56d+AkyVkLJw9qm9sYmWZLS8CMtRrQtlRXYdA=
-			</data>
-		</dict>
-		<key>Modules/SmartlookAnalytics.swiftmodule/x86_64.swiftmodule</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			iA+kBHeSeTjur75Tm25IxqIR3qYFNS4RQJ1JqBYqWso=
+			fDp/HBjGsa0n7+XCFg0f6IIAapNZmAls8+q90suldbI=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
@@ -113,7 +99,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			Wmzf2iZwjXaaavDhzgaTJ4DsSawE0eqKERvf7T8cwXY=
+			/sY8YSbjkEH2Am6GrzBIxAferpKuWDLMGKXkVIeB8gE=
 			</data>
 		</dict>
 	</dict>

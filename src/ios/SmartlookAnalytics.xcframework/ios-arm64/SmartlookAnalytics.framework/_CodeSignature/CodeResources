@@ -6,35 +6,31 @@
 	<dict>
 		<key>Headers/SmartlookAnalytics-Swift.h</key>
 		<data>
-		s1ayMIkBLBL49VNwTkzB9C3lnKE=
+		P/jocTRo89IxIPAxxjMqKm3dX6w=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		4QjS+PgLOsaO7isfEbxZqG0lobI=
+		J6uU5i+FmSxYUG+TGJYMB/va2qI=
+		</data>
+		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios.abi.json</key>
+		<data>
+		UUOvM+7A6tMTnyzRUEuP3ffWRkY=
+		</data>
+		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios.private.swiftinterface</key>
+		<data>
+		I/D7XgAt2BZkrPrbhkN5ZELVsbw=
 		</data>
 		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<data>
-		vtHZG6ZcDiqFUoX9BwPWfogF6/M=
+		FcLINv7g+R0TK+fuxN5r6BOSNe0=
 		</data>
 		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<data>
-		KnIwxAYUscF8BOkt7NcNz3LL9O0=
+		I/D7XgAt2BZkrPrbhkN5ZELVsbw=
 		</data>
 		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<data>
-		xNfCHUs4D1nEhB5uNf6Mair6Y8g=
-		</data>
-		<key>Modules/SmartlookAnalytics.swiftmodule/arm64.swiftdoc</key>
-		<data>
-		vtHZG6ZcDiqFUoX9BwPWfogF6/M=
-		</data>
-		<key>Modules/SmartlookAnalytics.swiftmodule/arm64.swiftinterface</key>
-		<data>
-		KnIwxAYUscF8BOkt7NcNz3LL9O0=
-		</data>
-		<key>Modules/SmartlookAnalytics.swiftmodule/arm64.swiftmodule</key>
-		<data>
-		xNfCHUs4D1nEhB5uNf6Mair6Y8g=
+		UaxPYHwx0QSY+WmaDrvg/Wt82zE=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -47,49 +43,42 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			a0oB8KeY8EjMINRSo/w0T7hNkT+Y64icWciXrQF2TQ4=
+			9CpkxM/DIsnV1/mM6SfTsYFIfdZYBbuwuNkMmxZ89yk=
+			</data>
+		</dict>
+		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios.abi.json</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			5hetr+HBkciwfX6TnsRQkSd00u6827NuWcDwObwvapU=
+			</data>
+		</dict>
+		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios.private.swiftinterface</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			LhOYcsYQSe+oThpFHc9iXBKZU1CXZzlvQ4yS+5ZoSu4=
 			</data>
 		</dict>
 		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			5ySHEwM/5iBIdRzBxQbtm27eNQiSPwUbc0/ZWjcOa9w=
+			+bE+ii5a8PHB853ev9c8wT4am1qSAExTYugUxnMqb3U=
 			</data>
 		</dict>
 		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			PlxwOyRe6CpYlxYPUfmEAJAmCe2uvUUgoY/Qp+wK/A4=
+			LhOYcsYQSe+oThpFHc9iXBKZU1CXZzlvQ4yS+5ZoSu4=
 			</data>
 		</dict>
 		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			eONHdtWWcqygOudYsYHfAR5i2BvhuELOSEV90nKZHYs=
-			</data>
-		</dict>
-		<key>Modules/SmartlookAnalytics.swiftmodule/arm64.swiftdoc</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			5ySHEwM/5iBIdRzBxQbtm27eNQiSPwUbc0/ZWjcOa9w=
-			</data>
-		</dict>
-		<key>Modules/SmartlookAnalytics.swiftmodule/arm64.swiftinterface</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			PlxwOyRe6CpYlxYPUfmEAJAmCe2uvUUgoY/Qp+wK/A4=
-			</data>
-		</dict>
-		<key>Modules/SmartlookAnalytics.swiftmodule/arm64.swiftmodule</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			eONHdtWWcqygOudYsYHfAR5i2BvhuELOSEV90nKZHYs=
+			yTEZtURIyl/WADnZMtMWeL2BUCvirP0x6glQLKU4n18=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
