@@ -207,8 +207,8 @@ export interface Smartlook {
 	 *                                  - EventTrackingMode.IGNORE_RAGE_CLICKS ... will not track rage clicks
 	 *                                  - EventTrackingMode.NO_TRACKING ... not gonna track any events
 	 */
-	setEventTrackingMode(
-		options: { eventTrackingMode: EventTrackingMode },
+	setEventTrackingMode<T extends { eventTrackingMode: EventTrackingMode }> (
+		options: T,
 		successCallback: SuccessCallback,
 		errorCallback: ErrorCallback,
 	): void;
@@ -316,8 +316,8 @@ export interface Smartlook {
 	 * @param options.immutable  If set to TRUE this property has higher priority than mutable ones and also it
 	 *                           cannot be changed (only removed).
 	 */
-	setGlobalEventProperty(
-		options: { key: string; value: string; immutable?: boolean },
+	setGlobalEventProperty<TOptions extends { key: string; value: string; immutable?: boolean }>(
+		options: TOptions,
 		successCallback: SuccessCallback,
 		errorCallback: ErrorCallback,
 	): void;
@@ -462,7 +462,7 @@ export function setupAndStartRecording(
 ) {
 	setPluginVersion();
 
-	const args = [];
+	const args: string[] = [];
 	const renderingModeAllowedValues = [RenderingMode.NO_RENDERING, RenderingMode.NATIVE];
 
 	if (checkStringOption('smartlookAPIKey', options, errorCallback, true)) {
@@ -604,7 +604,7 @@ export function resetSession(
 	successCallback: SuccessCallback,
 	errorCallback: ErrorCallback,
 ) {
-	const args = [];
+	const args: string[] = [];
 
 	if (checkBooleanOption('resetUser', options, errorCallback, true)) {
 		args.push(options['resetUser']);
@@ -658,8 +658,7 @@ export function setUserIdentifier(
  *                                  - EventTrackingMode.IGNORE_RAGE_CLICKS ... will not track rage clicks
  *                                  - EventTrackingMode.NO_TRACKING ... not gonna track any events
  */
-export function setEventTrackingMode(options, successCallback: SuccessCallback, errorCallback: ErrorCallback) {
-	const args = [];
+	const args: string[] = [];
 	const allowedValues = [
 		EventTrackingMode.FULL_TRACKING,
 		EventTrackingMode.IGNORE_USER_INTERACTION,
@@ -696,7 +695,7 @@ export function setEventTrackingModes(options, successCallback: SuccessCallback,
 	} else {
 		return;
 	}
-
+  setEventTrackingMode({eventTrackingMode: 'neco', neco: 'neco'}, emptyCallback, emptyCallback);
 	execWithCallbacks(successCallback, errorCallback, Command.SET_EVENT_TRACKING_MODES, args);
 }
 
