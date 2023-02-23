@@ -4,10 +4,11 @@
 		"module": "CommonJS",
 		"outDir": "www/",
 		"types": ["cordova"],
-    "lib": ["ES5", "DOM"],
+		"lib": ["ES5", "DOM"],
 		"declaration": true,
+		"strict": true
 	},
 	"compileOnSave": true,
-  "exclude": ["node_modules", "src/js/cordova-plugin-smartlook-legacy.ts"],
+	"exclude": ["node_modules", "src/js/cordova-plugin-smartlook-legacy.ts"],
 	"files": ["src/js/cordova-plugin-smartlook.ts"]
 }

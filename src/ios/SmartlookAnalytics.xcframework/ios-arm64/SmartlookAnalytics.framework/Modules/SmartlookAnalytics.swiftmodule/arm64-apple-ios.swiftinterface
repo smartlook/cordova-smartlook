@@ -1,6 +1,7 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.5.2 (swiftlang-1300.0.47.5 clang-1300.0.29.30)
+// swift-compiler-version: Apple Swift version 5.7.2 (swiftlang-5.7.2.135.5 clang-1400.0.29.51)
 // swift-module-flags: -target arm64-apple-ios13.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name SmartlookAnalytics
+// swift-module-flags-ignorable: -enable-bare-slash-regex
 import AVFoundation
 import Combine
 import CoreData
@@ -19,6 +20,7 @@ import UIKit
 import Vision
 import WebKit
 import _Concurrency
+import _StringProcessing
 import os
 public enum Region : Swift.Equatable, Swift.Codable {
   case eu
@@ -113,6 +115,7 @@ public enum Status : Swift.Equatable {
     case internalError
     case swiftUIPreviewContext
     case unsupportedPlatform
+    case diskCacheCapacityOverreached
     public static func == (a: SmartlookAnalytics.Status.Cause, b: SmartlookAnalytics.Status.Cause) -> Swift.Bool
     public func hash(into hasher: inout Swift.Hasher)
     public var hashValue: Swift.Int {
@@ -153,6 +156,9 @@ public enum Status : Swift.Equatable {
   public var swiftUIPreviewRecordingAllowed: Swift.Bool {
     get
   }
+  public var crashReportsEnabled: Swift.Bool {
+    get
+  }
   @Combine.Published @_projectedValueProperty($renderingMode) public var renderingMode: SmartlookAnalytics.RenderingMode {
     get
   }
@@ -191,9 +197,9 @@ public struct MaskElement : Swift.Codable, Swift.Equatable {
       get
     }
   }
-  public let rect: CoreGraphics.CGRect
+  public let rect: CoreFoundation.CGRect
   public let type: SmartlookAnalytics.MaskElement.MaskType
-  public init(rect: CoreGraphics.CGRect, type: SmartlookAnalytics.MaskElement.MaskType = .covering)
+  public init(rect: CoreFoundation.CGRect, type: SmartlookAnalytics.MaskElement.MaskType = .covering)
   public static func == (a: SmartlookAnalytics.MaskElement, b: SmartlookAnalytics.MaskElement) -> Swift.Bool
   public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws
@@ -243,7 +249,7 @@ extension SmartlookAnalytics.Smartlook {
   @discardableResult
   final public func track(navigationEvent: Swift.String, direction: SmartlookAnalytics.NavigationEventDirection? = .enter, properties: SmartlookAnalytics.Properties? = nil) -> SmartlookAnalytics.Smartlook
   @discardableResult
-  final public func track(selector: Swift.String, frame: CoreGraphics.CGRect? = nil, properties: SmartlookAnalytics.Properties? = nil) -> SmartlookAnalytics.Smartlook
+  final public func track(selector: Swift.String, frame: CoreFoundation.CGRect? = nil, properties: SmartlookAnalytics.Properties? = nil) -> SmartlookAnalytics.Smartlook
 }
 final public class SetupConfiguration : Swift.Codable {
   public init(region: SmartlookAnalytics.Region? = nil, relayProxyHost: Swift.String? = nil)
@@ -259,6 +265,8 @@ final public class SetupConfiguration : Swift.Codable {
   }
   @discardableResult
   final public func relayProxyHost(_ relayProxyHost: Swift.String?) -> SmartlookAnalytics.SetupConfiguration
+  @discardableResult
+  final public func disableCrashReports() -> SmartlookAnalytics.SetupConfiguration
   @objc deinit
   final public func encode(to encoder: Swift.Encoder) throws
   public init(from decoder: Swift.Decoder) throws

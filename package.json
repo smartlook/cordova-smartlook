@@ -1,51 +1,53 @@
 {
-  "name": "cordova-plugin-smartlook",
-  "version": "1.9.5",
-  "description": "Official Smartlook SDK plugin for Cordova Android and iOS applications.",
-  "platforms": [
-    "android",
-    "ios"
-  ],
-  "cordova": {
-    "id": "cordova-plugin-smartlook",
-    "platforms": [
-      "android",
-      "ios"
-    ]
-  },
-  "engines": {
-    "cordovaDependencies": {
-      "1.9.5": {
-        "cordova": ">=10.0.0",
-        "cordova-android": ">=10.1.1"
-      }
-    }
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/smartlook/cordova-smartlook-plugin.git"
-  },
-  "keywords": [
-    "ecosystem:cordova",
-    "cordova-android",
-    "cordova-ios"
-  ],
-  "author": "c0mtru1se <martin.budinsky@smartlook.com> (https://www.smartlook.com)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/smartlook/cordova-smartlook-plugin"
-  },
-  "homepage": "https://www.smartlook.com",
-  "types": "./www/cordova-plugin-smartlook.d.ts",
-  "main": "./www/cordova-plugin-smartlook.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsc -w",
-    "build": "tsc",
-    "postpublish": "PACKAGE_VERSION=$(cat package.json | grep \\\"version\\\" | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag v$PACKAGE_VERSION && git push --tags"
-  },
-  "devDependencies": {
-    "@types/cordova": "^0.0.34",
-    "@types/node": "^15.6.1"
-  }
+	"name": "cordova-plugin-smartlook",
+	"version": "1.9.5",
+	"description": "Official Smartlook SDK plugin for Cordova Android and iOS applications.",
+	"platforms": [
+		"android",
+		"ios"
+	],
+	"cordova": {
+		"id": "cordova-plugin-smartlook",
+		"platforms": [
+			"android",
+			"ios"
+		]
+	},
+	"engines": {
+		"cordovaDependencies": {
+			"1.9.5": {
+				"cordova": ">=10.0.0",
+				"cordova-android": ">=10.1.1"
+			}
+		}
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/smartlook/cordova-smartlook-plugin.git"
+	},
+	"keywords": [
+		"ecosystem:cordova",
+		"cordova-android",
+		"cordova-ios"
+	],
+	"author": "c0mtru1se <martin.budinsky@smartlook.com> (https://www.smartlook.com)",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/smartlook/cordova-smartlook-plugin"
+	},
+	"homepage": "https://www.smartlook.com",
+	"types": "./www/cordova-plugin-smartlook.d.ts",
+	"main": "./www/cordova-plugin-smartlook.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"dev": "tsc -w",
+		"build": "tsc",
+		"ptr": "yarn prettier --write .",
+		"postpublish": "PACKAGE_VERSION=$(cat package.json | grep \\\"version\\\" | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag v$PACKAGE_VERSION && git push --tags"
+	},
+	"devDependencies": {
+		"@types/cordova": "^0.0.34",
+		"@types/node": "^15.6.1",
+		"prettier": "2.8.4"
+	}
 }

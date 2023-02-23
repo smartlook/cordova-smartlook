@@ -31,6 +31,9 @@
       <framework src="src/ios/SmartlookAnalytics.xcframework" custom="true"/>  
 
       <header-file src="src/ios/SmartlookPlugin-Bridging-Header.h" type="BridgingHeader" />
+      <source-file src="src/ios/SmartlookPlugin+Extensions.swift" />
+      <source-file src="src/ios/SmartlookPlugin+RecordingMask.swift" />
       <source-file src="src/ios/SmartlookPlugin.swift" />
+      <source-file src="src/ios/SmartlookPlugin+APIHelper.swift" />
     </platform>
 </plugin>
