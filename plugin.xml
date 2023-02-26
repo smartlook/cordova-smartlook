@@ -10,14 +10,16 @@
    </js-module>
 
    <platform name="android">
-      <config-file parent="/*" target="res/xml/config.xml">
+      <config-file parent="/*" target="config.xml">
+         <preference name="GradlePluginKotlinEnabled" value="true" />
+
          <feature name="SmartlookPlugin">
             <param name="android-package" value="com.smartlook.cordovaplugin.SmartlookPlugin" />
          </feature>
       </config-file>
       <config-file parent="/*" target="AndroidManifest.xml" />
-      <source-file src="src/android/com/smartlook/cordovaplugin/SmartlookPlugin.java" target-dir="src/com/smartlook/cordovaplugin/SmartlookPlugin" />
       <framework src="src/android/plugin.gradle" custom="true" type="gradleReference" />
+      <source-file src="src/android/com/smartlook/cordovaplugin/SmartlookPlugin.kt" target-dir="java/com/smartlook/cordovaplugin/SmartlookPlugin" />
    </platform>
 
    <platform name="ios">
