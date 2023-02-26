@@ -1,11 +1,9 @@
-const { cordova } = window;
-
 // Plugin name
 const SMARTLOOK_PLUGIN = 'SmartlookPlugin';
 
 // Smartlook framework info
-const SMARTLOOK_FRAMEWORK_VERSION = '-';
-const SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = '1.9.5';
+export const SMARTLOOK_FRAMEWORK_VERSION = '-';
+export const SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = '1.9.5';
 
 // API methods names
 export enum Command {
@@ -468,8 +466,8 @@ export function setUserIdentifier(
 
 export function setUserName(
 	options: { name: string },
-	successCallback: SuccessCallback<boolean>,
-	errorCallback: ErrorCallback,
+	successCallback?: SuccessCallback<boolean>,
+	errorCallback?: ErrorCallback,
 ): void {
 	let args = [];
 	if (!checkStringOption('name', options, true, errorCallback)) {
@@ -889,11 +887,11 @@ function execWithCallbacks<T>(
 	errorCallback: ErrorCallback = emptyCallback,
 	args?: any[],
 ) {
-	cordova.exec(successCallback, errorCallback, SMARTLOOK_PLUGIN, method, args);
+	window.cordova.exec(successCallback, errorCallback, SMARTLOOK_PLUGIN, method, args);
 }
 
 function logError(message: string, errorCallback?: ErrorCallback) {
-	errorCallback?.(`${new Error(message).stack}`);
+	errorCallback?.(`${new Error(message).message}`);
 }
 
 function checkStringOption(
