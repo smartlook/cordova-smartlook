@@ -39,7 +39,7 @@
 	"types": "./www/cordova-plugin-smartlook.d.ts",
 	"main": "./www/cordova-plugin-smartlook.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
+		"test": "yarn test",
 		"dev": "tsc -w",
 		"build": "tsc",
 		"ptr": "yarn prettier --write .",
@@ -47,7 +47,10 @@
 	},
 	"devDependencies": {
 		"@types/cordova": "^0.0.34",
+		"@types/jest": "^29.4.0",
 		"@types/node": "^15.6.1",
-		"prettier": "2.8.4"
+		"jest": "^29.4.3",
+		"prettier": "2.8.4",
+		"ts-jest": "^29.0.5"
 	}
 }
