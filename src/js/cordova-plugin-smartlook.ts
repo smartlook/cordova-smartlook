@@ -85,21 +85,21 @@ export type ErrorCallback = (message: string) => void;
 export type RecordingMaskType = 'COVERING' | 'ERASING';
 
 export enum RenderingMode {
-  NO_RENDERING = 0,
-  NATIVE = 1,
-  WIREFRAME = 2,
+	NO_RENDERING = 0,
+	NATIVE = 1,
+	WIREFRAME = 2,
 }
 
 export enum RecordingStatus {
-  Recording = 0,
-  NotStarted = 1,
-  Stopped = 2,
-  BellowMinSdkVersion = 3,
-  ProjectLimitReached = 4,
-  StorageLimitReached = 5,
-  InternalError = 6,
-  NotRunningInSwiftUIContext = 7,
-  UnsupportedPlatform = 8,
+	Recording = 0,
+	NotStarted = 1,
+	Stopped = 2,
+	BellowMinSdkVersion = 3,
+	ProjectLimitReached = 4,
+	StorageLimitReached = 5,
+	InternalError = 6,
+	NotRunningInSwiftUIContext = 7,
+	UnsupportedPlatform = 8,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -305,15 +305,15 @@ export function sdkTest(successCallback?: SuccessCallback<boolean>, errorCallbac
 
 // Internal setup logic
 function setupAndRegisterBridgeInterface(): void {
-  let args = [];
+	let args = [];
 
-  args.push(SMARTLOOK_FRAMEWORK_PLUGIN_VERSION);
-  args.push(SMARTLOOK_FRAMEWORK_VERSION);
-  execWithCallbacks(SET_PLUGIN_VERSION, emptyCallback, emptyCallback, args);
+	args.push(SMARTLOOK_FRAMEWORK_PLUGIN_VERSION);
+	args.push(SMARTLOOK_FRAMEWORK_VERSION);
+	execWithCallbacks(SET_PLUGIN_VERSION, emptyCallback, emptyCallback, args);
 }
 
 export function start(successCallback?: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void {
-  setupAndRegisterBridgeInterface();
+	setupAndRegisterBridgeInterface();
 	execWithCallbacks(Command.START, successCallback, errorCallback);
 }
 
@@ -449,7 +449,10 @@ export function removeGlobalEventProperty(
 	execWithCallbacks(Command.REMOVE_STRING_EVENT_PROPERTY, successCallback, errorCallback, args);
 }
 
-export function clearGlobalEventProperties(successCallback: SuccessCallback<boolean>, errorCallback: ErrorCallback): void {
+export function clearGlobalEventProperties(
+	successCallback: SuccessCallback<boolean>,
+	errorCallback: ErrorCallback,
+): void {
 	execWithCallbacks(Command.CLEAR_EVENT_PROPERTIES, successCallback, errorCallback);
 }
 
@@ -653,8 +656,8 @@ export function setProjectKey(
 	successCallback?: SuccessCallback<string>,
 	errorCallback?: ErrorCallback,
 ) {
-  // TODO log how many times this happens not to bottleneck
-  setupAndRegisterBridgeInterface();
+	// TODO log how many times this happens not to bottleneck
+	setupAndRegisterBridgeInterface();
 
 	let args = [];
 	if (!checkStringOption('key', options, true, errorCallback)) {
@@ -720,19 +723,22 @@ export function setWebViewSensitivity(
 }
 
 export function getRenderingMode(successCallback: SuccessCallback<RenderingMode>, errorCallback?: ErrorCallback): void {
-  const renderingModeCallback = (renderingMode: number) => {
-    const renderingModeTyped = renderingModeFromNumber(renderingMode);
-    successCallback(renderingModeTyped);
-  };
+	const renderingModeCallback = (renderingMode: number) => {
+		const renderingModeTyped = renderingModeFromNumber(renderingMode);
+		successCallback(renderingModeTyped);
+	};
 
 	execWithCallbacks(Command.GET_RENDERING_MODE, renderingModeCallback, errorCallback);
 }
 
-export function getRecordingStatus(successCallback: SuccessCallback<RecordingStatus>, errorCallback?: ErrorCallback): void {
-  const recordingStatusCallback = (recordingStatus: number) => {
-    const renderingModeTyped = recordingStatusFromNumber(recordingStatus);
-    successCallback(renderingModeTyped);
-  };
+export function getRecordingStatus(
+	successCallback: SuccessCallback<RecordingStatus>,
+	errorCallback?: ErrorCallback,
+): void {
+	const recordingStatusCallback = (recordingStatus: number) => {
+		const renderingModeTyped = recordingStatusFromNumber(recordingStatus);
+		successCallback(renderingModeTyped);
+	};
 
 	execWithCallbacks(Command.GET_RECORDING_STATUS, recordingStatusCallback, errorCallback);
 }
@@ -748,7 +754,7 @@ export function setRenderingMode(
 ): void {
 	let args = [];
 	if (!(options['renderingMode'] in RenderingMode)) {
-    logError(`Invalid rendering mode ${options['renderingMode']} set!`, errorCallback);
+		logError(`Invalid rendering mode ${options['renderingMode']} set!`, errorCallback);
 		return;
 	}
 
@@ -967,42 +973,42 @@ function checkFpsOption(options: Record<any, any>, isMandatory: boolean, errorCa
 	return true;
 }
 
-function renderingModeFromNumber(renderingMode:number): RenderingMode {
-  switch (renderingMode) {
-    case 0:
-      return RenderingMode.NO_RENDERING;
-    case 1:
-      return RenderingMode.NATIVE;
-    case 2:
-      return RenderingMode.WIREFRAME;
-  
-    default:
-      return RenderingMode.NATIVE;
-  }
+function renderingModeFromNumber(renderingMode: number): RenderingMode {
+	switch (renderingMode) {
+		case 0:
+			return RenderingMode.NO_RENDERING;
+		case 1:
+			return RenderingMode.NATIVE;
+		case 2:
+			return RenderingMode.WIREFRAME;
+
+		default:
+			return RenderingMode.NATIVE;
+	}
 }
 
 function recordingStatusFromNumber(recordingStatus: number): RecordingStatus {
-  switch (recordingStatus) {
-    case 0:
-      return RecordingStatus.Recording;
-    case 1:
-      return RecordingStatus.NotStarted;
-    case 2:
-      return RecordingStatus.Stopped;
-    case 3:
-      return RecordingStatus.BellowMinSdkVersion;
-    case 4:
-      return RecordingStatus.ProjectLimitReached;
-    case 5:
-      return RecordingStatus.StorageLimitReached;
-    case 6:
-      return RecordingStatus.InternalError;
-    case 7:
-      return RecordingStatus.NotRunningInSwiftUIContext;
-    case 8:
-      return RecordingStatus.UnsupportedPlatform;
+	switch (recordingStatus) {
+		case 0:
+			return RecordingStatus.Recording;
+		case 1:
+			return RecordingStatus.NotStarted;
+		case 2:
+			return RecordingStatus.Stopped;
+		case 3:
+			return RecordingStatus.BellowMinSdkVersion;
+		case 4:
+			return RecordingStatus.ProjectLimitReached;
+		case 5:
+			return RecordingStatus.StorageLimitReached;
+		case 6:
+			return RecordingStatus.InternalError;
+		case 7:
+			return RecordingStatus.NotRunningInSwiftUIContext;
+		case 8:
+			return RecordingStatus.UnsupportedPlatform;
 
-    default:
-      return RecordingStatus.NotStarted;
-  }
+		default:
+			return RecordingStatus.NotStarted;
+	}
 }

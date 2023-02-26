@@ -1,253 +1,390 @@
-
-import { getGlobalEventProperty, putGlobalEventProperty, removeGlobalEventProperty, RenderingMode, reset, setFrameRate, setReferrer, setRenderingMode, setUserEmail, setUserIdentifier, setUserName, setWebViewSensitivity, SMARTLOOK_FRAMEWORK_PLUGIN_VERSION, SMARTLOOK_FRAMEWORK_VERSION, start, stop, trackEvent, trackNavigationEnter, trackNavigationExit, trackSelector } from '../src/js/cordova-plugin-smartlook'
+import {
+	getGlobalEventProperty,
+	putGlobalEventProperty,
+	removeGlobalEventProperty,
+	RenderingMode,
+	reset,
+	setFrameRate,
+	setReferrer,
+	setRenderingMode,
+	setUserEmail,
+	setUserIdentifier,
+	setUserName,
+	setWebViewSensitivity,
+	SMARTLOOK_FRAMEWORK_PLUGIN_VERSION,
+	SMARTLOOK_FRAMEWORK_VERSION,
+	start,
+	stop,
+	trackEvent,
+	trackNavigationEnter,
+	trackNavigationExit,
+	trackSelector,
+} from '../src/js/cordova-plugin-smartlook';
 
 const execFn = jest.fn();
 
 // @ts-expect-error - re-assignment not exhaustive enough
 window.cordova = {
-  exec: execFn
+	exec: execFn,
 } as Cordova;
 
 const emptyCallback = function () {
 	return;
 };
 
-describe('SmartlookPlugin', () => { 
-  beforeEach(() => {
-    execFn.mockClear();
-  });
+describe('SmartlookPlugin', () => {
+	beforeEach(() => {
+		execFn.mockClear();
+	});
 
+	describe('start', () => {
+		it('should call the mock twice', () => {
+			start();
 
-  describe('start', () => { 
-    it('should call the mock twice', () => {
-      start();
+			expect(execFn).toHaveBeenCalledTimes(2);
+		});
 
-      expect(execFn).toHaveBeenCalledTimes(2);
-    });
+		it('should call setPluginVersion first with plugin info', () => {
+			start();
 
-    it('should call setPluginVersion first with plugin info', () => {
-      start();
+			expect(execFn).toHaveBeenNthCalledWith(
+				1,
+				expect.any(Function),
+				expect.any(Function),
+				'SmartlookPlugin',
+				'setPluginVersion',
+				[SMARTLOOK_FRAMEWORK_PLUGIN_VERSION, SMARTLOOK_FRAMEWORK_VERSION],
+			);
+		});
 
-      expect(execFn).toHaveBeenNthCalledWith(1, expect.any(Function), expect.any(Function), 'SmartlookPlugin', 'setPluginVersion', [SMARTLOOK_FRAMEWORK_PLUGIN_VERSION, SMARTLOOK_FRAMEWORK_VERSION]);
-    }); 
+		it('should call start as a last call', () => {
+			start();
 
-    it('should call start as a last call', () => {
-      start();
+			expect(execFn).toHaveBeenLastCalledWith(
+				expect.any(Function),
+				expect.any(Function),
+				'SmartlookPlugin',
+				'start',
+				undefined,
+			);
+		});
+	});
 
-      expect(execFn).toHaveBeenLastCalledWith(expect.any(Function), expect.any(Function), 'SmartlookPlugin', 'start', undefined);
-    });
-  });
+	describe('stop', () => {
+		it('should be called with correct params', () => {
+			stop();
 
-  describe('stop', () => { 
-    it('should be called with correct params', () => {
-      stop();
+			expect(execFn).toHaveBeenCalledWith(
+				expect.any(Function),
+				expect.any(Function),
+				'SmartlookPlugin',
+				'stop',
+				undefined,
+			);
+		});
+	});
 
-      expect(execFn).toHaveBeenCalledWith(expect.any(Function), expect.any(Function), 'SmartlookPlugin', 'stop', undefined);
-    
-    }); 
-  });
+	describe('reset', () => {
+		it('should be called with correct params', () => {
+			reset();
 
-  describe('reset', () => {
-    it('should be called with correct params', () => {
-      reset();
+			expect(execFn).toHaveBeenCalledWith(
+				expect.any(Function),
+				expect.any(Function),
+				'SmartlookPlugin',
+				'reset',
+				undefined,
+			);
+		});
+	});
 
-      expect(execFn).toHaveBeenCalledWith(expect.any(Function), expect.any(Function), 'SmartlookPlugin', 'reset', undefined);
-    });
-    });
+	describe('checkStringOption arbitrary test', () => {
+		it('should fail and throw into error callback when missing mandatory option', () => {
+			const props = {
+				'test-prop': 'test-value',
+			};
 
-    describe('checkStringOption arbitrary test', () => { 
-      it('should fail and throw into error callback when missing mandatory option', () => {
-      const props = {
-        'test-prop': 'test-value',
-      };
+			const successCallback = jest.fn();
+			const errorCallback = jest.fn();
 
-      const successCallback = jest.fn();
-      const errorCallback = jest.fn();
+			// @ts-expect-error - we are testing the error case
+			trackEvent({ props: props }, successCallback, errorCallback);
 
-      // @ts-expect-error - we are testing the error case
-      trackEvent({ props: props }, successCallback, errorCallback);
+			expect(errorCallback).toHaveBeenCalledWith(new Error('eventName option is mandatory!').message);
+		});
 
-      expect(errorCallback).toHaveBeenCalledWith(new Error('eventName option is mandatory!').message);
-    });
-  
-    it('should bail out and not call the exec function when missing mandatory option', () => {
-      const props = {
-        'test-prop': 'test-value',
-      };
+		it('should bail out and not call the exec function when missing mandatory option', () => {
+			const props = {
+				'test-prop': 'test-value',
+			};
 
-      const successCallback = jest.fn();
-      const errorCallback = jest.fn();
+			const successCallback = jest.fn();
+			const errorCallback = jest.fn();
 
-      // @ts-expect-error - we are testing the error case
-      trackEvent({ props: props }, successCallback, errorCallback);
+			// @ts-expect-error - we are testing the error case
+			trackEvent({ props: props }, successCallback, errorCallback);
 
-      expect(execFn).not.toHaveBeenCalled();
-    });
-  });
-  
-    describe('trackEvent', () => { it('should be called with correctly parsed props', () => {
-      const eventName = 'test-event';
-      const props = {
-        'test-prop': 'test-value',
-      };
+			expect(execFn).not.toHaveBeenCalled();
+		});
+	});
 
-      trackEvent({ eventName: eventName, props: props });
+	describe('trackEvent', () => {
+		it('should be called with correctly parsed props', () => {
+			const eventName = 'test-event';
+			const props = {
+				'test-prop': 'test-value',
+			};
 
-      expect(execFn).toHaveBeenCalledWith(expect.any(Function), expect.any(Function), 'SmartlookPlugin', 'trackEvent', [eventName, props]);
-    }); });
+			trackEvent({ eventName: eventName, props: props });
 
-    describe('trackSelector', () => { it('should be called with correctly parsed props', () => {
-      const selector = 'test-selector';
-      const props = {
-        'test-prop': 'test-value',
-      };
+			expect(execFn).toHaveBeenCalledWith(expect.any(Function), expect.any(Function), 'SmartlookPlugin', 'trackEvent', [
+				eventName,
+				props,
+			]);
+		});
+	});
 
-      trackSelector({ selectorName: selector, props: props });
+	describe('trackSelector', () => {
+		it('should be called with correctly parsed props', () => {
+			const selector = 'test-selector';
+			const props = {
+				'test-prop': 'test-value',
+			};
 
-      expect(execFn).toHaveBeenCalledWith(expect.any(Function), expect.any(Function), 'SmartlookPlugin', 'trackSelector', [selector, props]);
-    }); });
+			trackSelector({ selectorName: selector, props: props });
 
-    describe('trackNavigationEnter', () => { it('should be called with correctly parsed props', () => {
-      const eventName = 'test-event';
-      const props = {
-        'test-prop': 'test-value',
-      };
+			expect(execFn).toHaveBeenCalledWith(
+				expect.any(Function),
+				expect.any(Function),
+				'SmartlookPlugin',
+				'trackSelector',
+				[selector, props],
+			);
+		});
+	});
 
-      trackNavigationEnter({ eventName: eventName, props: props });
+	describe('trackNavigationEnter', () => {
+		it('should be called with correctly parsed props', () => {
+			const eventName = 'test-event';
+			const props = {
+				'test-prop': 'test-value',
+			};
 
-      expect(execFn).toHaveBeenCalledWith(expect.any(Function), expect.any(Function), 'SmartlookPlugin', 'trackNavigationEnter', [eventName, props]);
-    }); });
+			trackNavigationEnter({ eventName: eventName, props: props });
 
-    describe('trackNavigationExit', () => { it('should be called with correctly parsed props', () => {
-      const eventName = 'test-event';
-      const props = {
-        'test-prop': 'test-value',
-      };
+			expect(execFn).toHaveBeenCalledWith(
+				expect.any(Function),
+				expect.any(Function),
+				'SmartlookPlugin',
+				'trackNavigationEnter',
+				[eventName, props],
+			);
+		});
+	});
 
-      trackNavigationExit({ eventName: eventName, props: props });
+	describe('trackNavigationExit', () => {
+		it('should be called with correctly parsed props', () => {
+			const eventName = 'test-event';
+			const props = {
+				'test-prop': 'test-value',
+			};
 
-      expect(execFn).toHaveBeenCalledWith(expect.any(Function), expect.any(Function), 'SmartlookPlugin', 'trackNavigationExit', [eventName, props]);
-    }); });
+			trackNavigationExit({ eventName: eventName, props: props });
 
-    describe('setReferrer', () => { 
-      it('should be called with correctly parsed props', () => {
-      const referrer = 'test-referrer';
-      const source = 'test-source';
+			expect(execFn).toHaveBeenCalledWith(
+				expect.any(Function),
+				expect.any(Function),
+				'SmartlookPlugin',
+				'trackNavigationExit',
+				[eventName, props],
+			);
+		});
+	});
 
-      setReferrer({ referrer: referrer, source: source});
+	describe('setReferrer', () => {
+		it('should be called with correctly parsed props', () => {
+			const referrer = 'test-referrer';
+			const source = 'test-source';
 
-      expect(execFn).toHaveBeenCalledWith(expect.any(Function), expect.any(Function), 'SmartlookPlugin', 'setReferrer', [referrer, source]);
-    })
-    });
+			setReferrer({ referrer: referrer, source: source });
 
-    describe('putGlobalEventProperty', () => { it('should be called with correct value', () => {
-      const propertyName = 'test-property';
-      const value = 'test-value';
+			expect(execFn).toHaveBeenCalledWith(
+				expect.any(Function),
+				expect.any(Function),
+				'SmartlookPlugin',
+				'setReferrer',
+				[referrer, source],
+			);
+		});
+	});
 
-      putGlobalEventProperty({ propertyName: propertyName, value: value });
-      expect(execFn).toHaveBeenCalledWith(expect.any(Function), expect.any(Function), 'SmartlookPlugin', 'putStringEventProperty', [propertyName, value]);
-    }); });
+	describe('putGlobalEventProperty', () => {
+		it('should be called with correct value', () => {
+			const propertyName = 'test-property';
+			const value = 'test-value';
 
-    describe('getGlobalEventProperty', () => { it('should be called with correct value', () => {
-      const propertyName = 'test-property';
-      const successCallback = jest.fn();
+			putGlobalEventProperty({ propertyName: propertyName, value: value });
+			expect(execFn).toHaveBeenCalledWith(
+				expect.any(Function),
+				expect.any(Function),
+				'SmartlookPlugin',
+				'putStringEventProperty',
+				[propertyName, value],
+			);
+		});
+	});
 
-      getGlobalEventProperty({ propertyName: propertyName }, successCallback, emptyCallback);
-      expect(execFn).toHaveBeenCalledWith(expect.any(Function), expect.any(Function), 'SmartlookPlugin', 'getStringEventProperty', [propertyName]);
-    }); });
+	describe('getGlobalEventProperty', () => {
+		it('should be called with correct value', () => {
+			const propertyName = 'test-property';
+			const successCallback = jest.fn();
 
-    describe('removeGlobalEventProperty', () => { it('should be called with correct value', () => {
-      const propertyName = 'test-property';
-      const successCallback = jest.fn();
+			getGlobalEventProperty({ propertyName: propertyName }, successCallback, emptyCallback);
+			expect(execFn).toHaveBeenCalledWith(
+				expect.any(Function),
+				expect.any(Function),
+				'SmartlookPlugin',
+				'getStringEventProperty',
+				[propertyName],
+			);
+		});
+	});
 
-      removeGlobalEventProperty({ propertyName: propertyName }, successCallback, emptyCallback);
-      expect(execFn).toHaveBeenCalledWith(expect.any(Function), expect.any(Function), 'SmartlookPlugin', 'removeStringEventProperty', [propertyName]);
-    }); });
+	describe('removeGlobalEventProperty', () => {
+		it('should be called with correct value', () => {
+			const propertyName = 'test-property';
+			const successCallback = jest.fn();
 
-   describe('setUserIdentifier', () => { it('should be called with an identifier', () => {
-      const identifier = 'test-identifier';
+			removeGlobalEventProperty({ propertyName: propertyName }, successCallback, emptyCallback);
+			expect(execFn).toHaveBeenCalledWith(
+				expect.any(Function),
+				expect.any(Function),
+				'SmartlookPlugin',
+				'removeStringEventProperty',
+				[propertyName],
+			);
+		});
+	});
 
-      setUserIdentifier({ identifier: identifier });
-      expect(execFn).toHaveBeenCalledWith(expect.any(Function), expect.any(Function), 'SmartlookPlugin', 'setUserIdentifier', [identifier]);
-    } ); });
+	describe('setUserIdentifier', () => {
+		it('should be called with an identifier', () => {
+			const identifier = 'test-identifier';
 
-    describe('setUserName', () => { it('should be called with the name', () => {
-      const userName = 'test-name';
+			setUserIdentifier({ identifier: identifier });
+			expect(execFn).toHaveBeenCalledWith(
+				expect.any(Function),
+				expect.any(Function),
+				'SmartlookPlugin',
+				'setUserIdentifier',
+				[identifier],
+			);
+		});
+	});
 
-      setUserName({ name: userName });
-      expect(execFn).toHaveBeenCalledWith(expect.any(Function), expect.any(Function), 'SmartlookPlugin', 'setUserName', [userName]);
-    } ); });
+	describe('setUserName', () => {
+		it('should be called with the name', () => {
+			const userName = 'test-name';
 
-    describe('setUserEmail', () => { it('should be called with the email', () => {
-      const userEmail = 'test@test.com';
+			setUserName({ name: userName });
+			expect(execFn).toHaveBeenCalledWith(
+				expect.any(Function),
+				expect.any(Function),
+				'SmartlookPlugin',
+				'setUserName',
+				[userName],
+			);
+		});
+	});
 
-      setUserEmail({ email: userEmail });
-      expect(execFn).toHaveBeenCalledWith(expect.any(Function), expect.any(Function), 'SmartlookPlugin', 'setUserEmail', [userEmail]);
-    } ); });
+	describe('setUserEmail', () => {
+		it('should be called with the email', () => {
+			const userEmail = 'test@test.com';
 
-    describe('setFrameRate', () => { it('should set the framerate with correct range passed', () => {
-      const frameRate = 5;
-      setFrameRate({ frameRate: frameRate });
+			setUserEmail({ email: userEmail });
+			expect(execFn).toHaveBeenCalledWith(
+				expect.any(Function),
+				expect.any(Function),
+				'SmartlookPlugin',
+				'setUserEmail',
+				[userEmail],
+			);
+		});
+	});
 
-      expect(execFn).toHaveBeenCalledWith(expect.any(Function), expect.any(Function), 'SmartlookPlugin', 'setFrameRate', [frameRate]);
-    }); 
-    
-    it('should bail out and throw an error when frameRate is out of range', () => {
-      const frameRate = 35;
-      const errorCallback = jest.fn();
+	describe('setFrameRate', () => {
+		it('should set the framerate with correct range passed', () => {
+			const frameRate = 5;
+			setFrameRate({ frameRate: frameRate });
 
-      setFrameRate({ frameRate: frameRate }, emptyCallback, errorCallback);
+			expect(execFn).toHaveBeenCalledWith(
+				expect.any(Function),
+				expect.any(Function),
+				'SmartlookPlugin',
+				'setFrameRate',
+				[frameRate],
+			);
+		});
 
-      expect(errorCallback).toHaveBeenCalledWith(new Error('fps not set, must be between 1 and 10 fps!').message);
-    }
-    ); 
-    
-    it('should bail out and throw an error when frameRate is not a number', () => {
-      const frameRate = 'test';
-      const errorCallback = jest.fn();
+		it('should bail out and throw an error when frameRate is out of range', () => {
+			const frameRate = 35;
+			const errorCallback = jest.fn();
 
-      // @ts-expect-error - we are testing the error case
-      setFrameRate({ frameRate: frameRate }, emptyCallback, errorCallback);
+			setFrameRate({ frameRate: frameRate }, emptyCallback, errorCallback);
 
-      expect(errorCallback).toHaveBeenCalledWith(new Error('fps not set, must be a number!').message);
-    }
-    ); });
+			expect(errorCallback).toHaveBeenCalledWith(new Error('fps not set, must be between 1 and 10 fps!').message);
+		});
 
-    describe('checkBooleanOption arbitrary test', () => { it('should bail out and throw an error when a mandatory boolean option is not present', () => {
-      const errorCallback = jest.fn();
+		it('should bail out and throw an error when frameRate is not a number', () => {
+			const frameRate = 'test';
+			const errorCallback = jest.fn();
 
-      // @ts-expect-error - we are testing the error case
-      setWebViewSensitivity({ }, emptyCallback, errorCallback);
+			// @ts-expect-error - we are testing the error case
+			setFrameRate({ frameRate: frameRate }, emptyCallback, errorCallback);
 
-      expect(errorCallback).toHaveBeenCalledWith(new Error('isSensitive option is mandatory!').message);
-    }); 
-    it('should bail out and throw an error when a mandatory boolean option is not a boolean', () => {
-      const errorCallback = jest.fn();
+			expect(errorCallback).toHaveBeenCalledWith(new Error('fps not set, must be a number!').message);
+		});
+	});
 
-      // @ts-expect-error - we are testing the error case
-      setWebViewSensitivity({ isSensitive: 'test' }, emptyCallback, errorCallback);
+	describe('checkBooleanOption arbitrary test', () => {
+		it('should bail out and throw an error when a mandatory boolean option is not present', () => {
+			const errorCallback = jest.fn();
 
-      expect(errorCallback).toHaveBeenCalledWith(new Error('isSensitive must be boolean!').message);
-    }
-    );
-   });
-  
-   describe('setRenderingMode', () => { 
-    it('should bail out and throw an error when invalid RenderingMode is set', () => {
-    const errorCallback = jest.fn();
-    const renderingMode = 9;
+			// @ts-expect-error - we are testing the error case
+			setWebViewSensitivity({}, emptyCallback, errorCallback);
 
-    setRenderingMode({ renderingMode: renderingMode }, emptyCallback, errorCallback);
-    expect(errorCallback).toHaveBeenCalledWith(new Error('Invalid rendering mode 9 set!').message);
-   }); 
+			expect(errorCallback).toHaveBeenCalledWith(new Error('isSensitive option is mandatory!').message);
+		});
+		it('should bail out and throw an error when a mandatory boolean option is not a boolean', () => {
+			const errorCallback = jest.fn();
 
-   it('should set the rendering mode with correct value passed', () => {
-     const renderingMode = RenderingMode.WIREFRAME;
+			// @ts-expect-error - we are testing the error case
+			setWebViewSensitivity({ isSensitive: 'test' }, emptyCallback, errorCallback);
 
-      setRenderingMode({ renderingMode: renderingMode });
+			expect(errorCallback).toHaveBeenCalledWith(new Error('isSensitive must be boolean!').message);
+		});
+	});
 
-      expect(execFn).toHaveBeenCalledWith(expect.any(Function), expect.any(Function), 'SmartlookPlugin', 'setRenderingMode', [renderingMode]);
-   });
-  });
+	describe('setRenderingMode', () => {
+		it('should bail out and throw an error when invalid RenderingMode is set', () => {
+			const errorCallback = jest.fn();
+			const renderingMode = 9;
 
+			setRenderingMode({ renderingMode: renderingMode }, emptyCallback, errorCallback);
+			expect(errorCallback).toHaveBeenCalledWith(new Error('Invalid rendering mode 9 set!').message);
+		});
+
+		it('should set the rendering mode with correct value passed', () => {
+			const renderingMode = RenderingMode.WIREFRAME;
+
+			setRenderingMode({ renderingMode: renderingMode });
+
+			expect(execFn).toHaveBeenCalledWith(
+				expect.any(Function),
+				expect.any(Function),
+				'SmartlookPlugin',
+				'setRenderingMode',
+				[renderingMode],
+			);
+		});
+	});
 });
