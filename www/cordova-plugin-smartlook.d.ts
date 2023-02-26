@@ -1,3 +1,5 @@
+export declare const SMARTLOOK_FRAMEWORK_VERSION = '-';
+export declare const SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = '1.9.5';
 export declare enum Command {
 	START = 'start',
 	STOP = 'stop',
@@ -419,8 +421,8 @@ export declare function setUserName(
 	options: {
 		name: string;
 	},
-	successCallback: SuccessCallback<boolean>,
-	errorCallback: ErrorCallback,
+	successCallback?: SuccessCallback<boolean>,
+	errorCallback?: ErrorCallback,
 ): void;
 export declare function setUserEmail(
 	options: {

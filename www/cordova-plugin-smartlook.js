@@ -1,8 +1,6 @@
 'use strict';
 Object.defineProperty(exports, '__esModule', { value: true });
-exports.registerSessionUrlChangedListener =
-	exports.registerUserUrlChangedListener =
-	exports.setRenderingMode =
+exports.setRenderingMode =
 	exports.getStateFrameRate =
 	exports.getRecordingStatus =
 	exports.getRenderingMode =
@@ -50,6 +48,8 @@ exports.registerSessionUrlChangedListener =
 	exports.RecordingStatus =
 	exports.RenderingMode =
 	exports.Command =
+	exports.SMARTLOOK_FRAMEWORK_PLUGIN_VERSION =
+	exports.SMARTLOOK_FRAMEWORK_VERSION =
 		void 0;
 exports.enableLogs =
 	exports.setRecordingMask =
@@ -59,13 +59,14 @@ exports.enableLogs =
 	exports.removeUserUrlChangedListener =
 	exports.registerRecordingStatusChangedListener =
 	exports.registerRenderingModeChangedListener =
+	exports.registerSessionUrlChangedListener =
+	exports.registerUserUrlChangedListener =
 		void 0;
-var cordova = window.cordova;
 // Plugin name
 var SMARTLOOK_PLUGIN = 'SmartlookPlugin';
 // Smartlook framework info
-var SMARTLOOK_FRAMEWORK_VERSION = '-';
-var SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = '1.9.5';
+exports.SMARTLOOK_FRAMEWORK_VERSION = '-';
+exports.SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = '1.9.5';
 // API methods names
 var Command;
 (function (Command) {
@@ -158,8 +159,8 @@ exports.sdkTest = sdkTest;
 // Internal setup logic
 function setupAndRegisterBridgeInterface() {
 	var args = [];
-	args.push(SMARTLOOK_FRAMEWORK_PLUGIN_VERSION);
-	args.push(SMARTLOOK_FRAMEWORK_VERSION);
+	args.push(exports.SMARTLOOK_FRAMEWORK_PLUGIN_VERSION);
+	args.push(exports.SMARTLOOK_FRAMEWORK_VERSION);
 	execWithCallbacks(SET_PLUGIN_VERSION, emptyCallback, emptyCallback, args);
 }
 function start(successCallback, errorCallback) {
@@ -476,10 +477,11 @@ exports.getStateFrameRate = getStateFrameRate;
 function setRenderingMode(options, successCallback, errorCallback) {
 	var args = [];
 	if (!(options['renderingMode'] in RenderingMode)) {
+		logError('Invalid rendering mode '.concat(options['renderingMode'], ' set!'), errorCallback);
 		return;
 	}
 	args.push(options['renderingMode']);
-	execWithCallbacks(Command.SET_WEB_VIEW_SENSITIVITY, successCallback, errorCallback, args);
+	execWithCallbacks(Command.SET_RENDERING_MODE, successCallback, errorCallback, args);
 }
 exports.setRenderingMode = setRenderingMode;
 function registerUserUrlChangedListener(options, successCallback, errorCallback) {
@@ -569,10 +571,10 @@ function execWithCallbacks(method, successCallback, errorCallback, args) {
 	if (errorCallback === void 0) {
 		errorCallback = emptyCallback;
 	}
-	cordova.exec(successCallback, errorCallback, SMARTLOOK_PLUGIN, method, args);
+	window.cordova.exec(successCallback, errorCallback, SMARTLOOK_PLUGIN, method, args);
 }
 function logError(message, errorCallback) {
-	errorCallback === null || errorCallback === void 0 ? void 0 : errorCallback(''.concat(new Error(message).stack));
+	errorCallback === null || errorCallback === void 0 ? void 0 : errorCallback(''.concat(new Error(message).message));
 }
 function checkStringOption(option, options, isMandatory, errorCallback) {
 	var toCheck = options[option];
