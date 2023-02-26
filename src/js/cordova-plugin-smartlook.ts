@@ -40,8 +40,8 @@ export enum Command {
 	SET_JOB_UPLOAD_ENABLED = 'setJobUploadEnabled',
 	SET_ADAPTIVE_FRAMERATE_ENABLED = 'setAdaptiveFrameRateEnabled',
 	GET_ADAPTIVE_FRAMERATE_ENABLED = 'getAdaptiveFrameRateEnabled',
-	SET_SURFACE_CAPTURE_EMABLED = 'SurfaceCaptureEnabled',
-	GET_SURFACE_CAPTURE_EMABLED = 'getSurfaceCaptureEnabled',
+	SET_SURFACE_CAPTURE_ENABLED = 'setSurfaceCaptureEnabled',
+	GET_SURFACE_CAPTURE_ENABLED = 'getSurfaceCaptureEnabled',
 	EVENT_TRACKING_ENABLE_ALL = 'eventTrackingEnableAll',
 	EVENT_TRACKING_DISABLE_ALL = 'eventTrackingDisableAll',
 	IS_RECORDING = 'isRecording',
@@ -635,11 +635,11 @@ export function setSurfaceCaptureEnabled(
 	}
 
 	args.push(options['isEnabled']);
-	execWithCallbacks(Command.SET_SURFACE_CAPTURE_EMABLED, successCallback, errorCallback, args);
+	execWithCallbacks(Command.SET_SURFACE_CAPTURE_ENABLED, successCallback, errorCallback, args);
 }
 
 export function getSurfaceCaptureEnabled(successCallback: SuccessCallback<boolean>, errorCallback?: ErrorCallback) {
-	execWithCallbacks(Command.GET_SURFACE_CAPTURE_EMABLED, successCallback, errorCallback);
+	execWithCallbacks(Command.GET_SURFACE_CAPTURE_ENABLED, successCallback, errorCallback);
 }
 
 export function eventTrackingEnableAll(successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback) {
