@@ -42,8 +42,8 @@ var Command;
     Command["SET_JOB_UPLOAD_ENABLED"] = "setJobUploadEnabled";
     Command["SET_ADAPTIVE_FRAMERATE_ENABLED"] = "setAdaptiveFrameRateEnabled";
     Command["GET_ADAPTIVE_FRAMERATE_ENABLED"] = "getAdaptiveFrameRateEnabled";
-    Command["SET_SURFACE_CAPTURE_EMABLED"] = "SurfaceCaptureEnabled";
-    Command["GET_SURFACE_CAPTURE_EMABLED"] = "getSurfaceCaptureEnabled";
+    Command["SET_SURFACE_CAPTURE_ENABLED"] = "setSurfaceCaptureEnabled";
+    Command["GET_SURFACE_CAPTURE_ENABLED"] = "getSurfaceCaptureEnabled";
     Command["EVENT_TRACKING_ENABLE_ALL"] = "eventTrackingEnableAll";
     Command["EVENT_TRACKING_DISABLE_ALL"] = "eventTrackingDisableAll";
     Command["IS_RECORDING"] = "isRecording";
@@ -324,11 +324,11 @@ function setSurfaceCaptureEnabled(options, successCallback, errorCallback) {
         return;
     }
     args.push(options['isEnabled']);
-    execWithCallbacks(Command.SET_SURFACE_CAPTURE_EMABLED, successCallback, errorCallback, args);
+    execWithCallbacks(Command.SET_SURFACE_CAPTURE_ENABLED, successCallback, errorCallback, args);
 }
 exports.setSurfaceCaptureEnabled = setSurfaceCaptureEnabled;
 function getSurfaceCaptureEnabled(successCallback, errorCallback) {
-    execWithCallbacks(Command.GET_SURFACE_CAPTURE_EMABLED, successCallback, errorCallback);
+    execWithCallbacks(Command.GET_SURFACE_CAPTURE_ENABLED, successCallback, errorCallback);
 }
 exports.getSurfaceCaptureEnabled = getSurfaceCaptureEnabled;
 function eventTrackingEnableAll(successCallback, errorCallback) {
