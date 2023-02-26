@@ -748,11 +748,12 @@ export function setRenderingMode(
 ): void {
 	let args = [];
 	if (!(options['renderingMode'] in RenderingMode)) {
+    logError(`Invalid rendering mode ${options['renderingMode']} set!`, errorCallback);
 		return;
 	}
 
 	args.push(options['renderingMode']);
-	execWithCallbacks(Command.SET_WEB_VIEW_SENSITIVITY, successCallback, errorCallback, args);
+	execWithCallbacks(Command.SET_RENDERING_MODE, successCallback, errorCallback, args);
 }
 
 export function registerUserUrlChangedListener(
