@@ -28,11 +28,6 @@ class SmartlookPlugin : CordovaPlugin() {
 
     override fun execute(action: String, args: JSONArray, callbackContext: CallbackContext): Boolean {
         when (action) {
-            "testSdk" -> {
-                val isRecording = smartlook.state.status == Status.Recording
-                val result = PluginResult(PluginResult.Status.OK, isRecording)
-                callbackContext.sendPluginResult(result)
-            }
             "setPluginVersion" -> {
                 try {
                     val pluginVersion = args.getString(0)

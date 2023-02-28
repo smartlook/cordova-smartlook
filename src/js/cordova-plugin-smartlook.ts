@@ -10,7 +10,6 @@ export enum Command {
 	START = 'start',
 	STOP = 'stop',
 	RESET = 'reset',
-	TEST_SDK = 'testSdk',
 	SET_PROJECT_KEY = 'setProjectKey',
 	TRACK_EVENT = 'trackEvent',
 	TRACK_SELECTOR = 'trackSelector',
@@ -67,17 +66,9 @@ export enum Command {
 // Internal logic
 const SET_PLUGIN_VERSION = 'setPluginVersion';
 
-// Undefined
-const UNDEFINED_FPS = -1;
-const UNDEFINED_RENDERING_MODE = '';
-
 const emptyCallback = function () {
 	return;
 };
-
-export interface Dictionary<T> {
-	[key: string]: T;
-}
 
 export type SuccessCallback<TValue> = (value: TValue) => void;
 export type ErrorCallback = (message: string) => void;
@@ -137,7 +128,6 @@ export type NativeListenerCallbackShape = (url: string | RenderingMode | Recordi
  * }
  */
 export interface Smartlook {
-	sdkTest(successCallback: SuccessCallback<boolean>, errorCallback: ErrorCallback): void;
 	start(successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback): void;
 	stop(successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback): void;
 	reset(successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback): void;
@@ -313,10 +303,6 @@ export interface Smartlook {
 		errorCallback?: ErrorCallback,
 	): void;
 	enableLogs(successCallback?: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void;
-}
-
-export function sdkTest(successCallback?: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void {
-	execWithCallbacks(Command.TEST_SDK, successCallback, errorCallback, []);
 }
 
 // Internal setup logic

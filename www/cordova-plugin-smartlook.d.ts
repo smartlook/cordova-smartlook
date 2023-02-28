@@ -4,7 +4,6 @@ export declare enum Command {
     START = "start",
     STOP = "stop",
     RESET = "reset",
-    TEST_SDK = "testSdk",
     SET_PROJECT_KEY = "setProjectKey",
     TRACK_EVENT = "trackEvent",
     TRACK_SELECTOR = "trackSelector",
@@ -57,9 +56,6 @@ export declare enum Command {
     SET_RECORDING_MASK = "setRecordingMask",
     ENABLE_LOGS = "enableLogs"
 }
-export interface Dictionary<T> {
-    [key: string]: T;
-}
 export type SuccessCallback<TValue> = (value: TValue) => void;
 export type ErrorCallback = (message: string) => void;
 export type RecordingMaskType = 'COVERING' | 'ERASING';
@@ -107,7 +103,6 @@ export type NativeListenerCallbackShape = (url: string | RenderingMode | Recordi
  * }
  */
 export interface Smartlook {
-    sdkTest(successCallback: SuccessCallback<boolean>, errorCallback: ErrorCallback): void;
     start(successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback): void;
     stop(successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback): void;
     reset(successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback): void;
@@ -236,7 +231,6 @@ export interface Smartlook {
     }, successCallback?: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void;
     enableLogs(successCallback?: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void;
 }
-export declare function sdkTest(successCallback?: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void;
 export declare function start(successCallback?: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void;
 export declare function stop(successCallback?: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void;
 export declare function reset(successCallback?: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void;

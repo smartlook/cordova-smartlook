@@ -11,16 +11,6 @@ import WebKit
 
 @objc(SmartlookPlugin)
 public class SmartlookPlugin : CDVPlugin {
-    @objc(testSdk:)
-    func testSdk(command: CDVInvokedUrlCommand) {
-        let isRecording = Smartlook.instance.state.status == .recording
-        let result = CDVPluginResult(status: .ok, messageAs: isRecording)
-
-        print("SL: ", isRecording)
-
-        self.commandDelegate.send(result, callbackId: command.callbackId)
-    }
-
     @objc(setPluginVersion:)
     func setPluginVersion(command: CDVInvokedUrlCommand) {
       DispatchQueue.main.async {

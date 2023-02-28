@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.setRenderingMode = exports.getStateFrameRate = exports.getRecordingStatus = exports.getRenderingMode = exports.setWebViewSensitivity = exports.restoreDefault = exports.setEventTrackingInteractionRageClickStatus = exports.setEventTrackingInteractionUserStatus = exports.getProjectKey = exports.isRecording = exports.setProjectKey = exports.eventTrackingDisableAll = exports.eventTrackingEnableAll = exports.getSurfaceCaptureEnabled = exports.setSurfaceCaptureEnabled = exports.getAdaptiveFrameRateEnabled = exports.setAdaptiveFrameRateEnabled = exports.setJobUploadEnabled = exports.getFrameRate = exports.setFrameRate = exports.setRelayProxyHost = exports.getSessionUrlWithTimestamp = exports.getSessionUrl = exports.getUserUrl = exports.openNewSession = exports.openNewUser = exports.removeUserProperty = exports.getUserProperty = exports.setUserProperty = exports.setUserEmail = exports.setUserName = exports.setUserIdentifier = exports.clearGlobalEventProperties = exports.removeGlobalEventProperty = exports.getGlobalEventProperty = exports.putGlobalEventProperty = exports.setReferrer = exports.trackNavigationExit = exports.trackNavigationEnter = exports.trackSelector = exports.trackEvent = exports.reset = exports.stop = exports.start = exports.sdkTest = exports.RecordingStatus = exports.RenderingMode = exports.Command = exports.SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = exports.SMARTLOOK_FRAMEWORK_VERSION = void 0;
-exports.enableLogs = exports.setRecordingMask = exports.removeRecordingStatusChangedListener = exports.removeRenderingModeChangedListener = exports.removeSessionUrlChangedListener = exports.removeUserUrlChangedListener = exports.registerRecordingStatusChangedListener = exports.registerRenderingModeChangedListener = exports.registerSessionUrlChangedListener = exports.registerUserUrlChangedListener = void 0;
+exports.registerUserUrlChangedListener = exports.setRenderingMode = exports.getStateFrameRate = exports.getRecordingStatus = exports.getRenderingMode = exports.setWebViewSensitivity = exports.restoreDefault = exports.setEventTrackingInteractionRageClickStatus = exports.setEventTrackingInteractionUserStatus = exports.getProjectKey = exports.isRecording = exports.setProjectKey = exports.eventTrackingDisableAll = exports.eventTrackingEnableAll = exports.getSurfaceCaptureEnabled = exports.setSurfaceCaptureEnabled = exports.getAdaptiveFrameRateEnabled = exports.setAdaptiveFrameRateEnabled = exports.setJobUploadEnabled = exports.getFrameRate = exports.setFrameRate = exports.setRelayProxyHost = exports.getSessionUrlWithTimestamp = exports.getSessionUrl = exports.getUserUrl = exports.openNewSession = exports.openNewUser = exports.removeUserProperty = exports.getUserProperty = exports.setUserProperty = exports.setUserEmail = exports.setUserName = exports.setUserIdentifier = exports.clearGlobalEventProperties = exports.removeGlobalEventProperty = exports.getGlobalEventProperty = exports.putGlobalEventProperty = exports.setReferrer = exports.trackNavigationExit = exports.trackNavigationEnter = exports.trackSelector = exports.trackEvent = exports.reset = exports.stop = exports.start = exports.RecordingStatus = exports.RenderingMode = exports.Command = exports.SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = exports.SMARTLOOK_FRAMEWORK_VERSION = void 0;
+exports.enableLogs = exports.setRecordingMask = exports.removeRecordingStatusChangedListener = exports.removeRenderingModeChangedListener = exports.removeSessionUrlChangedListener = exports.removeUserUrlChangedListener = exports.registerRecordingStatusChangedListener = exports.registerRenderingModeChangedListener = exports.registerSessionUrlChangedListener = void 0;
 // Plugin name
 var SMARTLOOK_PLUGIN = 'SmartlookPlugin';
 // Smartlook framework info
@@ -13,7 +13,6 @@ var Command;
     Command["START"] = "start";
     Command["STOP"] = "stop";
     Command["RESET"] = "reset";
-    Command["TEST_SDK"] = "testSdk";
     Command["SET_PROJECT_KEY"] = "setProjectKey";
     Command["TRACK_EVENT"] = "trackEvent";
     Command["TRACK_SELECTOR"] = "trackSelector";
@@ -68,9 +67,6 @@ var Command;
 })(Command = exports.Command || (exports.Command = {}));
 // Internal logic
 var SET_PLUGIN_VERSION = 'setPluginVersion';
-// Undefined
-var UNDEFINED_FPS = -1;
-var UNDEFINED_RENDERING_MODE = '';
 var emptyCallback = function () {
     return;
 };
@@ -92,10 +88,6 @@ var RecordingStatus;
     RecordingStatus[RecordingStatus["NotRunningInSwiftUIContext"] = 7] = "NotRunningInSwiftUIContext";
     RecordingStatus[RecordingStatus["UnsupportedPlatform"] = 8] = "UnsupportedPlatform";
 })(RecordingStatus = exports.RecordingStatus || (exports.RecordingStatus = {}));
-function sdkTest(successCallback, errorCallback) {
-    execWithCallbacks(Command.TEST_SDK, successCallback, errorCallback, []);
-}
-exports.sdkTest = sdkTest;
 // Internal setup logic
 function setupAndRegisterBridgeInterface() {
     var args = [];
