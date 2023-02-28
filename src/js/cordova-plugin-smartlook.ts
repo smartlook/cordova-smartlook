@@ -84,23 +84,39 @@ export type ErrorCallback = (message: string) => void;
 
 export type RecordingMaskType = 'COVERING' | 'ERASING';
 
+export type RecordingMaskRect = {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+};
+
+export interface RecordingMask {
+  maskType: RecordingMaskType;
+  maskRect: RecordingMaskRect; 
+}
+
+export type RecordingMaskList = RecordingMask[];
+
 export enum RenderingMode {
-	NO_RENDERING = 0,
-	NATIVE = 1,
-	WIREFRAME = 2,
+  NO_RENDERING = 0,
+  NATIVE = 1,
+  WIREFRAME = 2,
 }
 
 export enum RecordingStatus {
-	Recording = 0,
-	NotStarted = 1,
-	Stopped = 2,
-	BellowMinSdkVersion = 3,
-	ProjectLimitReached = 4,
-	StorageLimitReached = 5,
-	InternalError = 6,
-	NotRunningInSwiftUIContext = 7,
-	UnsupportedPlatform = 8,
+  Recording = 0,
+  NotStarted = 1,
+  Stopped = 2,
+  BellowMinSdkVersion = 3,
+  ProjectLimitReached = 4,
+  StorageLimitReached = 5,
+  InternalError = 6,
+  NotRunningInSwiftUIContext = 7,
+  UnsupportedPlatform = 8,
 }
+
+export type NativeListenerCallbackShape = (url: string | RenderingMode | RecordingStatus) => void;
 
 ////////////////////////////////////////////////////////////////////////////////
 // SDK API methods
@@ -256,7 +272,7 @@ export interface Smartlook {
 	): void;
 	getRenderingMode(successCallback: SuccessCallback<RenderingMode>, errorCallback?: ErrorCallback): void;
 	getRecordingStatus(successCallback: SuccessCallback<RecordingStatus>, errorCallback?: ErrorCallback): void;
-	getStateFrameRate(successCallback: SuccessCallback<number>, errorCallback?: ErrorCallback): Promise<number>;
+	getStateFrameRate(successCallback: SuccessCallback<number>, errorCallback?: ErrorCallback): void;
 	setRenderingMode(
 		options: { renderingMode: RenderingMode },
 		successCallback?: SuccessCallback<string>,
@@ -797,19 +813,15 @@ export function registerSessionUrlChangedListener(
 }
 
 export function registerRenderingModeChangedListener(
-	options: { renderingModeChangedCallback: (renderingMode: string) => void },
+	options: { renderingModeChangedCallback: (renderingMode: RenderingMode) => void },
 	successCallback?: SuccessCallback<string>,
 	errorCallback?: ErrorCallback,
 ): void {
-	const integrationCallback = (callbackData: Record<string, string>) => {
+	const integrationCallback = (renderingMode: number) => {
 		const renderingModeChangedCallback = options['renderingModeChangedCallback'];
 
-		if (
-			callbackData != undefined &&
-			callbackData['renderingMode'] != undefined &&
-			callbackData['renderingMode'].length > 0
-		) {
-			renderingModeChangedCallback(callbackData['renderingMode']);
+		if (renderingMode != undefined) {
+			renderingModeChangedCallback(renderingModeFromNumber(renderingMode));
 		}
 	};
 
@@ -818,19 +830,15 @@ export function registerRenderingModeChangedListener(
 }
 
 export function registerRecordingStatusChangedListener(
-	options: { recordingStatusChangedCallback: (recordingStatus: string) => void },
+	options: { recordingStatusChangedCallback: NativeListenerCallbackShape },
 	successCallback?: SuccessCallback<string>,
 	errorCallback?: ErrorCallback,
 ): void {
-	const integrationCallback = (callbackData: Record<string, string>) => {
+	const integrationCallback = (recordingStatus: number) => {
 		const renderingModeChangedCallback = options['recordingStatusChangedCallback'];
 
-		if (
-			callbackData != undefined &&
-			callbackData['recordingStatus'] != undefined &&
-			callbackData['recordingStatus'].length > 0
-		) {
-			renderingModeChangedCallback(callbackData['recordingStatus']);
+		if (recordingStatus != undefined) {
+			renderingModeChangedCallback(recordingStatusFromNumber(recordingStatus));
 		}
 	};
 
@@ -868,11 +876,8 @@ export function removeRecordingStatusChangedListener(
 
 export function setRecordingMask(
 	options: {
-		recordingMaskList: Array<{
-			maskType: RecordingMaskType;
-			maskRect: { left: number; top: number; width: number; height: number };
-		}>;
-	},
+    recordingMaskList: RecordingMaskList
+  },
 	successCallback?: SuccessCallback<boolean>,
 	errorCallback?: ErrorCallback,
 ): void {
