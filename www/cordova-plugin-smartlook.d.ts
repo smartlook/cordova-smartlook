@@ -203,31 +203,23 @@ export interface Smartlook {
         renderingMode: RenderingMode;
     }, successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback): void;
     registerUserUrlChangedListener(options: {
-        userUrlChangedCallback: (userUrl: string) => void;
+        userUrlChangedCallback: NativeListenerCallbackShape;
     }, successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback): void;
     registerSessionUrlChangedListener(options: {
-        sessionUrlChangedCallback: (sessionUrl: string) => void;
+        sessionUrlChangedCallback: NativeListenerCallbackShape;
     }, successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback): void;
     registerRenderingModeChangedListener(options: {
-        renderingModeChangedCallback: (renderingMode: RenderingMode) => void;
+        renderingModeChangedCallback: NativeListenerCallbackShape;
     }, successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback): void;
     registerRecordingStatusChangedListener(options: {
-        recordingStatusChangedCallback: (recordingStatus: RecordingStatus) => void;
+        recordingStatusChangedCallback: NativeListenerCallbackShape;
     }, successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback): void;
     removeUserUrlChangedListener(successCallback?: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void;
     removeSessionUrlChangedListener(successCallback?: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void;
     removeRenderingModeChangedListener(successCallback?: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void;
     removeRecordingStatusChangedListener(successCallback?: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void;
     setRecordingMask(options: {
-        recordingMaskList: Array<{
-            maskType: RecordingMaskType;
-            maskRect: {
-                left: number;
-                top: number;
-                width: number;
-                height: number;
-            };
-        }>;
+        recordingMaskList: RecordingMaskList;
     }, successCallback?: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void;
     enableLogs(successCallback?: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void;
 }

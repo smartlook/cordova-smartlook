@@ -269,22 +269,22 @@ export interface Smartlook {
 		errorCallback?: ErrorCallback,
 	): void;
 	registerUserUrlChangedListener(
-		options: { userUrlChangedCallback: (userUrl: string) => void },
+		options: { userUrlChangedCallback: NativeListenerCallbackShape },
 		successCallback?: SuccessCallback<string>,
 		errorCallback?: ErrorCallback,
 	): void;
 	registerSessionUrlChangedListener(
-		options: { sessionUrlChangedCallback: (sessionUrl: string) => void },
+		options: { sessionUrlChangedCallback: NativeListenerCallbackShape },
 		successCallback?: SuccessCallback<string>,
 		errorCallback?: ErrorCallback,
 	): void;
 	registerRenderingModeChangedListener(
-		options: { renderingModeChangedCallback: (renderingMode: RenderingMode) => void },
+		options: { renderingModeChangedCallback: NativeListenerCallbackShape },
 		successCallback?: SuccessCallback<string>,
 		errorCallback?: ErrorCallback,
 	): void;
 	registerRecordingStatusChangedListener(
-		options: { recordingStatusChangedCallback: (recordingStatus: RecordingStatus) => void },
+		options: { recordingStatusChangedCallback: NativeListenerCallbackShape },
 		successCallback?: SuccessCallback<string>,
 		errorCallback?: ErrorCallback,
 	): void;
@@ -294,10 +294,7 @@ export interface Smartlook {
 	removeRecordingStatusChangedListener(successCallback?: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void;
 	setRecordingMask(
 		options: {
-			recordingMaskList: Array<{
-				maskType: RecordingMaskType;
-				maskRect: { left: number; top: number; width: number; height: number };
-			}>;
+			recordingMaskList: RecordingMaskList;
 		},
 		successCallback?: SuccessCallback<boolean>,
 		errorCallback?: ErrorCallback,
