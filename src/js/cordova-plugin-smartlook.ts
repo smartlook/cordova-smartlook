@@ -1,105 +1,119 @@
-const { cordova } = window;
-
 // Plugin name
 const SMARTLOOK_PLUGIN = 'SmartlookPlugin';
 
 // Smartlook framework info
-const SMARTLOOK_FRAMEWORK = 'CORDOVA';
-const SMARTLOOK_FRAMEWORK_VERSION = '-';
-const SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = '1.9.5';
+export const SMARTLOOK_FRAMEWORK_VERSION = '-';
+export const SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = '2.0.0';
 
 // API methods names
 export enum Command {
-	// Setup and lifecycle
-	SETUP_AND_START_RECORDING = 'setupAndStartRecording',
-	SETUP = 'setup',
-	START_RECORDING = 'startRecording',
-	STOP_RECORDING = 'stopRecording',
-	IS_RECORDING = 'isRecording',
-	RESET_SESSION = 'resetSession',
-
-	// User identifier
-	SET_USER_IDENTIFIER = 'setUserIdentifier',
-
-	//Tracking
-	SET_EVENT_TRACKING_MODE = 'setEventTrackingMode',
-	SET_EVENT_TRACKING_MODES = 'setEventTrackingModes',
-	TRACK_NAVIGATION_EVENT = 'trackNavigationEvent',
-	START_TIMED_CUSTOM_EVENT = 'startTimedCustomEvent',
-	STOP_TIMED_CUSTOM_EVENT = 'stopTimedCustomEvent',
-	CANCEL_TIMED_CUSTOM_EVENT = 'cancelTimedCustomEvent',
-	TRACK_CUSTOM_EVENT = 'trackCustomEvent',
-
-	// Event properties
-	SET_GLOBAL_EVENT_PROPERTIES = 'setGlobalEventProperties',
-	SET_GLOBAL_EVENT_PROPERTY = 'setGlobalEventProperty',
-	REMOVE_GLOBAL_EVENT_PROPERTY = 'removeGlobalEventProperty',
-	REMOVE_ALL_GLOBAL_EVENT_PROPERTIES = 'removeAllGlobalEventProperties',
-
-	// Utilities
+	START = 'start',
+	STOP = 'stop',
+	RESET = 'reset',
+	SET_PROJECT_KEY = 'setProjectKey',
+	TRACK_EVENT = 'trackEvent',
+	TRACK_SELECTOR = 'trackSelector',
+	TRACK_NAVIGATION_ENTER = 'trackNavigationEnter',
+	TRACK_NAVIGATION_EXIT = 'trackNavigationExit',
 	SET_REFERRER = 'setReferrer',
-	GET_DASHBOARD_SESSION_URL = 'getDashboardSessionUrl',
-	GET_DASHBOARD_VISITOR_URL = 'getDashboardVisitorUrl',
-	REGISTER_LOG_LISTENER = 'registerLogListener',
-	UNREGISTER_LOG_LISTENER = 'unregisterLogListener',
+	PUT_STRING_EVENT_PROPERTY = 'putStringEventProperty',
+	GET_STRING_EVENT_PROPERTY = 'getStringEventProperty',
+	REMOVE_STRING_EVENT_PROPERTY = 'removeStringEventProperty',
+	CLEAR_EVENT_PROPERTIES = 'clearEventProperties',
+	SET_USER_IDENTIFIER = 'setUserIdentifier',
+	SET_USER_NAME = 'setUserName',
+	SET_USER_EMAIL = 'setUserEmail',
+	SET_USER_PROPERTY = 'setUserProperty',
+	GET_USER_PROPERTY = 'getUserProperty',
+	REMOVE_USER_PROPERTY = 'removeUserProperty',
+	OPEN_NEW_USER = 'openNewUser',
+	OPEN_NEW_SESSION = 'openNewSession',
+	GET_USER_URL = 'getUserUrl',
+	GET_SESSION_URL = 'getSessionUrl',
+	GET_SESSION_URL_WITH_TIMESTAMP = 'getSessionUrlWithTimestamp',
+	SET_RELAY_PROXY_HOST = 'setRelayProxyHost',
+	GET_FRAMERATE = 'getFrameRate',
+	SET_FRAMERATE = 'setFrameRate',
+	SET_JOB_UPLOAD_ENABLED = 'setJobUploadEnabled',
+	SET_ADAPTIVE_FRAMERATE_ENABLED = 'setAdaptiveFrameRateEnabled',
+	GET_ADAPTIVE_FRAMERATE_ENABLED = 'getAdaptiveFrameRateEnabled',
+	SET_SURFACE_CAPTURE_ENABLED = 'setSurfaceCaptureEnabled',
+	GET_SURFACE_CAPTURE_ENABLED = 'getSurfaceCaptureEnabled',
+	EVENT_TRACKING_ENABLE_ALL = 'eventTrackingEnableAll',
+	EVENT_TRACKING_DISABLE_ALL = 'eventTrackingDisableAll',
+	IS_RECORDING = 'isRecording',
+	GET_PROJECT_KEY = 'getProjectKey',
+	SET_EVENT_TRACKING_INTERACTION_USER_STATUS = 'setEventTrackingInteractionUserStatus',
+	SET_EVENT_TRACKING_INTERACTION_RAGE_CLICK_STATUS = 'setEventTrackingInteractionRageClickStatus',
+	RESTORE_DEFAULT = 'restoreDefault',
+	SET_WEB_VIEW_SENSITIVITY = 'setWebViewSensitivity',
+	GET_RENDERING_MODE = 'getRenderingMode',
+	GET_RECORDING_STATUS = 'getRecordingStatus',
+	GET_STATE_FRAME_RATE = 'getStateFrameRate',
 	SET_RENDERING_MODE = 'setRenderingMode',
-
-	//Integrations
-	REGISTER_INTEGRATION_LISTENER = 'registerIntegrationListener',
-	UNREGISTER_INTEGRATION_LISTENER = 'unregisterIntegrationListener',
-
-	// Callbacks
-	SESSION_READY_CALLBACK = 'onSessionReady',
-	VISITOR_READY_CALLBACK = 'onVisitorReady',
+	REGISTER_USER_URL_CHANGED_LISTENER = 'registerUserUrlChangedListener',
+	REGISTER_SESSION_URL_CHANGED_LISTENER = 'registerSessionUrlChangedListener',
+	REGISTER_RENDERING_MODE_CHANGED_LISTENER = 'registerRenderingModeChangedListener',
+	REGISTER_RECORDING_STATUS_CHANGED_LISTENER = 'registerRecordingStatusChangedListener',
+	REMOVE_USER_URL_CHANGED_LISTENER = 'removeUserUrlChangedListener',
+	REMOVE_SESSION_URL_CHANGED_LISTENER = 'removeSessionUrlChangedListener',
+	REMOVE_RENDERING_MODE_CHANGED_LISTENER = 'removeRenderingModeChangedListener',
+	REMOVE_RECORDING_STATUS_CHANGED_LISTENER = 'removeRecordingStatusChangedListener',
+	SET_RECORDING_MASK = 'setRecordingMask',
+	ENABLE_LOGS = 'enableLogs',
 }
 
 // Internal logic
 const SET_PLUGIN_VERSION = 'setPluginVersion';
 
-// Undefined
-const UNDEFINED_FPS = -1;
-const UNDEFINED_RENDERING_MODE = '';
-
 const emptyCallback = function () {
 	return;
 };
 
-export interface Dictionary<T> {
-	[key: string]: T;
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// SDK API constants
-
-export enum ViewState {
-	START = 'start',
-	STOP = 'stop',
-}
-
-export enum EventTrackingMode {
-	FULL_TRACKING = 'full_tracking',
-	IGNORE_USER_INTERACTION = 'ignore_user_interaction',
-	IGNORE_NAVIGATION_INTERACTION = 'ignore_navigation_interaction',
-	IGNORE_RAGE_CLICKS = 'ignore_rage_clicks',
-	NO_TRACKING = 'no_tracking',
-}
-
-export enum RenderingMode {
-	NO_RENDERING = 'no_rendering',
-	NATIVE = 'native',
-}
-
-export type SuccessCallback = (value: any) => void;
+// Public types
+export type SuccessCallback<TValue> = (value: TValue) => void;
 export type ErrorCallback = (message: string) => void;
 
-export type SetupOptions = {
-	smartlookAPIKey: string;
-	fps?: number;
-	renderingMode?: RenderingMode;
-	startNewSession?: boolean;
-	startNewSessionAndUser?: boolean;
-	eventTrackingModes?: EventTrackingMode[];
+export type RecordingMaskType = 'COVERING' | 'ERASING';
+
+export type RecordingMaskRect = {
+	left: number;
+	top: number;
+	width: number;
+	height: number;
 };
+
+/**
+ * @description Creates an overlay that masks a specified screen part to protect it from unwanted recording.
+ * @param maskType - Represents the type of a mask element.
+ * @param maskRect - Defines an area of the recording mask.
+ */
+export interface RecordingMask {
+	maskType: RecordingMaskType;
+	maskRect: RecordingMaskRect;
+}
+
+export type RecordingMaskList = RecordingMask[];
+
+export enum RenderingMode {
+	NO_RENDERING = 0,
+	NATIVE = 1,
+	WIREFRAME = 2,
+}
+
+export enum RecordingStatus {
+	Recording = 0,
+	NotStarted = 1,
+	Stopped = 2,
+	BellowMinSdkVersion = 3,
+	ProjectLimitReached = 4,
+	StorageLimitReached = 5,
+	InternalError = 6,
+	NotRunningInSwiftUIContext = 7,
+	UnsupportedPlatform = 8,
+}
+
+export type NativeListenerCallbackShape = (url: string | RenderingMode | RecordingStatus) => void;
 
 ////////////////////////////////////////////////////////////////////////////////
 // SDK API methods
@@ -119,1145 +133,1337 @@ export type SetupOptions = {
  *     alert('Failed because: ' + message);
  * }
  */
-
 export interface Smartlook {
-	ViewState: {
-		[P in keyof typeof ViewState]: ViewState;
-	};
-
-	EventTrackingMode: {
-		[P in keyof typeof EventTrackingMode]: EventTrackingMode;
-	};
-
-	RenderingMode: {
-		[P in keyof typeof RenderingMode]: RenderingMode;
-	};
-
 	/**
-	 * @description Setup and start Smartlook SDK recording.
-	 *
-	 * @param options.smartlookAPIKey        Unique 40 character key identifying your app. You can find in your
-	 *                                       dashboard. If invalid key is set SDK will not work properly.
-	 * @param options.fps                    (Optional) Desired FPS for the recording, that must be in range from 1 to 10.
-	 * @param options.renderingMode          (Optional) Mode defining the video output of recording.
-	 * @param options.startNewSession        (Optional) If true new session is going to be created.
-	 * @param options.startNewSessionAndUser (Optional) If true new session and visitor is going to be created.
-	 * @param options.eventTrackingModes     (Optional) Array of EventTrackingModes that should be applied to recording.
+	 * @description Starts the recording, even when no project key is set.
+	 * See the docs for more infromation.
 	 */
-	setupAndStartRecording(options: SetupOptions, successCallback: SuccessCallback, errorCallback: ErrorCallback): void;
+	start(successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback): void;
 	/**
-	 * @description Setup/initialize Smartlook SDK. This method DOESN'T start the recording (@see Smartlook.startRecording())
-	 *
-	 * @param options.smartlookAPIKey        Unique 40 character key identifying your app. You can find in your
-	 *                                       dashboard. If invalid key is set SDK will not work properly.
-	 * @param options.fps                    (Optional) Desired FPS for the recording, that must be in range from 1 to 10.
-	 * @param options.renderingMode          (Optional) Mode defining the video output of recording.
-	 * @param options.startNewSession        (Optional) If true new session is going to be created.
-	 * @param options.startNewSessionAndUser (Optional) If true new session and visitor is going to be created.
-	 * @param options.eventTrackingModes     (Optional) Array of EventTrackingModes that should be applied to recording.
+	 * @description Stops the recording.
 	 */
-	setup(options: SetupOptions, successCallback: SuccessCallback, errorCallback: ErrorCallback): void;
+	stop(successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback): void;
 	/**
-	 * @description Start SDK recording.
+	 * @description Resets the SDK to a default state.
 	 */
-	startRecording(successCallback: SuccessCallback, errorCallback: ErrorCallback): void;
+	reset(successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback): void;
 	/**
-	 * @description Stop SDK recording.
+	 * @description Logs a new event in the application.
+	 * @param options.eventName - Application event name
+	 * @param options.props - optional event properties object
 	 */
-	stopRecording(successCallback: SuccessCallback, errorCallback: ErrorCallback): void;
-	/**
-	 * @description Check if SDK is currently recording.
-	 *
-	 * @callback successCallback Callback value set to true if SDK is currently recording.
-	 *
-	 * @example
-	 * Smartlook.isRecording(successCallback, ...);
-	 *
-	 * function successCallback(value) {
-	 *     alert('Is smartlook recording: ' + value);
-	 * }
-	 */
-	isRecording(successCallback: SuccessCallback, errorCallback: ErrorCallback): void;
-	/**
-	 * @description Resets current session and new session in dashboard is created.
-	 *
-	 * @param options.resetUser (Optional) If set to TRUE new visitor is created in the dashboard.
-	 */
-	resetSession(options: { resetUser: boolean }, successCallback: SuccessCallback, errorCallback: ErrorCallback): void;
-	/**
-	 * @deprecated This method is deprecated and should not be further used. Please use:
-	 * Smartlook.setRenderingMode({renderingMode: Smartlook.RenderingMode.NO_RENDERING})
-	 *
-	 * @description When you start sensitive mode SDK records blank videos (single color) but SDK still
-	 *              sends Analytic events.
-	 */
-	setUserIdentifier(
-		options: { identifier: string; sessionProperties: Dictionary<any> },
-		successCallback: SuccessCallback,
-		errorCallback: ErrorCallback,
+	trackEvent(
+		options: { eventName: string; props?: Record<string, string> },
+		successCallback?: SuccessCallback<string>,
+		errorCallback?: ErrorCallback,
 	): void;
 	/**
-	 * @description You can configure which events are being tracked by setting eventTrackingMode.
-	 *
-	 * @param options.eventTrackingMode Can be one of:
-	 *                                  - EventTrackingMode.FULL_TRACKING ... track everything
-	 *                                  - EventTrackingMode.IGNORE_USER_INTERACTION ... will not track touches
-	 *                                    focus, keyboard, selector events
-	 *                                  - EventTrackingMode.IGNORE_NAVIGATION_INTERACTION ... will not track screen names
-	 *                                  - EventTrackingMode.IGNORE_RAGE_CLICKS ... will not track rage clicks
-	 *                                  - EventTrackingMode.NO_TRACKING ... not gonna track any events
+	 * @description Logs a new selector event in the application.
+	 * @param options.eventName - Application event name
+	 * @param options.props - optional event properties object
+	 * @kind **iOS only**
 	 */
-	setEventTrackingMode(
-		options: { eventTrackingMode: EventTrackingMode },
-		successCallback: SuccessCallback,
-		errorCallback: ErrorCallback,
+	trackSelector(
+		options: { selectorName: string; props?: Record<string, string> },
+		successCallback?: SuccessCallback<string>,
+		errorCallback?: ErrorCallback,
 	): void;
 	/**
-	 * @description You can configure which events are being tracked by setting eventTrackingMode.
-	 *
-	 * @param options.eventTrackingModes Array of EventTrackingMode tha can be one of:
-	 *                                  - EventTrackingMode.FULL_TRACKING ... track everything
-	 *                                  - EventTrackingMode.IGNORE_USER_INTERACTION ... will not track touches
-	 *                                    focus, keyboard, selector events
-	 *                                  - EventTrackingMode.IGNORE_NAVIGATION_INTERACTION ... will not track screen names
-	 *                                  - EventTrackingMode.IGNORE_RAGE_CLICKS ... will not track rage clicks
-	 *                                  - EventTrackingMode.NO_TRACKING ... not gonna track any events
+	 * Logs a new navigation sreen-entering event in the application.
+	 * @param options.eventName - Application event name
+	 * @param options.props - optional event properties object
 	 */
-	setEventTrackingModes(
-		options: { eventTrackingMode: EventTrackingMode[] },
-		successCallback: SuccessCallback,
-		errorCallback: ErrorCallback,
+	trackNavigationEnter(
+		options: { eventName: string; props?: Record<string, string> },
+		successCallback?: SuccessCallback<string>,
+		errorCallback?: ErrorCallback,
 	): void;
 	/**
-	 * @description Track custom navigation event.
-	 *
-	 * @param options.name      Controller/Activity/Page name.
-	 * @param options.viewState One of Smartlook.ViewState.START or Smartlook.ViewState.STOP.
+	 * Logs a new navigation sreen-exiting event in the application.
+	 * @param options.eventName - Application event name
+	 * @param options.props - optional event properties object
 	 */
-	trackNavigationEvent(
-		options: { name: string; viewState: ViewState },
-		successCallback: SuccessCallback,
-		errorCallback: ErrorCallback,
+	trackNavigationExit(
+		options: { eventName: string; props?: Record<string, string> },
+		successCallback?: SuccessCallback<string>,
+		errorCallback?: ErrorCallback,
 	): void;
 	/**
-	 * @description Starts timed event. Timed event can be used to record duration (between the start and stop/cancel).
+	 * Sets a new SDK referrer.
+	 * @param options.referrer - Application referrer name
+	 * @param options.source - Referrer source name
 	 *
-	 * @param options.name            String used to identify event in dashboard.
-	 * @param options.eventProperties (Optional) Event data stored in object. These are going to be merged with
-	 *                                data passed in stop/cancel.
-	 *
-	 * @callback successCallback Callback value set to eventId if event was started successfully.
-	 *
-	 * @example
-	 * Smartlook.startTimedCustomEvent({identifier: "random_identifier"}, successCallback, ...);
-	 *
-	 * function successCallback(value) {
-	 *     alert('Timed event eventId: ' + value);
-	 * }
-	 */
-	startTimedCustomEvent(
-		options: { name: string; eventProperties?: Dictionary<string> },
-		successCallback: SuccessCallback,
-		errorCallback: ErrorCallback,
-	): void;
-	/**
-	 * @description Stops timed event. Duration from according start is calculated and send with the event.
-	 *
-	 * @param options.eventId         Unique event id that is used to identify this event.
-	 * @param options.eventProperties (Optional) Event data stored in object. These are going to be merged with
-	 *                                data passed in start.
-	 */
-	stopTimedCustomEvent(
-		options: { eventId: string; eventProperties?: Dictionary<string> },
-		successCallback: SuccessCallback,
-		errorCallback: ErrorCallback,
-	): void;
-	/**
-	 * @description Cancels timed event. It calculates event duration and notes that this event has failed.
-	 *
-	 * @param options.eventId         Unique event id that is used to identify this event.
-	 * @param options.reason          Short string description explaining why the event was canceled.
-	 * @param options.eventProperties (Optional) Event data stored in object. These are going to be merged with
-	 *                                data passed in start.
-	 */
-	cancelTimedCustomEvent(
-		options: { eventId: string; reason: string; eventProperties?: Dictionary<string> },
-		successCallback: SuccessCallback,
-		errorCallback: ErrorCallback,
-	): void;
-	/**
-	 * @description Track custom event.
-	 *
-	 * @param options.name            String used to identify event.
-	 * @param options.eventProperties (Optional) Event data stored in object.
-	 */
-	trackCustomEvent(
-		options: { name: string; eventProperties: Dictionary<any> },
-		successCallback: SuccessCallback,
-		errorCallback: ErrorCallback,
-	): void;
-	/**
-	 * @description Set global event properties that will be added to every tracked event.
-	 *
-	 * @param options.globalEventProperties Global event properties stored in object.
-	 * @param options.immutable             If set to TRUE these properties have higher priority than mutable ones
-	 *                                      and also they cannot be changed (only removed).
-	 */
-	setGlobalEventProperties(
-		options: { globalEventProperties: Dictionary<string>; immutable?: boolean },
-		successCallback: SuccessCallback,
-		errorCallback: ErrorCallback,
-	): void;
-	/**
-	 * @description Set global event property that will be added to every tracked event.
-	 *
-	 * @param options.key        Global event property key.
-	 * @param options.value      Global event property value.
-	 * @param options.immutable  If set to TRUE this property has higher priority than mutable ones and also it
-	 *                           cannot be changed (only removed).
-	 */
-	setGlobalEventProperty(
-		options: { key: string; value: string; immutable?: boolean },
-		successCallback: SuccessCallback,
-		errorCallback: ErrorCallback,
-	): void;
-	/**
-	 * @description Remove property from global event properties.
-	 *
-	 * @param options.key Key of global event property that needs to be removed.
-	 */
-	removeGlobalEventProperty(
-		options: { key: string },
-		successCallback: SuccessCallback,
-		errorCallback: ErrorCallback,
-	): void;
-	/**
-	 * @description Remove all properties from global event properties.
-	 */
-	removeAllGlobalEventProperties(successCallback: SuccessCallback, errorCallback: ErrorCallback): void;
-	/**
-	 * @description Possibility to manually set referrer and source of the installation visible in dashboard
-	 *              and accessible via filters
-	 *
-	 * @param referrer Desired referrer value
-	 * @param source   Desired source, i.e. com.android.vending or com.amazon.venezia
+	 * @kind **Android only**
 	 */
 	setReferrer(
 		options: { referrer: string; source: string },
-		successCallback: SuccessCallback,
-		errorCallback: ErrorCallback,
+		successCallback?: SuccessCallback<string>,
+		errorCallback?: ErrorCallback,
 	): void;
 	/**
-	 * @description Obtain sharable url to user's session leading to our dashboard.
-	 *
-	 * @callback successCallback Callback value set to dashboard sessionURL.
-	 *
-	 * @example
-	 * Smartlook.getDashboardSessionUrl({withCurrentTimestamp: true}, successCallback, ...);
-	 *
-	 * function successCallback(value) {
-	 *     alert('Shareable dashboard session URL: ' + value);
-	 * }
+	 * @description Sets a user-passed global event property.
+	 * @param options.eventName - Global event name
+	 * @param options.props - optional event properties object
 	 */
-	getDashboardSessionUrl(
-		options: { withCurrentTimestamp?: boolean },
-		successCallback: SuccessCallback,
-		errorCallback: ErrorCallback,
+	putGlobalEventProperty(
+		options: { propertyName: string; value: string },
+		successCallback?: SuccessCallback<string>,
+		errorCallback?: ErrorCallback,
 	): void;
 	/**
-	 * @description Obtain sharable url to visitor page in our dashboard.
-	 *
-	 * @callback successCallback Callback value set to dashboard visitorURL.
-	 *
-	 * @example
-	 * Smartlook.getDashboardVisitorUrl(successCallback, ...);
-	 *
-	 * function successCallback(value) {
-	 *     alert('Shareable dashboard visitor URL: ' + value);
-	 * }
+	 * @description Retrieves a user-passed event property.
+	 * @param options.eventName - Global event name to retrieve
 	 */
-	getDashboardVisitorUrl(successCallback: SuccessCallback, errorCallback: ErrorCallback): void;
+	getGlobalEventProperty(
+		options: { propertyName: string },
+		successCallback?: SuccessCallback<string>,
+		errorCallback?: ErrorCallback,
+	): void;
 	/**
-	 * You can register callback to all public SDK logs.
-	 *
-	 * @callback successCallback Callback value contains log message in given format: `TAG[severity]: message`
-	 *
-	 * @example
-	 * Smartlook.registerLogListener(successCallback, ...);
-	 *
-	 * function successCallback(value) {
-	 *     alert('SDK logged: ' + value);
-	 * }
+	 * @description Removes a user-passed event property.
+	 * @param options.eventName - Global event name to remove
 	 */
-	registerLogListener(successCallback: SuccessCallback, errorCallback: ErrorCallback): void;
+	removeGlobalEventProperty(
+		options: { propertyName: string },
+		successCallback?: SuccessCallback<string>,
+		errorCallback?: ErrorCallback,
+	): void;
 	/**
-	 * You can unregister callback to all public SDK logs if registered before.
+	 * @description Clears all user-passed event properties.
 	 */
-	unregisterLogListener(successCallback: SuccessCallback, errorCallback: ErrorCallback): void;
+	clearGlobalEventProperties(successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback): void;
 	/**
-	 * By changing rendering method you can adjust the way we render the application for recordings.
+	 * @description Sets new identification for the recorded user.
+	 * @param options.identifier - User identifier
+	 */
+	setUserIdentifier(
+		options: { identifier: string },
+		successCallback?: SuccessCallback<boolean>,
+		errorCallback?: ErrorCallback,
+	): void;
+	/**
+	 * @description Sets user’s full name.
+	 * @param options.name - User's full name
+	 */
+	setUserName(
+		options: { name: string },
+		successCallback?: SuccessCallback<string>,
+		errorCallback?: ErrorCallback,
+	): void;
+	/**
+	 * @description Sets user’s email address.
+	 * @param options.email - User's email address
+	 */
+	setUserEmail(
+		options: { email: string },
+		successCallback?: SuccessCallback<boolean>,
+		errorCallback?: ErrorCallback,
+	): void;
+	/**
+	 * @description Sets or adds a new value to the user properties.
+	 * @param options.propertyName - User property name
+	 * @param options.value - User property value
+	 */
+	setUserProperty(
+		options: { propertyName: string; value: string },
+		successCallback?: SuccessCallback<boolean>,
+		errorCallback?: ErrorCallback,
+	): void;
+	/**
+	 * @description Retrieves a user property value with a given property name (a key).
+	 * @param options.propertyName - User property name
+	 * @param options.successCallback - Callback to be invoked with the user property value
+	 */
+	getUserProperty(
+		options: { propertyName: string },
+		successCallback: SuccessCallback<string>,
+		errorCallback?: ErrorCallback,
+	): void;
+	/**
+	 * @description Removes a user property given a property name (a key).
+	 */
+	removeUserProperty(
+		options: { propertyName: string },
+		successCallback?: SuccessCallback<string>,
+		errorCallback?: ErrorCallback,
+	): void;
+	/**
+	 * @description Initializes a new user for recording.
+	 */
+	openNewUser(successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback): void;
+	/**
+	 * @description Opens a new recording session.
+	 */
+	openNewSession(successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback): void;
+	/**
+	 * @description Retrieves the unique URL of the currently recorded user.
+	 * @param options.successCallback - Callback to be invoked with the user URL
+	 */
+	getUserUrl(successCallback: SuccessCallback<string>, errorCallback?: ErrorCallback): void;
+	/**
+	 * @description Retrieves the unique URL of this recording session.
+	 * @param options.successCallback - Callback to be invoked with the session URL
+	 */
+	getSessionUrl(successCallback: SuccessCallback<string>, errorCallback?: ErrorCallback): void;
+	/**
+	 * @description Retrieves the unique session URL with the exact location on the timeline.
+	 * @param options.successCallback - Callback to be invoked with the session URL
+	 */
+	getSessionUrlWithTimestamp(successCallback: SuccessCallback<string>, errorCallback?: ErrorCallback): void;
+	/**
+	 * @description Sets a proxy host name for data transfer.
+	 * @param options.relayProxyHost - Proxy host name
 	 *
-	 * @param options.renderingMode       Mode defining the video output of recording. Currently only
-	 *                                    RenderingMode.NO_RENDERING and RenderingMode.NATIVE available.
-	 * @param options.renderingModeOption [NOT IMPLEMENTED]
+	 * @kind **Android only**
+	 */
+	setRelayProxyHost(
+		options: { relaxyProxyHost: string },
+		successCallback?: SuccessCallback<string>,
+		errorCallback?: ErrorCallback,
+	): void;
+	/**
+	 * @description Sets video capturing framerate.
+	 * @param options.frameRate - Framerate to be set. Must be between `2` and `10` frames per second.
+	 */
+	setFrameRate(
+		options: { frameRate: number },
+		successCallback?: SuccessCallback<string>,
+		errorCallback?: ErrorCallback,
+	): void;
+	/**
+	 * Retrieves the video capturing framerate.
+	 * @param options.successCallback - Callback to be invoked with the current framerate
+	 */
+	getFrameRate(successCallback: SuccessCallback<number>, errorCallback?: ErrorCallback): void;
+	/**
+	 * @description Sets whether or not Android's `Jobs` are used for uploading.
+	 *
+	 * @kind **Android only**
+	 */
+	setJobUploadEnabled(
+		options: { isEnabled: boolean },
+		successCallback?: SuccessCallback<string>,
+		errorCallback?: ErrorCallback,
+	): void;
+	/**
+	 * @description Sets whether or not the SDK should use the adaptive framerate feature to capture video.
+	 */
+	setAdaptiveFrameRateEnabled(
+		options: { isEnabled: boolean },
+		successCallback?: SuccessCallback<string>,
+		errorCallback?: ErrorCallback,
+	): void;
+	/**
+	 * @description A boolean that determines whether the SDK uses the adaptive framerate functionality for video capture.
+	 */
+	getAdaptiveFrameRateEnabled(successCallback: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void;
+	/**
+	 * @description Sets whether or not Android's Surface should be recorded by the video capture.
+	 *
+	 * @kind **Android only**
+	 */
+	setSurfaceCaptureEnabled(
+		options: { isEnabled: boolean },
+		successCallback?: SuccessCallback<string>,
+		errorCallback?: ErrorCallback,
+	): void;
+	/**
+	 * @description A boolean that determines whether or not Android's Surface is recorded by the video capture.
+	 *
+	 * @kind **Android only**
+	 * @param options.successCallback - Callback to be invoked with the current value
+	 */
+	getSurfaceCaptureEnabled(successCallback: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void;
+	/**
+	 * @description Enables the tracking of all events.
+	 */
+	eventTrackingEnableAll(successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback): void;
+	/**
+	 * @description Disabled the tracking of all events.
+	 */
+	eventTrackingDisableAll(successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback): void;
+	/**
+	 * @description Sets a unique project key.
+	 * @param options.key - Project key
+	 */
+	setProjectKey(
+		options: { key: string },
+		successCallback?: SuccessCallback<string>,
+		errorCallback?: ErrorCallback,
+	): void;
+	/**
+	 * @description Determines whether or not the SDK is recording.
+	 * @param options.successCallback - Callback to be invoked with the current value
+	 */
+	isRecording(successCallback: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void;
+	/**
+	 * @description Retrieves a string containing the current project key.
+	 * @param options.successCallback - Callback to be invoked with the current project key
+	 */
+	getProjectKey(successCallback: SuccessCallback<string>, errorCallback?: ErrorCallback): void;
+	/**
+	 * @description Enables the tracking of all user's interaction events.
+	 *
+	 * @kind **Android only**
+	 * @param options.isEnabled - A boolean that determines whether or not the tracking of all user's interaction events is enabled.
+	 */
+	setEventTrackingInteractionUserStatus(
+		options: { isEnabled: boolean },
+		successCallback?: SuccessCallback<string>,
+		errorCallback?: ErrorCallback,
+	): void;
+	/**
+	 * @description Sets whether or not "rage" clicks are automatically tracked.
+	 * @param options.isEnabled - A boolean that determines whether or not "rage" clicks are automatically tracked.
+	 */
+	setEventTrackingInteractionRageClickStatus(
+		options: { isEnabled: boolean },
+		successCallback?: SuccessCallback<string>,
+		errorCallback?: ErrorCallback,
+	): void;
+	/**
+	 * @description Sets tracking properties to default values.
+	 */
+	restoreDefault(successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback): void;
+	/**
+	 * @description Sets whether or not a WebView class should be considered sensitive.
+	 * @default True by default in the SDK.
+	 * @param options.isSensitive - A boolean that determines whether or not the WebView class should be considered sensitive.
+	 */
+	setWebViewSensitivity(
+		options: { isSensitive: boolean },
+		successCallback?: SuccessCallback<string>,
+		errorCallback?: ErrorCallback,
+	): void;
+	/**
+	 * @description Retrieves the current SDK's rendering mode.
+	 * @param options.successCallback - Callback to be invoked with the current rendering mode
+	 */
+	getRenderingMode(successCallback: SuccessCallback<RenderingMode>, errorCallback?: ErrorCallback): void;
+	/**
+	 * @description Retrieves the current recording status. The default SDK value is `NotStarted`.
+	 * @param options.successCallback - Callback to be invoked with the current recording status
+	 */
+	getRecordingStatus(successCallback: SuccessCallback<RecordingStatus>, errorCallback?: ErrorCallback): void;
+	/**
+	 * @description Retrieves a number representing the current framerate.
+	 * @param options.successCallback - Callback to be invoked with the current framerate
+	 */
+	getStateFrameRate(successCallback: SuccessCallback<number>, errorCallback?: ErrorCallback): void;
+	/**
+	 * @description Sets SDK's video rendering mode for captured data.
+	 * @param options.renderingMode - Rendering mode to be set. @see RenderingMode
 	 */
 	setRenderingMode(
-		options: { renderingMode: RenderingMode[] },
-		successCallback: SuccessCallback,
-		errorCallback: ErrorCallback,
+		options: { renderingMode: RenderingMode },
+		successCallback?: SuccessCallback<string>,
+		errorCallback?: ErrorCallback,
 	): void;
 	/**
-	 * @description Integration listener can be used to obtain dashboard URL for current session and visitor.
-	 * These URLs can be propagated to various analytic tools/SDKs.
+	 * @description Registers a listener that gets triggered when the User URL changes.
 	 *
-	 * @callback options.onSessionReady Called when dashboard session URL is ready. Note that this URL can be accessed only by user
-	 * that has access to Smartlook dashboard (it is not public share link).
-	 *
-	 * @callback options.onVisitorReady Called when dashboard visitor URL is ready. Note that this URL can be accessed only by user
-	 * that has access to Smartlook dashboard (it is not public share link).
-	 *
-	 * @example
-	 * Smartlook.registerIntegrationListener({
-	 *      onSessionReady: function (dashboardSessionUrl) { alert("Session: " + dashboardSessionUrl); },
-	 *      onVisitorReady: function (dashboardVisitorUrl) { alert("Visitor: " + dashboardVisitorUrl); }
-	 *   });
-	 * }
+	 * @param options.userUrlChangedCallback - Callback to be invoked when the User URL changes
 	 */
-	registerIntegrationListener(
+	registerUserUrlChangedListener(
+		options: { userUrlChangedCallback: NativeListenerCallbackShape },
+		successCallback?: SuccessCallback<string>,
+		errorCallback?: ErrorCallback,
+	): void;
+	/**
+	 * @description Registers a listener that gets triggered when the Session URL changes.
+	 *
+	 * @param options.sessionUrlChangedCallback - Callback to be invoked when the Session URL changes
+	 */
+	registerSessionUrlChangedListener(
+		options: { sessionUrlChangedCallback: NativeListenerCallbackShape },
+		successCallback?: SuccessCallback<string>,
+		errorCallback?: ErrorCallback,
+	): void;
+	/**
+	 * @description Registers a listener that gets triggered when the native SDK's Rendering mode changes.
+	 *
+	 * @param options.renderingModeChangedCallback - Callback to be invoked when the native SDK's Rendering mode changes
+	 * @kind **iOS only**
+	 */
+	registerRenderingModeChangedListener(
+		options: { renderingModeChangedCallback: NativeListenerCallbackShape },
+		successCallback?: SuccessCallback<string>,
+		errorCallback?: ErrorCallback,
+	): void;
+	/**
+	 * @description Registers a listener that gets triggered when the native SDK's Recording status changes.
+	 *
+	 * @param options.recordingStatusChangedCallback - Callback to be invoked when the native SDK's Recording status changes
+	 * @kind **iOS only**
+	 */
+	registerRecordingStatusChangedListener(
+		options: { recordingStatusChangedCallback: NativeListenerCallbackShape },
+		successCallback?: SuccessCallback<string>,
+		errorCallback?: ErrorCallback,
+	): void;
+	/**
+	 * @description Removes the user URL change listener.
+	 */
+	removeUserUrlChangedListener(successCallback?: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void;
+	/**
+	 * @description Removes the session URL change listener.
+	 */
+	removeSessionUrlChangedListener(successCallback?: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void;
+	/**
+	 * @description Removes the rendering mode change listener.
+	 */
+	removeRenderingModeChangedListener(successCallback?: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void;
+	/**
+	 * @description Removes the recording status change listener.
+	 */
+	removeRecordingStatusChangedListener(successCallback?: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void;
+	/**
+	 * @description Creates a new @see RecordingMask .
+	 *
+	 * @param options.recordingMaskList - an array of recording mask elements containing their bounding rectangles and mask types.
+	 * @see RecordingMaskRect , @see RecordingMaskType
+	 */
+	setRecordingMask(
 		options: {
-			onSessionReady: (dashboardSessionUrl: string) => void;
-			onVisitorReady: (dashboardVisitorUrl: string) => void;
+			recordingMaskList: RecordingMaskList;
 		},
-		successCallback: SuccessCallback,
-		errorCallback: ErrorCallback,
+		successCallback?: SuccessCallback<boolean>,
+		errorCallback?: ErrorCallback,
 	): void;
 	/**
-	 * @description Unregister Integration listener (@see registerIntegrationListener())
+	 * @description Enables advanced SDK logging capabilities.
+	 *
+	 * @kind **Android only**
 	 */
-	unregisterIntegrationListener(successCallback: SuccessCallback, errorCallback: ErrorCallback): void;
+	enableLogs(successCallback?: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void;
 }
 
-// Setup and lifecycle
+/**
+ * @description Starts the recording, even when no project key is set.
+ * See the docs for more infromation.
+ */
+export function start(successCallback?: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void {
+	setupAndRegisterBridgeInterface();
+	execWithCallbacks(Command.START, successCallback, errorCallback);
+}
 
 /**
- * @deprecated Variable used only for support of deprecated methods. Should be removed on next release.
+ * @description Stops the recording.
  */
-var fullscreenModeActive = false;
+export function stop(successCallback?: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void {
+	execWithCallbacks(Command.STOP, successCallback, errorCallback);
+}
 
 /**
- * @description Setup and start Smartlook SDK recording.
- *
- * @param options.smartlookAPIKey        Unique 40 character key identifying your app. You can find in your
- *                                       dashboard. If invalid key is set SDK will not work properly.
- * @param options.fps                    (Optional) Desired FPS for the recording, that must be in range from 1 to 10.
- * @param options.renderingMode          (Optional) Mode defining the video output of recording.
- * @param options.startNewSession        (Optional) If true new session is going to be created.
- * @param options.startNewSessionAndUser (Optional) If true new session and visitor is going to be created.
- * @param options.eventTrackingModes     (Optional) Array of EventTrackingModes that should be applied to recording.
+ * @description Resets the SDK to a default state.
  */
-export function setupAndStartRecording(
-	options: SetupOptions,
-	successCallback: SuccessCallback,
-	errorCallback: ErrorCallback,
-) {
-	setPluginVersion();
+export function reset(successCallback?: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void {
+	execWithCallbacks(Command.RESET, successCallback, errorCallback);
+}
 
-	const args = [];
-	const renderingModeAllowedValues = [RenderingMode.NO_RENDERING, RenderingMode.NATIVE];
-
-	if (checkStringOption('smartlookAPIKey', options, errorCallback, true)) {
-		args.push(options['smartlookAPIKey']);
-	} else {
+/**
+ * @description Logs a new event in the application.
+ * @param options.eventName - Application event name
+ * @param options.props - optional event properties object
+ */
+export function trackEvent(
+	options: { eventName: string; props?: Record<string, string> },
+	successCallback?: SuccessCallback<string>,
+	errorCallback?: ErrorCallback,
+): void {
+	let args = [];
+	if (!checkStringOption('eventName', options, true, errorCallback)) {
 		return;
 	}
 
-	if (checkFpsOption(options, errorCallback, false)) {
-		args.push(options['fps']);
-	} else {
-		args.push(UNDEFINED_FPS);
+	args.push(options['eventName']);
+	args.push(options['props']);
+	execWithCallbacks(Command.TRACK_EVENT, successCallback, errorCallback, args);
+}
+
+/**
+ * @description Logs a new selector event in the application.
+ * @param options.eventName - Application event name
+ * @param options.props - optional event properties object
+ * @kind **iOS only**
+ */
+export function trackSelector(
+	options: { selectorName: string; props?: Record<string, string> },
+	successCallback?: SuccessCallback<string>,
+	errorCallback?: ErrorCallback,
+): void {
+	let args = [];
+	if (!checkStringOption('selectorName', options, true, errorCallback)) {
+		return;
 	}
 
+	args.push(options['selectorName']);
+	args.push(options['props']);
+	execWithCallbacks(Command.TRACK_SELECTOR, successCallback, errorCallback, args);
+}
+
+/**
+ * Logs a new navigation sreen-entering event in the application.
+ * @param options.eventName - Application event name
+ * @param options.props - optional event properties object
+ */
+export function trackNavigationEnter(
+	options: { eventName: string; props?: Record<string, string> },
+	successCallback?: SuccessCallback<string>,
+	errorCallback?: ErrorCallback,
+): void {
+	let args = [];
+	if (!checkStringOption('eventName', options, true, errorCallback)) {
+		return;
+	}
+
+	args.push(options['eventName']);
+	args.push(options['props']);
+	execWithCallbacks(Command.TRACK_NAVIGATION_ENTER, successCallback, errorCallback, args);
+}
+
+/**
+ * Logs a new navigation sreen-exiting event in the application.
+ * @param options.eventName - Application event name
+ * @param options.props - optional event properties object
+ */
+export function trackNavigationExit(
+	options: { eventName: string; props?: Record<string, string> },
+	successCallback?: SuccessCallback<string>,
+	errorCallback?: ErrorCallback,
+): void {
+	let args = [];
+	if (!checkStringOption('eventName', options, true, errorCallback)) {
+		return;
+	}
+
+	args.push(options['eventName']);
+	args.push(options['props']);
+	execWithCallbacks(Command.TRACK_NAVIGATION_EXIT, successCallback, errorCallback, args);
+}
+
+/**
+ * Sets a new SDK referrer.
+ * @param options.referrer - Application referrer name
+ * @param options.source - Referrer source name
+ *
+ * @kind **Android only**
+ */
+export function setReferrer(
+	options: { referrer: string; source: string },
+	successCallback?: SuccessCallback<string>,
+	errorCallback?: ErrorCallback,
+): void {
+	let args = [];
 	if (
-		checkStringArrayOption(options['renderingMode'], 'renderingMode', renderingModeAllowedValues, errorCallback, false)
+		!checkStringOption('referrer', options, true, errorCallback) ||
+		!checkStringOption('source', options, true, errorCallback)
 	) {
-		args.push(options['renderingMode']);
-	} else {
-		args.push(UNDEFINED_RENDERING_MODE);
-	}
-
-	if (checkBooleanOption('startNewSession', options, errorCallback, false)) {
-		args.push(options['startNewSession']);
-	} else {
-		args.push(false);
-	}
-
-	if (checkBooleanOption('startNewSessionAndUser', options, errorCallback, false)) {
-		args.push(options['startNewSessionAndUser']);
-	} else {
-		args.push(false);
-	}
-
-	if (checkEventTrackingModeArray(options, errorCallback, false)) {
-		args.push(options['eventTrackingModes']);
-	} else {
-		args.push([]);
-	}
-
-	execWithCallbacks(successCallback, errorCallback, Command.SETUP_AND_START_RECORDING, args);
-}
-
-/**
- * @description Setup/initialize Smartlook SDK. This method DOESN'T start the recording (@see Smartlook.startRecording())
- *
- * @param options.smartlookAPIKey        Unique 40 character key identifying your app. You can find in your
- *                                       dashboard. If invalid key is set SDK will not work properly.
- * @param options.fps                    (Optional) Desired FPS for the recording, that must be in range from 1 to 10.
- * @param options.renderingMode          (Optional) Mode defining the video output of recording.
- * @param options.startNewSession        (Optional) If true new session is going to be created.
- * @param options.startNewSessionAndUser (Optional) If true new session and visitor is going to be created.
- * @param options.eventTrackingModes     (Optional) Array of EventTrackingModes that should be applied to recording.
- */
-export function setup(options: SetupOptions, successCallback: SuccessCallback, errorCallback: ErrorCallback) {
-	setPluginVersion();
-
-	const args = [];
-	const renderingModeAllowedValues = [RenderingMode.NO_RENDERING, RenderingMode.NATIVE];
-
-	if (checkStringOption('smartlookAPIKey', options, errorCallback, true)) {
-		args.push(options['smartlookAPIKey']);
-	} else {
 		return;
 	}
 
-	if (checkFpsOption(options, errorCallback, false)) {
-		args.push(options['fps']);
-	} else {
-		args.push(UNDEFINED_FPS);
-	}
+	args.push(options['referrer']);
+	args.push(options['source']);
+	execWithCallbacks(Command.SET_REFERRER, successCallback, errorCallback, args);
+}
 
+/**
+ * @description Sets a user-passed global event property.
+ * @param options.eventName - Global event name
+ * @param options.props - optional event properties object
+ */
+export function putGlobalEventProperty(
+	options: { propertyName: string; value: string },
+	successCallback?: SuccessCallback<string>,
+	errorCallback?: ErrorCallback,
+): void {
+	let args = [];
 	if (
-		checkStringArrayOption(options['renderingMode'], 'renderingMode', renderingModeAllowedValues, errorCallback, false)
+		!checkStringOption('propertyName', options, true, errorCallback) ||
+		!checkStringOption('value', options, true, errorCallback)
 	) {
-		args.push(options['renderingMode']);
-	} else {
-		args.push(UNDEFINED_RENDERING_MODE);
-	}
-
-	if (checkBooleanOption('startNewSession', options, errorCallback, false)) {
-		args.push(options['startNewSession']);
-	} else {
-		args.push(false);
-	}
-
-	if (checkBooleanOption('startNewSessionAndUser', options, errorCallback, false)) {
-		args.push(options['startNewSessionAndUser']);
-	} else {
-		args.push(false);
-	}
-
-	if (checkEventTrackingModeArray(options, errorCallback, false)) {
-		args.push(options['eventTrackingModes']);
-	} else {
-		args.push([]);
-	}
-
-	execWithCallbacks(successCallback, errorCallback, Command.SETUP, args);
-}
-
-/**
- * @description Start SDK recording.
- */
-export function startRecording(successCallback: SuccessCallback, errorCallback: ErrorCallback) {
-	execWithCallbacks(successCallback, errorCallback, Command.START_RECORDING, []);
-}
-
-/**
- * @description Stop SDK recording.
- */
-export function stopRecording(successCallback: SuccessCallback, errorCallback: ErrorCallback) {
-	execWithCallbacks(successCallback, errorCallback, Command.STOP_RECORDING, []);
-}
-
-/**
- * @description Check if SDK is currently recording.
- *
- * @callback successCallback Callback value set to true if SDK is currently recording.
- *
- * @example
- * Smartlook.isRecording(successCallback, ...);
- *
- * function successCallback(value) {
- *     alert('Is smartlook recording: ' + value);
- * }
- */
-export function isRecording(successCallback: SuccessCallback, errorCallback: ErrorCallback) {
-	execWithCallbacks(successCallback, errorCallback, Command.IS_RECORDING, []);
-}
-
-/**
- * @description Resets current session and new session in dashboard is created.
- *
- * @param options.resetUser (Optional) If set to TRUE new visitor is created in the dashboard.
- */
-export function resetSession(
-	options: { resetUser: boolean },
-	successCallback: SuccessCallback,
-	errorCallback: ErrorCallback,
-) {
-	const args = [];
-
-	if (checkBooleanOption('resetUser', options, errorCallback, true)) {
-		args.push(options['resetUser']);
-	} else {
 		return;
 	}
 
-	execWithCallbacks(successCallback, errorCallback, Command.RESET_SESSION, args);
+	args.push(options['propertyName']);
+	args.push(options['value']);
+	execWithCallbacks(Command.PUT_STRING_EVENT_PROPERTY, successCallback, errorCallback, args);
 }
 
-// User identification
+/**
+ * @description Retrieves a user-passed event property.
+ * @param options.eventName - Global event name to retrieve
+ */
+export function getGlobalEventProperty(
+	options: { propertyName: string },
+	successCallback: SuccessCallback<string>,
+	errorCallback?: ErrorCallback,
+): void {
+	let args = [];
+	if (!checkStringOption('propertyName', options, true, errorCallback)) {
+		return;
+	}
+
+	args.push(options['propertyName']);
+	execWithCallbacks(Command.GET_STRING_EVENT_PROPERTY, successCallback, errorCallback, args);
+}
 
 /**
- * @description Identify user with identifier and optional properties.
- *
- * @param options.identifier        String Id that can be used to identify user and his records. You will see this
- *                                  Id in Smartlook dashboard so you can pair records with concrete user.
- * @param options.sessionProperties (Optional) Additional properties object that will be paired with every session and can
- *                                  be viewed in Smartlook dashboard.
+ * @description Removes a user-passed event property.
+ * @param options.eventName - Global event name to remove
+ */
+export function removeGlobalEventProperty(
+	options: { propertyName: string },
+	successCallback?: SuccessCallback<string>,
+	errorCallback?: ErrorCallback,
+): void {
+	let args = [];
+	if (!checkStringOption('propertyName', options, true, errorCallback)) {
+		return;
+	}
+
+	args.push(options['propertyName']);
+	execWithCallbacks(Command.REMOVE_STRING_EVENT_PROPERTY, successCallback, errorCallback, args);
+}
+
+/**
+ * @description Clears all user-passed event properties.
+ */
+export function clearGlobalEventProperties(
+	successCallback: SuccessCallback<boolean>,
+	errorCallback: ErrorCallback,
+): void {
+	execWithCallbacks(Command.CLEAR_EVENT_PROPERTIES, successCallback, errorCallback);
+}
+
+/**
+ * @description Sets new identification for the recorded user.
+ * @param options.identifier - User identifier
  */
 export function setUserIdentifier(
-	options: { identifier: string; sessionProperties: Dictionary<any> },
-	successCallback: SuccessCallback,
-	errorCallback: ErrorCallback,
+	options: { identifier: string },
+	successCallback?: SuccessCallback<boolean>,
+	errorCallback?: ErrorCallback,
+): void {
+	let args = [];
+
+	args.push(options['identifier']);
+	execWithCallbacks(Command.SET_USER_IDENTIFIER, successCallback, errorCallback, args);
+}
+
+/**
+ * @description Sets user’s full name.
+ * @param options.name - User's full name
+ */
+export function setUserName(
+	options: { name: string },
+	successCallback?: SuccessCallback<boolean>,
+	errorCallback?: ErrorCallback,
+): void {
+	let args = [];
+	if (!checkStringOption('name', options, true, errorCallback)) {
+		return;
+	}
+
+	args.push(options['name']);
+	execWithCallbacks(Command.SET_USER_NAME, successCallback, errorCallback, args);
+}
+
+/**
+ * @description Sets user’s email address.
+ * @param options.email - User's email address
+ */
+export function setUserEmail(
+	options: { email: string },
+	successCallback?: SuccessCallback<boolean>,
+	errorCallback?: ErrorCallback,
+): void {
+	let args = [];
+	if (!checkStringOption('email', options, true, errorCallback)) {
+		return;
+	}
+
+	args.push(options['email']);
+	execWithCallbacks(Command.SET_USER_EMAIL, successCallback, errorCallback, args);
+}
+
+/**
+ * @description Sets or adds a new value to the user properties.
+ * @param options.propertyName - User property name
+ * @param options.value - User property value
+ */
+export function setUserProperty(
+	options: { propertyName: string; value: string },
+	successCallback?: SuccessCallback<boolean>,
+	errorCallback?: ErrorCallback,
 ) {
-	const args = [];
-
-	if (checkStringOption('identifier', options, errorCallback, true)) {
-		args.push(options['identifier']);
-	} else {
+	let args = [];
+	if (
+		!checkStringOption('propertyName', options, true, errorCallback) ||
+		!checkStringOption('value', options, true, errorCallback)
+	) {
 		return;
 	}
 
-	if (checkProperties('sessionProperties', options, errorCallback, false)) {
-		args.push(options['sessionProperties']);
-	}
-
-	execWithCallbacks(successCallback, errorCallback, Command.SET_USER_IDENTIFIER, args);
+	args.push(options['propertyName']);
+	args.push(options['value']);
+	execWithCallbacks(Command.SET_USER_PROPERTY, successCallback, errorCallback, args);
 }
 
-// Tracking
-
 /**
- * @description You can configure which events are being tracked by setting eventTrackingMode.
- *
- * @param options.eventTrackingMode Can be on of:
- *                                  - EventTrackingMode.FULL_TRACKING ... track everything
- *                                  - EventTrackingMode.IGNORE_USER_INTERACTION ... will not track touches
- *                                    focus, keyboard, selector events
- *                                  - EventTrackingMode.IGNORE_NAVIGATION_INTERACTION ... will not track screen names
- *                                  - EventTrackingMode.IGNORE_RAGE_CLICKS ... will not track rage clicks
- *                                  - EventTrackingMode.NO_TRACKING ... not gonna track any events
+ * @description Retrieves a user property value with a given property name (a key).
+ * @param options.propertyName - User property name
+ * @param options.successCallback - Callback to be invoked with the user property value
  */
-export function setEventTrackingMode(options, successCallback: SuccessCallback, errorCallback: ErrorCallback) {
-	const args = [];
-	const allowedValues = [
-		EventTrackingMode.FULL_TRACKING,
-		EventTrackingMode.IGNORE_USER_INTERACTION,
-		EventTrackingMode.IGNORE_NAVIGATION_INTERACTION,
-		EventTrackingMode.IGNORE_RAGE_CLICKS,
-		EventTrackingMode.NO_TRACKING,
-	];
-
-	if (checkStringArrayOption(options['eventTrackingMode'], 'eventTrackingMode', allowedValues, errorCallback, true)) {
-		args.push(options['eventTrackingMode']);
-	} else {
+export function getUserProperty(
+	options: { propertyName: string },
+	successCallback: SuccessCallback<string>,
+	errorCallback?: ErrorCallback,
+) {
+	let args = [];
+	if (!checkStringOption('propertyName', options, true, errorCallback)) {
 		return;
 	}
 
-	execWithCallbacks(successCallback, errorCallback, Command.SET_EVENT_TRACKING_MODE, args);
+	args.push(options['propertyName']);
+	execWithCallbacks(Command.GET_USER_PROPERTY, successCallback, errorCallback, args);
 }
 
 /**
- * @description You can configure which events are being tracked by setting eventTrackingMode.
- *
- * @param options.eventTrackingModes Array of EventTrackingMode tha can be one of:
- *                                  - EventTrackingMode.FULL_TRACKING ... track everything
- *                                  - EventTrackingMode.IGNORE_USER_INTERACTION ... will not track touches
- *                                    focus, keyboard, selector events
- *                                  - EventTrackingMode.IGNORE_NAVIGATION_INTERACTION ... will not track screen names
- *                                  - EventTrackingMode.IGNORE_RAGE_CLICKS ... will not track rage clicks
- *                                  - EventTrackingMode.NO_TRACKING ... not gonna track any events
+ * @description Removes a user property given a property name (a key).
  */
-export function setEventTrackingModes(options, successCallback: SuccessCallback, errorCallback: ErrorCallback) {
-	const args = [];
-
-	if (checkEventTrackingModeArray(options, errorCallback, true)) {
-		args.push(options['eventTrackingModes']);
-	} else {
+export function removeUserProperty(
+	options: { propertyName: string },
+	successCallback?: SuccessCallback<string>,
+	errorCallback?: ErrorCallback,
+) {
+	let args = [];
+	if (!checkStringOption('propertyName', options, true, errorCallback)) {
 		return;
 	}
 
-	execWithCallbacks(successCallback, errorCallback, Command.SET_EVENT_TRACKING_MODES, args);
+	args.push(options['propertyName']);
+	execWithCallbacks(Command.REMOVE_USER_PROPERTY, successCallback, errorCallback, args);
 }
 
 /**
- * @description Track custom navigation event.
- *
- * @param options.name      Controller/Activity/Page name.
- * @param options.viewState One of Smartlook.ViewState.START or Smartlook.ViewState.STOP.
+ * @description Initializes a new user for recording.
  */
-export function trackNavigationEvent(options, successCallback: SuccessCallback, errorCallback: ErrorCallback) {
-	const args = [];
-	const allowedValues = [ViewState.START, ViewState.STOP];
-
-	if (checkStringOption('name', options, errorCallback, true)) {
-		args.push(options['name']);
-	} else {
-		return;
-	}
-
-	if (checkStringArrayOption(options['viewState'], 'viewState', allowedValues, errorCallback, true)) {
-		args.push(options['viewState']);
-	} else {
-		return;
-	}
-
-	execWithCallbacks(successCallback, errorCallback, Command.TRACK_NAVIGATION_EVENT, args);
+export function openNewUser(successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback) {
+	execWithCallbacks(Command.OPEN_NEW_USER, successCallback, errorCallback);
 }
 
 /**
- * @description Starts timed event. Timed event can be used to record duration (between the start and stop/cancel).
- *
- * @param options.name            String used to identify event in dashboard.
- * @param options.eventProperties (Optional) Event data stored in object. These are going to be merged with
- *                                data passed in stop/cancel.
- *
- * @callback successCallback Callback value set to eventId if event was started successfully.
- *
- * @example
- * Smartlook.startTimedCustomEvent({identifier: "random_identifier"}, successCallback, ...);
- *
- * function successCallback(value) {
- *     alert('Timed event eventId: ' + value);
- * }
+ * @description Opens a new recording session.
  */
-export function startTimedCustomEvent(options, successCallback: SuccessCallback, errorCallback: ErrorCallback) {
-	const args = [];
+export function openNewSession(successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback) {
+	execWithCallbacks(Command.OPEN_NEW_SESSION, successCallback, errorCallback);
+}
 
-	if (checkStringOption('name', options, errorCallback, true)) {
-		args.push(options['name']);
-	} else {
+/**
+ * @description Retrieves the unique URL of the currently recorded user.
+ * @param options.successCallback - Callback to be invoked with the user URL
+ */
+export function getUserUrl(successCallback: SuccessCallback<string>, errorCallback?: ErrorCallback) {
+	execWithCallbacks(Command.GET_USER_URL, successCallback, errorCallback);
+}
+
+/**
+ * @description Retrieves the unique URL of this recording session.
+ * @param options.successCallback - Callback to be invoked with the session URL
+ */
+export function getSessionUrl(successCallback: SuccessCallback<string>, errorCallback?: ErrorCallback) {
+	execWithCallbacks(Command.GET_SESSION_URL, successCallback, errorCallback);
+}
+
+/**
+ * @description Retrieves the unique session URL with the exact location on the timeline.
+ * @param options.successCallback - Callback to be invoked with the session URL
+ */
+export function getSessionUrlWithTimestamp(successCallback: SuccessCallback<string>, errorCallback?: ErrorCallback) {
+	execWithCallbacks(Command.GET_SESSION_URL_WITH_TIMESTAMP, successCallback, errorCallback);
+}
+
+/**
+ * @description Sets a proxy host name for data transfer.
+ * @param options.relayProxyHost - Proxy host name
+ *
+ * @kind **Android only**
+ */
+export function setRelayProxyHost(
+	options: { relayProxyHost: string },
+	successCallback?: SuccessCallback<string>,
+	errorCallback?: ErrorCallback,
+) {
+	let args = [];
+	if (!checkStringOption('relayProxyHost', options, true, errorCallback)) {
 		return;
 	}
 
-	if (checkProperties('eventProperties', options, errorCallback, false)) {
-		args.push(options['eventProperties']);
-	}
-
-	execWithCallbacks(successCallback, errorCallback, Command.START_TIMED_CUSTOM_EVENT, args);
+	args.push(options['relayProxyHost']);
+	execWithCallbacks(Command.SET_RELAY_PROXY_HOST, successCallback, errorCallback, args);
 }
 
 /**
- * @description Stops timed event. Duration from according start is calculated and send with the event.
- *
- * @param options.eventId         Unique event id that is used to identify this event.
- * @param options.eventProperties (Optional) Event data stored in object. These are going to be merged with
- *                                data passed in start.
+ * @description Sets video capturing framerate.
+ * @param options.frameRate - Framerate to be set. Must be between `2` and `10` frames per second.
  */
-export function stopTimedCustomEvent(options, successCallback: SuccessCallback, errorCallback: ErrorCallback) {
-	const args = [];
-
-	if (checkStringOption('eventId', options, errorCallback, true)) {
-		args.push(options['eventId']);
-	} else {
+export function setFrameRate(
+	options: { frameRate: number },
+	successCallback?: SuccessCallback<string>,
+	errorCallback?: ErrorCallback,
+) {
+	let args = [];
+	if (!checkFpsOption(options, true, errorCallback)) {
 		return;
 	}
 
-	if (checkProperties('eventProperties', options, errorCallback, false)) {
-		args.push(options['eventProperties']);
-	}
-
-	execWithCallbacks(successCallback, errorCallback, Command.STOP_TIMED_CUSTOM_EVENT, args);
+	args.push(options['frameRate']);
+	execWithCallbacks(Command.SET_FRAMERATE, successCallback, errorCallback, args);
 }
 
 /**
- * @description Cancels timed event. It calculates event duration and notes that this event has failed.
- *
- * @param options.eventId         Unique event id that is used to identify this event.
- * @param options.reason          Short string description explaining why the event was canceled.
- * @param options.eventProperties (Optional) Event data stored in object. These are going to be merged with
- *                                data passed in start.
+ * Retrieves the video capturing framerate.
+ * @param options.successCallback - Callback to be invoked with the current framerate
  */
-export function cancelTimedCustomEvent(options, successCallback: SuccessCallback, errorCallback: ErrorCallback) {
-	const args = [];
+export function getFrameRate(successCallback: SuccessCallback<number>, errorCallback?: ErrorCallback) {
+	execWithCallbacks(Command.GET_FRAMERATE, successCallback, errorCallback);
+}
 
-	if (checkStringOption('eventId', options, errorCallback, true)) {
-		args.push(options['eventId']);
-	} else {
+/**
+ * @description Sets whether or not Android's `Jobs` are used for uploading.
+ *
+ * @kind **Android only**
+ */
+export function setJobUploadEnabled(
+	options: { isEnabled: boolean },
+	successCallback?: SuccessCallback<string>,
+	errorCallback?: ErrorCallback,
+) {
+	let args = [];
+	if (!checkBooleanOption('isEnabled', options, true, errorCallback)) {
 		return;
 	}
 
-	if (checkStringOption('reason', options, errorCallback, true)) {
-		args.push(options['reason']);
-	} else {
+	args.push(options['isEnabled']);
+	execWithCallbacks(Command.SET_RELAY_PROXY_HOST, successCallback, errorCallback, args);
+}
+
+/**
+ * @description Sets whether or not the SDK should use the adaptive framerate feature to capture video.
+ */
+export function setAdaptiveFrameRateEnabled(
+	options: { isEnabled: boolean },
+	successCallback?: SuccessCallback<string>,
+	errorCallback?: ErrorCallback,
+) {
+	let args = [];
+	if (!checkBooleanOption('isEnabled', options, true, errorCallback)) {
 		return;
 	}
 
-	if (checkProperties('eventProperties', options, errorCallback, false)) {
-		args.push(options['eventProperties']);
-	}
-
-	execWithCallbacks(successCallback, errorCallback, Command.CANCEL_TIMED_CUSTOM_EVENT, args);
+	args.push(options['isEnabled']);
+	execWithCallbacks(Command.SET_ADAPTIVE_FRAMERATE_ENABLED, successCallback, errorCallback, args);
 }
 
 /**
- * @description Track custom event.
- *
- * @param options.name            String used to identify event.
- * @param options.eventProperties (Optional) Event data stored in object.
+ * @description A boolean that determines whether the SDK uses the adaptive framerate functionality for video capture.
  */
-export function trackCustomEvent(options, successCallback: SuccessCallback, errorCallback: ErrorCallback) {
-	const args = [];
+export function getAdaptiveFrameRateEnabled(successCallback: SuccessCallback<boolean>, errorCallback?: ErrorCallback) {
+	execWithCallbacks(Command.GET_ADAPTIVE_FRAMERATE_ENABLED, successCallback, errorCallback);
+}
 
-	if (checkStringOption('name', options, errorCallback, true)) {
-		args.push(options['name']);
-	} else {
+/**
+ * @description Sets whether or not Android's Surface should be recorded by the video capture.
+ *
+ * @kind **Android only**
+ */
+export function setSurfaceCaptureEnabled(
+	options: { isEnabled: boolean },
+	successCallback?: SuccessCallback<string>,
+	errorCallback?: ErrorCallback,
+) {
+	let args = [];
+	if (!checkBooleanOption('isEnabled', options, true, errorCallback)) {
 		return;
 	}
 
-	if (checkProperties('eventProperties', options, errorCallback, false)) {
-		args.push(options['eventProperties']);
-	}
-
-	execWithCallbacks(successCallback, errorCallback, Command.TRACK_CUSTOM_EVENT, args);
+	args.push(options['isEnabled']);
+	execWithCallbacks(Command.SET_SURFACE_CAPTURE_ENABLED, successCallback, errorCallback, args);
 }
 
-// Event properties
+/**
+ * @description A boolean that determines whether or not Android's Surface is recorded by the video capture.
+ *
+ * @kind **Android only**
+ * @param options.successCallback - Callback to be invoked with the current value
+ */
+export function getSurfaceCaptureEnabled(successCallback: SuccessCallback<boolean>, errorCallback?: ErrorCallback) {
+	execWithCallbacks(Command.GET_SURFACE_CAPTURE_ENABLED, successCallback, errorCallback);
+}
 
 /**
- * @description Set global event properties that will be added to every tracked event.
- *
- * @param options.globalEventProperties Global event properties stored in object.
- * @param options.immutable             If set to TRUE these properties have higher priority than mutable ones
- *                                      and also they cannot be changed (only removed).
+ * @description Enables the tracking of all events.
  */
-export function setGlobalEventProperties(options, successCallback: SuccessCallback, errorCallback: ErrorCallback) {
-	const args = [];
+export function eventTrackingEnableAll(successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback) {
+	execWithCallbacks(Command.EVENT_TRACKING_ENABLE_ALL, successCallback, errorCallback);
+}
 
-	if (checkProperties('globalEventProperties', options, errorCallback, true)) {
-		args.push(options['globalEventProperties']);
-	} else {
+/**
+ * @description Disabled the tracking of all events.
+ */
+export function eventTrackingDisableAll(successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback) {
+	execWithCallbacks(Command.EVENT_TRACKING_ENABLE_ALL, successCallback, errorCallback);
+}
+
+/**
+ * @description Sets a unique project key.
+ * @param options.key - Project key
+ */
+export function setProjectKey(
+	options: { key: string },
+	successCallback?: SuccessCallback<string>,
+	errorCallback?: ErrorCallback,
+) {
+	// TODO log how many times this happens not to bottleneck
+	setupAndRegisterBridgeInterface();
+
+	let args = [];
+	if (!checkStringOption('key', options, true, errorCallback)) {
 		return;
 	}
 
-	if (checkBooleanOption('immutable', options, errorCallback, true)) {
-		args.push(options['immutable']);
-	} else {
+	args.push(options['key']);
+	execWithCallbacks(Command.SET_PROJECT_KEY, successCallback, errorCallback, args);
+}
+
+/**
+ * @description Determines whether or not the SDK is recording.
+ * @param options.successCallback - Callback to be invoked with the current value
+ */
+export function isRecording(successCallback: SuccessCallback<boolean>, errorCallback?: ErrorCallback) {
+	execWithCallbacks(Command.IS_RECORDING, successCallback, errorCallback);
+}
+
+/**
+ * @description Retrieves a string containing the current project key.
+ * @param options.successCallback - Callback to be invoked with the current project key
+ */
+export function getProjectKey(successCallback: SuccessCallback<string>, errorCallback?: ErrorCallback) {
+	execWithCallbacks(Command.GET_PROJECT_KEY, successCallback, errorCallback);
+}
+
+/**
+ * @description Enables the tracking of all user's interaction events.
+ *
+ * @kind **Android only**
+ * @param options.isEnabled - A boolean that determines whether or not the tracking of all user's interaction events is enabled.
+ */
+export function setEventTrackingInteractionUserStatus(
+	options: { isEnabled: boolean },
+	successCallback?: SuccessCallback<string>,
+	errorCallback?: ErrorCallback,
+) {
+	let args = [];
+	if (!checkBooleanOption('isEnabled', options, true, errorCallback)) {
 		return;
 	}
 
-	execWithCallbacks(successCallback, errorCallback, Command.SET_GLOBAL_EVENT_PROPERTIES, args);
+	args.push(options['isEnabled']);
+	execWithCallbacks(Command.SET_EVENT_TRACKING_INTERACTION_USER_STATUS, successCallback, errorCallback, args);
 }
 
 /**
- * @description Set global event property that will be added to every tracked event.
- *
- * @param options.key        Global event property key.
- * @param options.value      Global event property value.
- * @param options.immutable  If set to TRUE this property has higher priority than mutable ones and also it
- *                           cannot be changed (only removed).
+ * @description Sets whether or not "rage" clicks are automatically tracked.
+ * @param options.isEnabled - A boolean that determines whether or not "rage" clicks are automatically tracked.
  */
-export function setGlobalEventProperty(options, successCallback: SuccessCallback, errorCallback: ErrorCallback) {
-	const args = [];
-
-	if (checkKeyValueOptions(options, errorCallback, true)) {
-		args.push(options['key']);
-		args.push(options['value']);
-	} else {
+export function setEventTrackingInteractionRageClickStatus(
+	options: { isEnabled: boolean },
+	successCallback?: SuccessCallback<string>,
+	errorCallback?: ErrorCallback,
+) {
+	let args = [];
+	if (!checkBooleanOption('isEnabled', options, true, errorCallback)) {
 		return;
 	}
 
-	if (checkBooleanOption('immutable', options, errorCallback, true)) {
-		args.push(options['immutable']);
-	} else {
+	args.push(options['isEnabled']);
+	execWithCallbacks(Command.SET_EVENT_TRACKING_INTERACTION_RAGE_CLICK_STATUS, successCallback, errorCallback, args);
+}
+
+/**
+ * @description Sets tracking properties to default values.
+ */
+export function restoreDefault(successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback) {
+	execWithCallbacks(Command.RESTORE_DEFAULT, successCallback, errorCallback);
+}
+
+/**
+ * @description Sets whether or not a WebView class should be considered sensitive.
+ * @default True by default in the SDK.
+ * @param options.isSensitive - A boolean that determines whether or not the WebView class should be considered sensitive.
+ */
+export function setWebViewSensitivity(
+	options: { isSensitive: boolean },
+	successCallback?: SuccessCallback<string>,
+	errorCallback?: ErrorCallback,
+) {
+	let args = [];
+	if (!checkBooleanOption('isSensitive', options, true, errorCallback)) {
 		return;
 	}
 
-	execWithCallbacks(successCallback, errorCallback, Command.SET_GLOBAL_EVENT_PROPERTY, args);
+	args.push(options['isSensitive']);
+	execWithCallbacks(Command.SET_WEB_VIEW_SENSITIVITY, successCallback, errorCallback, args);
 }
 
 /**
- * @description Remove property from global event properties.
- *
- * @param options.key Key of global event property that needs to be removed.
+ * @description Retrieves the current SDK's rendering mode.
+ * @param options.successCallback - Callback to be invoked with the current rendering mode
  */
-export function removeGlobalEventProperty(options, successCallback: SuccessCallback, errorCallback: ErrorCallback) {
-	const args = [];
+export function getRenderingMode(successCallback: SuccessCallback<RenderingMode>, errorCallback?: ErrorCallback): void {
+	const renderingModeCallback = (renderingMode: number) => {
+		const renderingModeTyped = renderingModeFromNumber(renderingMode);
+		successCallback(renderingModeTyped);
+	};
 
-	if (checkStringOption('key', options, errorCallback, true)) {
-		args.push(options['key']);
-	} else {
-		return;
-	}
-
-	execWithCallbacks(successCallback, errorCallback, Command.REMOVE_GLOBAL_EVENT_PROPERTY, args);
+	execWithCallbacks(Command.GET_RENDERING_MODE, renderingModeCallback, errorCallback);
 }
 
 /**
- * @description Remove all properties from global event properties.
+ * @description Retrieves the current recording status. The default SDK value is `NotStarted`.
+ * @param options.successCallback - Callback to be invoked with the current recording status
  */
-export function removeAllGlobalEventProperties(successCallback: SuccessCallback, errorCallback: ErrorCallback) {
-	execWithCallbacks(successCallback, errorCallback, Command.REMOVE_ALL_GLOBAL_EVENT_PROPERTIES, []);
+export function getRecordingStatus(
+	successCallback: SuccessCallback<RecordingStatus>,
+	errorCallback?: ErrorCallback,
+): void {
+	const recordingStatusCallback = (recordingStatus: number) => {
+		const renderingModeTyped = recordingStatusFromNumber(recordingStatus);
+		successCallback(renderingModeTyped);
+	};
+
+	execWithCallbacks(Command.GET_RECORDING_STATUS, recordingStatusCallback, errorCallback);
 }
 
-// Utilities
-
 /**
- * @description Possibility to manually set referrer and source of the installation visible in dashboard
- *              and accessible via filters
- *
- * @param referrer Desired referrer value
- * @param source   Desired source, i.e. com.android.vending or com.amazon.venezia
+ * @description Retrieves a number representing the current framerate.
+ * @param options.successCallback - Callback to be invoked with the current framerate
  */
-export function setReferrer(options, successCallback: SuccessCallback, errorCallback: ErrorCallback) {
-	const args = [];
-
-	if (checkStringOption('referrer', options, errorCallback, true)) {
-		args.push(options['referrer']);
-	} else {
-		return;
-	}
-
-	if (checkStringOption('source', options, errorCallback, true)) {
-		args.push(options['source']);
-	} else {
-		return;
-	}
-
-	execWithCallbacks(successCallback, errorCallback, Command.SET_REFERRER, args);
+export function getStateFrameRate(successCallback: SuccessCallback<number>, errorCallback?: ErrorCallback): void {
+	execWithCallbacks(Command.GET_STATE_FRAME_RATE, successCallback, errorCallback);
 }
 
 /**
- * @description Obtain sharable url to user's session leading to our dashboard.
- *
- * @callback successCallback Callback value set to dashboard sessionURL.
- *
- * @example
- * Smartlook.getDashboardSessionUrl({withCurrentTimestamp: true}, successCallback, ...);
- *
- * function successCallback(value) {
- *     alert('Shareable dashboard session URL: ' + value);
- * }
- */
-export function getDashboardSessionUrl(options, successCallback: SuccessCallback, errorCallback: ErrorCallback) {
-	const args = [];
-
-	if (checkBooleanOption('withCurrentTimestamp', options, errorCallback, false)) {
-		args.push(options['withCurrentTimestamp']);
-	}
-
-	execWithCallbacks(successCallback, errorCallback, Command.GET_DASHBOARD_SESSION_URL, args);
-}
-
-/**
- * @description Obtain sharable url to visitor page in our dashboard.
- *
- * @callback successCallback Callback value set to dashboard visitorURL.
- *
- * @example
- * Smartlook.getDashboardVisitorUrl(successCallback, ...);
- *
- * function successCallback(value) {
- *     alert('Shareable dashboard visitor URL: ' + value);
- * }
- */
-export function getDashboardVisitorUrl(successCallback: SuccessCallback, errorCallback: ErrorCallback) {
-	execWithCallbacks(successCallback, errorCallback, Command.GET_DASHBOARD_VISITOR_URL, []);
-}
-
-/**
- * You can register callback to all public SDK logs.
- *
- * @callback successCallback Callback value contains log message in given format: `TAG[severity]: message`
- *
- * @example
- * Smartlook.registerLogListener(successCallback, ...);
- *
- * function successCallback(value) {
- *     alert('SDK logged: ' + value);
- * }
- */
-export function registerLogListener(successCallback: SuccessCallback, errorCallback: ErrorCallback) {
-	execWithCallbacks(successCallback, errorCallback, Command.REGISTER_LOG_LISTENER, []);
-}
-
-/**
- * You can unregister callback to all public SDK logs if registered before.
- */
-export function unregisterLogListener(successCallback: SuccessCallback, errorCallback: ErrorCallback) {
-	execWithCallbacks(successCallback, errorCallback, Command.UNREGISTER_LOG_LISTENER, []);
-}
-
-/**
- * By changing rendering method you can adjust the way we render the application for recordings.
- *
- * @param options.renderingMode       Mode defining the video output of recording. Currently only
- *                                    RenderingMode.NO_RENDERING and RenderingMode.NATIVE available.
- * @param options.renderingModeOption [NOT IMPLEMENTED]
+ * @description Sets SDK's video rendering mode for captured data.
+ * @param options.renderingMode - Rendering mode to be set. @see RenderingMode
  */
 export function setRenderingMode(
 	options: { renderingMode: RenderingMode },
-	successCallback: SuccessCallback,
-	errorCallback: ErrorCallback,
-) {
-	const args = [];
-
-	const allowedValues = [RenderingMode.NO_RENDERING, RenderingMode.NATIVE];
-
-	if (checkStringArrayOption(options['renderingMode'], 'renderingMode', allowedValues, errorCallback, true)) {
-		args.push(options['renderingMode']);
-	} else {
+	successCallback?: SuccessCallback<string>,
+	errorCallback?: ErrorCallback,
+): void {
+	let args = [];
+	if (!(options['renderingMode'] in RenderingMode)) {
+		logError(`Invalid rendering mode ${options['renderingMode']} set!`, errorCallback);
 		return;
 	}
 
-	execWithCallbacks(successCallback, errorCallback, Command.SET_RENDERING_MODE, args);
+	args.push(options['renderingMode']);
+	execWithCallbacks(Command.SET_RENDERING_MODE, successCallback, errorCallback, args);
 }
 
-// Integrations
-
 /**
- * @description Integration listener can be used to obtain dashboard URL for current session and visitor.
- * These URLs can be propagated to various analytic tools/SDKs.
+ * @description Registers a listener that gets triggered when the User URL changes.
  *
- * @callback options.onSessionReady Called when dashboard session URL is ready. Note that this URL can be accessed only by user
- * that has access to Smartlook dashboard (it is not public share link).
- *
- * @callback options.onVisitorReady Called when dashboard visitor URL is ready. Note that this URL can be accessed only by user
- * that has access to Smartlook dashboard (it is not public share link).
- *
- * @example
- * Smartlook.registerIntegrationListener({
- *      onSessionReady: function (dashboardSessionUrl) { alert("Session: " + dashboardSessionUrl); },
- *      onVisitorReady: function (dashboardVisitorUrl) { alert("Visitor: " + dashboardVisitorUrl); }
- *   });
- * }
+ * @param options.userUrlChangedCallback - Callback to be invoked when the User URL changes
  */
-export function registerIntegrationListener(options, successCallback: SuccessCallback, errorCallback: ErrorCallback) {
-	const integrationCallback = (callbackData) => {
-		if (callbackData != undefined && callbackData['url'] != undefined && callbackData['url'].length > 0) {
-			if (callbackData['callback'] === Command.SESSION_READY_CALLBACK) {
-				options['onSessionReady'](callbackData['url']);
-			} else if (callbackData['callback'] === Command.VISITOR_READY_CALLBACK) {
-				options['onVisitorReady'](callbackData['url']);
-			}
+export function registerUserUrlChangedListener(
+	options: { userUrlChangedCallback: (userUrl: string) => void },
+	successCallback?: SuccessCallback<string>,
+	errorCallback?: ErrorCallback,
+): void {
+	const integrationCallback = (url: string) => {
+		const userUrlChangedCallback = options['userUrlChangedCallback'];
+
+		if (url != undefined && url.length > 0) {
+			userUrlChangedCallback(url);
 		}
 	};
 
-	execWithCallbacks(integrationCallback, errorCallback, Command.REGISTER_INTEGRATION_LISTENER, []);
-	successCallback('');
+	execWithCallbacks(Command.REGISTER_USER_URL_CHANGED_LISTENER, integrationCallback, errorCallback);
+	successCallback?.('');
 }
 
 /**
- * @description Unregister Integration listener (@see registerIntegrationListener())
+ * @description Registers a listener that gets triggered when the Session URL changes.
+ *
+ * @param options.sessionUrlChangedCallback - Callback to be invoked when the Session URL changes
  */
-export function unregisterIntegrationListener(successCallback: SuccessCallback, errorCallback: ErrorCallback) {
-	execWithCallbacks(successCallback, errorCallback, Command.UNREGISTER_INTEGRATION_LISTENER, []);
+export function registerSessionUrlChangedListener(
+	options: { sessionUrlChangedCallback: (sessionUrl: string) => void },
+	successCallback?: SuccessCallback<string>,
+	errorCallback?: ErrorCallback,
+): void {
+	const integrationCallback = (url: string) => {
+		const sessionUrlChangedCallback = options['sessionUrlChangedCallback'];
+
+		if (url != undefined && url.length > 0) {
+			sessionUrlChangedCallback(url);
+		}
+	};
+
+	execWithCallbacks(Command.REGISTER_SESSION_URL_CHANGED_LISTENER, integrationCallback, errorCallback);
+	successCallback?.('');
 }
 
-// Internal logic
+/**
+ * @description Registers a listener that gets triggered when the native SDK's Rendering mode changes.
+ *
+ * @param options.renderingModeChangedCallback - Callback to be invoked when the native SDK's Rendering mode changes
+ * @kind **iOS only**
+ */
+export function registerRenderingModeChangedListener(
+	options: { renderingModeChangedCallback: (renderingMode: RenderingMode) => void },
+	successCallback?: SuccessCallback<string>,
+	errorCallback?: ErrorCallback,
+): void {
+	const integrationCallback = (renderingMode: number) => {
+		const renderingModeChangedCallback = options['renderingModeChangedCallback'];
 
-function setPluginVersion() {
-	cordova.exec(emptyCallback, emptyCallback, SMARTLOOK_PLUGIN, SET_PLUGIN_VERSION, [
-		SMARTLOOK_FRAMEWORK,
-		SMARTLOOK_FRAMEWORK_VERSION,
-		SMARTLOOK_FRAMEWORK_PLUGIN_VERSION,
-	]);
+		if (renderingMode != undefined) {
+			renderingModeChangedCallback(renderingModeFromNumber(renderingMode));
+		}
+	};
+
+	execWithCallbacks(Command.REGISTER_RENDERING_MODE_CHANGED_LISTENER, integrationCallback, errorCallback);
+	successCallback?.('');
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Check and Utility methods
+/**
+ * @description Registers a listener that gets triggered when the native SDK's Recording status changes.
+ *
+ * @param options.recordingStatusChangedCallback - Callback to be invoked when the native SDK's Recording status changes
+ * @kind **iOS only**
+ */
+export function registerRecordingStatusChangedListener(
+	options: { recordingStatusChangedCallback: NativeListenerCallbackShape },
+	successCallback?: SuccessCallback<string>,
+	errorCallback?: ErrorCallback,
+): void {
+	const integrationCallback = (recordingStatus: number) => {
+		const renderingModeChangedCallback = options['recordingStatusChangedCallback'];
 
-// Check functions
+		if (recordingStatus != undefined) {
+			renderingModeChangedCallback(recordingStatusFromNumber(recordingStatus));
+		}
+	};
 
-function checkStringOption(option: string, options, errorCallback, isMandatory) {
+	execWithCallbacks(Command.REGISTER_RECORDING_STATUS_CHANGED_LISTENER, integrationCallback, errorCallback);
+	successCallback?.('');
+}
+
+/**
+ * @description Removes the user URL change listener.
+ */
+export function removeUserUrlChangedListener(
+	successCallback?: SuccessCallback<boolean>,
+	errorCallback?: ErrorCallback,
+): void {
+	execWithCallbacks(Command.REMOVE_USER_URL_CHANGED_LISTENER, successCallback, errorCallback);
+}
+
+/**
+ * @description Removes the session URL change listener.
+ */
+export function removeSessionUrlChangedListener(
+	successCallback?: SuccessCallback<boolean>,
+	errorCallback?: ErrorCallback,
+): void {
+	execWithCallbacks(Command.REMOVE_SESSION_URL_CHANGED_LISTENER, successCallback, errorCallback);
+}
+
+/**
+ * @description Removes the rendering mode change listener.
+ */
+export function removeRenderingModeChangedListener(
+	successCallback?: SuccessCallback<boolean>,
+	errorCallback?: ErrorCallback,
+): void {
+	execWithCallbacks(Command.REMOVE_RENDERING_MODE_CHANGED_LISTENER, successCallback, errorCallback);
+}
+
+/**
+ * @description Removes the recording status change listener.
+ */
+export function removeRecordingStatusChangedListener(
+	successCallback?: SuccessCallback<boolean>,
+	errorCallback?: ErrorCallback,
+): void {
+	execWithCallbacks(Command.REMOVE_RECORDING_STATUS_CHANGED_LISTENER, successCallback, errorCallback);
+}
+
+/**
+ * @description Creates a new @see RecordingMask .
+ *
+ * @param options.recordingMaskList - an array of recording mask elements containing their bounding rectangles and mask types.
+ * @see RecordingMaskRect , @see RecordingMaskType
+ */
+export function setRecordingMask(
+	options: {
+		recordingMaskList: RecordingMaskList;
+	},
+	successCallback?: SuccessCallback<boolean>,
+	errorCallback?: ErrorCallback,
+): void {
+	const args = options['recordingMaskList'];
+	if (args === undefined || args === null) {
+		logError('Recording mask list cannot be null or undefined!', errorCallback);
+	}
+
+	execWithCallbacks(Command.SET_RECORDING_MASK, successCallback, errorCallback, args);
+}
+
+/**
+ * @description Enables advanced SDK logging capabilities.
+ *
+ * @kind **Android only**
+ */
+export function enableLogs(successCallback: SuccessCallback<boolean>, errorCallback: ErrorCallback): void {
+	execWithCallbacks(Command.ENABLE_LOGS, successCallback, errorCallback);
+}
+
+// Internal setup logic
+
+function setupAndRegisterBridgeInterface(): void {
+	let args = [];
+
+	args.push(SMARTLOOK_FRAMEWORK_PLUGIN_VERSION);
+	args.push(SMARTLOOK_FRAMEWORK_VERSION);
+	execWithCallbacks(SET_PLUGIN_VERSION, emptyCallback, emptyCallback, args);
+}
+
+function execWithCallbacks<T>(
+	method: string,
+	successCallback: SuccessCallback<T> = emptyCallback,
+	errorCallback: ErrorCallback = emptyCallback,
+	args?: any[],
+) {
+	window.cordova.exec(successCallback, errorCallback, SMARTLOOK_PLUGIN, method, args);
+}
+
+function logError(message: string, errorCallback?: ErrorCallback) {
+	errorCallback?.(`${new Error(message).message}`);
+}
+
+function checkStringOption(
+	option: string,
+	options: Record<any, any>,
+	isMandatory: boolean,
+	errorCallback?: ErrorCallback,
+) {
 	const toCheck = options[option];
 
 	if (toCheck == undefined || toCheck == null) {
 		if (isMandatory != undefined && isMandatory === true) {
-			logError(errorCallback, option + ' option is mandatory!');
+			logError(option + ' option is mandatory!', errorCallback);
 		}
 
 		return false;
 	}
 
 	if (typeof toCheck !== 'string' || toCheck.length < 1) {
-		logError(errorCallback, option + ' must be non-empty string!');
+		logError(option + ' must be non-empty string!', errorCallback);
 		return false;
 	}
 
 	return true;
 }
 
-function checkStringArrayOption(
-	toCheck: string,
+function checkBooleanOption(
 	option: string,
-	possibleValueArray: string[],
-	errorCallback: ErrorCallback,
+	options: Record<any, any>,
 	isMandatory: boolean,
+	errorCallback?: ErrorCallback,
 ) {
-	if (toCheck == undefined || toCheck == null) {
-		if (isMandatory != undefined && isMandatory === true) {
-			logError(errorCallback, option + ' option! is mandatory');
-		}
-
-		return false;
-	}
-
-	if (typeof toCheck === 'string') {
-		let found = false;
-		var errorMessagePossibilities = '';
-		for (let i = 0; i < possibleValueArray.length; i++) {
-			if (possibleValueArray[i] === toCheck) {
-				found = true;
-			}
-
-			errorMessagePossibilities += possibleValueArray[i] + ' ';
-		}
-
-		errorMessagePossibilities.trim();
-
-		if (!found) {
-			logError(errorCallback, option + ' must be one of: ' + errorMessagePossibilities);
-			return false;
-		}
-	} else {
-		logError(errorCallback, option + ' must be one of: ' + errorMessagePossibilities);
-		return false;
-	}
-
-	return true;
-}
-
-function checkBooleanOption(option, options, errorCallback, isMandatory) {
 	const toCheck = options[option];
 
 	if (toCheck == undefined || toCheck == null) {
 		if (isMandatory != undefined && isMandatory === true) {
-			logError(errorCallback, option + ' option is mandatory!');
+			logError(option + ' option is mandatory!', errorCallback);
 		}
 
 		return false;
 	}
 
 	if (typeof toCheck !== 'boolean') {
-		logError(errorCallback, option + ' must be boolean!');
+		logError(option + ' must be boolean!', errorCallback);
 		return false;
 	}
 
 	return true;
 }
 
-function checkProperties(option, options, errorCallback, isMandatory) {
-	const toCheck = options[option];
-
-	if (toCheck == undefined || toCheck == null) {
-		if (isMandatory != undefined && isMandatory === true) {
-			logError(errorCallback, option + ' option is mandatory!');
-		}
-
-		return false;
-	}
-
-	return true;
-}
-
-function checkKeyValueOptions(options, errorCallback, isMandatory) {
-	const key = options['key'];
-	const value = options['value'];
-
-	if (key == undefined || key == null || value == undefined || value == null) {
-		if (isMandatory != undefined && isMandatory === true) {
-			logError(errorCallback, 'key value options is mandatory!');
-		}
-
-		return false;
-	}
-
-	if (typeof key !== 'string' || key.length < 1 || typeof value !== 'string') {
-		logError(errorCallback, 'key must be non-empty string and value be strings!');
-		return false;
-	}
-
-	return true;
-}
-
-function checkFpsOption(options, errorCallback, isMandatory) {
-	const fps = options['fps'];
+function checkFpsOption(options: Record<any, any>, isMandatory: boolean, errorCallback?: ErrorCallback) {
+	const fps = options['frameRate'];
 
 	if (fps == undefined || fps == null) {
 		if (isMandatory != undefined && isMandatory === true) {
-			logError(errorCallback, 'fps option is mandatory!');
+			logError('fps option is mandatory!', errorCallback);
 		}
 
 		return false;
 	}
 
 	if (typeof fps !== 'number') {
-		logError(errorCallback, 'fps not set, must be a number!');
+		logError('fps not set, must be a number!', errorCallback);
 		return false;
 	}
 
 	if (fps < 1 || fps > 10) {
-		logError(errorCallback, 'fps not set, must be between 1 and 10 fps!');
+		logError('fps not set, must be between 1 and 10 fps!', errorCallback);
 		return false;
 	}
 
 	return true;
 }
 
-function checkEventTrackingModeArray(options, errorCallback, isMandatory) {
-	const allowedValues = [
-		EventTrackingMode.FULL_TRACKING,
-		EventTrackingMode.IGNORE_USER_INTERACTION,
-		EventTrackingMode.IGNORE_NAVIGATION_INTERACTION,
-		EventTrackingMode.IGNORE_RAGE_CLICKS,
-		EventTrackingMode.NO_TRACKING,
-	];
+function renderingModeFromNumber(renderingMode: number): RenderingMode {
+	switch (renderingMode) {
+		case 0:
+			return RenderingMode.NO_RENDERING;
+		case 1:
+			return RenderingMode.NATIVE;
+		case 2:
+			return RenderingMode.WIREFRAME;
 
-	const eventTrackingModeArray = options['eventTrackingModes'];
-	let noneFailed = true;
-
-	if (eventTrackingModeArray == undefined || eventTrackingModeArray == null || !Array.isArray(eventTrackingModeArray)) {
-		if (isMandatory != undefined && isMandatory === true) {
-			logError(errorCallback, 'eventTrackingModes array option is mandatory!');
-		}
-
-		return false;
+		default:
+			return RenderingMode.NATIVE;
 	}
-
-	for (let i = 0; i < eventTrackingModeArray.length; i++) {
-		console.log('checkEventTrackingModeArray(): gonna check: ' + eventTrackingModeArray[i]);
-		if (
-			!checkStringArrayOption(eventTrackingModeArray[i], 'eventTrackingMode', allowedValues, errorCallback, isMandatory)
-		) {
-			noneFailed = false;
-		}
-	}
-
-	return noneFailed;
 }
 
-// Utility methods
+function recordingStatusFromNumber(recordingStatus: number): RecordingStatus {
+	switch (recordingStatus) {
+		case 0:
+			return RecordingStatus.Recording;
+		case 1:
+			return RecordingStatus.NotStarted;
+		case 2:
+			return RecordingStatus.Stopped;
+		case 3:
+			return RecordingStatus.BellowMinSdkVersion;
+		case 4:
+			return RecordingStatus.ProjectLimitReached;
+		case 5:
+			return RecordingStatus.StorageLimitReached;
+		case 6:
+			return RecordingStatus.InternalError;
+		case 7:
+			return RecordingStatus.NotRunningInSwiftUIContext;
+		case 8:
+			return RecordingStatus.UnsupportedPlatform;
 
-function execWithCallbacks(
-	successCallback: SuccessCallback = emptyCallback,
-	errorCallback: ErrorCallback = emptyCallback,
-	method: string,
-	args?: any[],
-) {
-	cordova.exec(successCallback, errorCallback, SMARTLOOK_PLUGIN, method, args);
-}
-
-function logError(errorCallback: ErrorCallback, message: string) {
-	errorCallback?.(`${new Error(message).stack}`);
+		default:
+			return RecordingStatus.NotStarted;
+	}
 }

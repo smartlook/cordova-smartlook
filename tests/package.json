@@ -1,17 +1,17 @@
 {
-    "name": "cordova-plugin-smartlook-tests",
-    "version": "1.8.0",
-    "description": "",
-    "cordova": {
-        "id": "cordova-plugin-smartlook-tests",
-        "platforms": []
-    },
-    "keywords": [
-        "cordova",
-        "ecosystem:cordova",
-        "cordova-ios",
-        "cordova-android"
-    ],
-    "author": "Smartlook",
-    "license": "MIT"
+	"name": "cordova-plugin-smartlook-tests",
+	"version": "1.8.0",
+	"description": "",
+	"cordova": {
+		"id": "cordova-plugin-smartlook-tests",
+		"platforms": []
+	},
+	"keywords": [
+		"cordova",
+		"ecosystem:cordova",
+		"cordova-ios",
+		"cordova-android"
+	],
+	"author": "Smartlook",
+	"license": "MIT"
 }

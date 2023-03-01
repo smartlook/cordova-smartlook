@@ -1,11 +1,16 @@
 {
 	"compilerOptions": {
-		"target": "es5",
+		"target": "ES5",
 		"module": "CommonJS",
 		"outDir": "www/",
-		"types": ["cordova", "node"],
+		"typeRoots": ["node_modules/@types"],
+		"types": ["jest", "cordova"],
+		"lib": ["ES5", "DOM"],
 		"declaration": true,
+		"strict": true,
+		"moduleResolution": "node"
 	},
 	"compileOnSave": true,
-	"files": ["src/js/cordova-plugin-smartlook.ts"]
+	"files": ["src/js/cordova-plugin-smartlook.ts"],
+	"exclude": ["node_modules", "src/js/cordova-plugin-smartlook-legacy.ts", "tests/*.ts"]
 }

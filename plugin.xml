@@ -1,43 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android" id="cordova-plugin-smartlook" version="1.7.4">
 
-   <!--Plugin info-->
    <name>Smartlook</name>
+   <description>Official Smartlook SDK plugin for Cordova Android and iOS applications.</description>
 
-   <!--Modules-->
    <js-module name="SmartlookPlugin" src="www/cordova-plugin-smartlook.js">
-      <clobbers target="cordova.plugins.SmartlookPlugin" /> <!--Legacy targed-->
+      <clobbers target="cordova.plugins.SmartlookPlugin" />
       <clobbers target="Smartlook" />
    </js-module>
 
-   <!--Android-->
    <platform name="android">
-      <config-file parent="/*" target="res/xml/config.xml">
+      <config-file parent="/*" target="config.xml">
+         <preference name="GradlePluginKotlinEnabled" value="true" />
+
          <feature name="SmartlookPlugin">
             <param name="android-package" value="com.smartlook.cordovaplugin.SmartlookPlugin" />
          </feature>
       </config-file>
       <config-file parent="/*" target="AndroidManifest.xml" />
-      <source-file src="src/android/com/smartlook/cordovaplugin/SmartlookPlugin.java" target-dir="src/com/smartlook/cordovaplugin/SmartlookPlugin" />
       <framework src="src/android/plugin.gradle" custom="true" type="gradleReference" />
+      <source-file src="src/android/com/smartlook/cordovaplugin/SmartlookPlugin.kt" target-dir="java/com/smartlook/cordovaplugin/SmartlookPlugin" />
    </platform>
 
-   <!--iOS-->
    <platform name="ios">
       <config-file parent="/*" target="config.xml">
           <feature name="SmartlookPlugin">
              <param name="ios-package" value="SmartlookPlugin" />
          </feature>
       </config-file>
-      <header-file src="src/ios/SmartlookPlugin.h" />
-      <source-file src="src/ios/SmartlookPlugin.m" />
-      <podspec>
-         <config>
-            <source url="https://github.com/CocoaPods/Specs.git"/>
-         </config>
-         <pods use-frameworks="true">
-            <pod name="Smartlook" spec="1.8.5"/>
-         </pods>
-      </podspec>   
+      
+      <framework src="src/ios/SmartlookAnalytics.xcframework" custom="true"/>  
+
+      <header-file src="src/ios/SmartlookPlugin-Bridging-Header.h" type="BridgingHeader" />
+      <source-file src="src/ios/SmartlookPlugin+Extensions.swift" />
+      <source-file src="src/ios/SmartlookPlugin+RecordingMask.swift" />
+      <source-file src="src/ios/SmartlookPlugin.swift" />
+      <source-file src="src/ios/SmartlookPlugin+APIHelper.swift" />
     </platform>
 </plugin>
