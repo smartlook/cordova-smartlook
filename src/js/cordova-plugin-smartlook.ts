@@ -347,6 +347,8 @@ export interface Smartlook {
 	): void;
 	/**
 	 * @description Sets whether or not the SDK should use the adaptive framerate feature to capture video.
+   * 
+   * @kind **iOS only**
 	 */
 	setAdaptiveFrameRateEnabled(
 		options: { isEnabled: boolean },
@@ -355,25 +357,10 @@ export interface Smartlook {
 	): void;
 	/**
 	 * @description A boolean that determines whether the SDK uses the adaptive framerate functionality for video capture.
+   * 
+   * @kind **iOS only**
 	 */
 	getAdaptiveFrameRateEnabled(successCallback: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void;
-	/**
-	 * @description Sets whether or not Android's Surface should be recorded by the video capture.
-	 *
-	 * @kind **Android only**
-	 */
-	setSurfaceCaptureEnabled(
-		options: { isEnabled: boolean },
-		successCallback?: SuccessCallback<string>,
-		errorCallback?: ErrorCallback,
-	): void;
-	/**
-	 * @description A boolean that determines whether or not Android's Surface is recorded by the video capture.
-	 *
-	 * @kind **Android only**
-	 * @param options.successCallback - Callback to be invoked with the current value
-	 */
-	getSurfaceCaptureEnabled(successCallback: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void;
 	/**
 	 * @description Enables the tracking of all events.
 	 */
