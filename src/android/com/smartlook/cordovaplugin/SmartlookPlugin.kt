@@ -13,7 +13,7 @@ import com.smartlook.android.core.api.model.Referrer
 import com.smartlook.android.core.bridge.BridgeInterface
 import com.smartlook.android.core.bridge.model.BridgeFrameworkInfo
 import com.smartlook.android.core.video.annotation.RenderingMode
-import com.smartlook.android.util.logging.annotation.LogAspect
+import com.smartlook.sdk.log.LogAspect
 import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaPlugin
 import org.apache.cordova.PluginResult
