@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerUserUrlChangedListener = exports.setRenderingMode = exports.getStateFrameRate = exports.getRecordingStatus = exports.getRenderingMode = exports.setWebViewSensitivity = exports.restoreDefault = exports.setEventTrackingInteractionRageClickStatus = exports.setEventTrackingInteractionUserStatus = exports.getProjectKey = exports.isRecording = exports.setProjectKey = exports.eventTrackingDisableAll = exports.eventTrackingEnableAll = exports.getSurfaceCaptureEnabled = exports.setSurfaceCaptureEnabled = exports.getAdaptiveFrameRateEnabled = exports.setAdaptiveFrameRateEnabled = exports.setJobUploadEnabled = exports.getFrameRate = exports.setFrameRate = exports.setRelayProxyHost = exports.getSessionUrlWithTimestamp = exports.getSessionUrl = exports.getUserUrl = exports.openNewSession = exports.openNewUser = exports.removeUserProperty = exports.getUserProperty = exports.setUserProperty = exports.setUserEmail = exports.setUserName = exports.setUserIdentifier = exports.clearGlobalEventProperties = exports.removeGlobalEventProperty = exports.getGlobalEventProperty = exports.putGlobalEventProperty = exports.setReferrer = exports.trackNavigationExit = exports.trackNavigationEnter = exports.trackSelector = exports.trackEvent = exports.reset = exports.stop = exports.start = exports.RecordingStatus = exports.RenderingMode = exports.Command = exports.SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = exports.SMARTLOOK_FRAMEWORK_VERSION = void 0;
-exports.enableLogs = exports.setRecordingMask = exports.removeRecordingStatusChangedListener = exports.removeRenderingModeChangedListener = exports.removeSessionUrlChangedListener = exports.removeUserUrlChangedListener = exports.registerRecordingStatusChangedListener = exports.registerRenderingModeChangedListener = exports.registerSessionUrlChangedListener = void 0;
+exports.registerRenderingModeChangedListener = exports.registerSessionUrlChangedListener = exports.registerUserUrlChangedListener = exports.setRenderingMode = exports.getStateFrameRate = exports.getRecordingStatus = exports.getRenderingMode = exports.setWebViewSensitivity = exports.restoreDefault = exports.setEventTrackingInteractionRageClickStatus = exports.setEventTrackingInteractionUserStatus = exports.getProjectKey = exports.isRecording = exports.setProjectKey = exports.eventTrackingDisableAll = exports.eventTrackingEnableAll = exports.getAdaptiveFrameRateEnabled = exports.setAdaptiveFrameRateEnabled = exports.setJobUploadEnabled = exports.getFrameRate = exports.setFrameRate = exports.setRelayProxyHost = exports.getSessionUrlWithTimestamp = exports.getSessionUrl = exports.getUserUrl = exports.openNewSession = exports.openNewUser = exports.removeUserProperty = exports.getUserProperty = exports.setUserProperty = exports.setUserEmail = exports.setUserName = exports.setUserIdentifier = exports.clearGlobalEventProperties = exports.removeGlobalEventProperty = exports.getGlobalEventProperty = exports.putGlobalEventProperty = exports.setReferrer = exports.trackNavigationExit = exports.trackNavigationEnter = exports.trackSelector = exports.trackEvent = exports.reset = exports.stop = exports.start = exports.RecordingStatus = exports.RenderingMode = exports.Command = exports.SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = exports.SMARTLOOK_FRAMEWORK_VERSION = void 0;
+exports.enableLogs = exports.setRecordingMask = exports.removeRecordingStatusChangedListener = exports.removeRenderingModeChangedListener = exports.removeSessionUrlChangedListener = exports.removeUserUrlChangedListener = exports.registerRecordingStatusChangedListener = void 0;
 // Plugin name
 var SMARTLOOK_PLUGIN = 'SmartlookPlugin';
 // Smartlook framework info
@@ -40,8 +40,6 @@ var Command;
     Command["SET_JOB_UPLOAD_ENABLED"] = "setJobUploadEnabled";
     Command["SET_ADAPTIVE_FRAMERATE_ENABLED"] = "setAdaptiveFrameRateEnabled";
     Command["GET_ADAPTIVE_FRAMERATE_ENABLED"] = "getAdaptiveFrameRateEnabled";
-    Command["SET_SURFACE_CAPTURE_ENABLED"] = "setSurfaceCaptureEnabled";
-    Command["GET_SURFACE_CAPTURE_ENABLED"] = "getSurfaceCaptureEnabled";
     Command["EVENT_TRACKING_ENABLE_ALL"] = "eventTrackingEnableAll";
     Command["EVENT_TRACKING_DISABLE_ALL"] = "eventTrackingDisableAll";
     Command["IS_RECORDING"] = "isRecording";
@@ -424,30 +422,6 @@ function getAdaptiveFrameRateEnabled(successCallback, errorCallback) {
     execWithCallbacks(Command.GET_ADAPTIVE_FRAMERATE_ENABLED, successCallback, errorCallback);
 }
 exports.getAdaptiveFrameRateEnabled = getAdaptiveFrameRateEnabled;
-/**
- * @description Sets whether or not Android's Surface should be recorded by the video capture.
- *
- * @kind **Android only**
- */
-function setSurfaceCaptureEnabled(options, successCallback, errorCallback) {
-    var args = [];
-    if (!checkBooleanOption('isEnabled', options, true, errorCallback)) {
-        return;
-    }
-    args.push(options['isEnabled']);
-    execWithCallbacks(Command.SET_SURFACE_CAPTURE_ENABLED, successCallback, errorCallback, args);
-}
-exports.setSurfaceCaptureEnabled = setSurfaceCaptureEnabled;
-/**
- * @description A boolean that determines whether or not Android's Surface is recorded by the video capture.
- *
- * @kind **Android only**
- * @param options.successCallback - Callback to be invoked with the current value
- */
-function getSurfaceCaptureEnabled(successCallback, errorCallback) {
-    execWithCallbacks(Command.GET_SURFACE_CAPTURE_ENABLED, successCallback, errorCallback);
-}
-exports.getSurfaceCaptureEnabled = getSurfaceCaptureEnabled;
 /**
  * @description Enables the tracking of all events.
  */

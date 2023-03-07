@@ -31,8 +31,6 @@ export declare enum Command {
     SET_JOB_UPLOAD_ENABLED = "setJobUploadEnabled",
     SET_ADAPTIVE_FRAMERATE_ENABLED = "setAdaptiveFrameRateEnabled",
     GET_ADAPTIVE_FRAMERATE_ENABLED = "getAdaptiveFrameRateEnabled",
-    SET_SURFACE_CAPTURE_ENABLED = "setSurfaceCaptureEnabled",
-    GET_SURFACE_CAPTURE_ENABLED = "getSurfaceCaptureEnabled",
     EVENT_TRACKING_ENABLE_ALL = "eventTrackingEnableAll",
     EVENT_TRACKING_DISABLE_ALL = "eventTrackingDisableAll",
     IS_RECORDING = "isRecording",
@@ -641,21 +639,6 @@ export declare function setAdaptiveFrameRateEnabled(options: {
  * @description A boolean that determines whether the SDK uses the adaptive framerate functionality for video capture.
  */
 export declare function getAdaptiveFrameRateEnabled(successCallback: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void;
-/**
- * @description Sets whether or not Android's Surface should be recorded by the video capture.
- *
- * @kind **Android only**
- */
-export declare function setSurfaceCaptureEnabled(options: {
-    isEnabled: boolean;
-}, successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback): void;
-/**
- * @description A boolean that determines whether or not Android's Surface is recorded by the video capture.
- *
- * @kind **Android only**
- * @param options.successCallback - Callback to be invoked with the current value
- */
-export declare function getSurfaceCaptureEnabled(successCallback: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void;
 /**
  * @description Enables the tracking of all events.
  */

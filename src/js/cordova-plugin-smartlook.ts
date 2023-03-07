@@ -37,8 +37,6 @@ export enum Command {
 	SET_JOB_UPLOAD_ENABLED = 'setJobUploadEnabled',
 	SET_ADAPTIVE_FRAMERATE_ENABLED = 'setAdaptiveFrameRateEnabled',
 	GET_ADAPTIVE_FRAMERATE_ENABLED = 'getAdaptiveFrameRateEnabled',
-	SET_SURFACE_CAPTURE_ENABLED = 'setSurfaceCaptureEnabled',
-	GET_SURFACE_CAPTURE_ENABLED = 'getSurfaceCaptureEnabled',
 	EVENT_TRACKING_ENABLE_ALL = 'eventTrackingEnableAll',
 	EVENT_TRACKING_DISABLE_ALL = 'eventTrackingDisableAll',
 	IS_RECORDING = 'isRecording',
@@ -958,35 +956,6 @@ export function setAdaptiveFrameRateEnabled(
  */
 export function getAdaptiveFrameRateEnabled(successCallback: SuccessCallback<boolean>, errorCallback?: ErrorCallback) {
 	execWithCallbacks(Command.GET_ADAPTIVE_FRAMERATE_ENABLED, successCallback, errorCallback);
-}
-
-/**
- * @description Sets whether or not Android's Surface should be recorded by the video capture.
- *
- * @kind **Android only**
- */
-export function setSurfaceCaptureEnabled(
-	options: { isEnabled: boolean },
-	successCallback?: SuccessCallback<string>,
-	errorCallback?: ErrorCallback,
-) {
-	let args = [];
-	if (!checkBooleanOption('isEnabled', options, true, errorCallback)) {
-		return;
-	}
-
-	args.push(options['isEnabled']);
-	execWithCallbacks(Command.SET_SURFACE_CAPTURE_ENABLED, successCallback, errorCallback, args);
-}
-
-/**
- * @description A boolean that determines whether or not Android's Surface is recorded by the video capture.
- *
- * @kind **Android only**
- * @param options.successCallback - Callback to be invoked with the current value
- */
-export function getSurfaceCaptureEnabled(successCallback: SuccessCallback<boolean>, errorCallback?: ErrorCallback) {
-	execWithCallbacks(Command.GET_SURFACE_CAPTURE_ENABLED, successCallback, errorCallback);
 }
 
 /**
