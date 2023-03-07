@@ -269,31 +269,10 @@ class SmartlookPlugin : CordovaPlugin() {
                 }
             }
             "setAdaptiveFrameRateEnabled" -> {
-                try {
-                    val isEnabled = args.getBoolean(0)
-                    smartlook.preferences.isAdaptiveFrameRateEnabled = isEnabled
-
-                    callbackContext.success()
-                } catch (e: Exception) {
-                    callbackContext.error(e.message)
-                }
+                callbackContext.success("Action $action is not implemented in the Cordova Smartlook Android bridge.")
             }
-
             "getAdaptiveFrameRateEnabled" -> {
-                callbackContext.sendPluginResult(PluginResult(PluginResult.Status.OK, state.isAdaptiveFrameRateEnabled))
-            }
-            "setSurfaceCaptureEnabled" -> {
-                try {
-                    val isEnabled = args.getBoolean(0)
-                    smartlook.preferences.isSurfaceRecordingEnabled = isEnabled
-
-                    callbackContext.success()
-                } catch (e: Exception) {
-                    callbackContext.error(e.message)
-                }
-            }
-            "getSurfaceCaptureEnabled" -> {
-                callbackContext.sendPluginResult(PluginResult(PluginResult.Status.OK, state.isSurfaceRecordingEnabled))
+                callbackContext.success("Action $action is not implemented in the Cordova Smartlook Android bridge.")
             }
             "setRecordingMask" -> {
                 try {
