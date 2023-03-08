@@ -1,5 +1,5 @@
 export declare const SMARTLOOK_FRAMEWORK_VERSION = "-";
-export declare const SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = "2.0.0";
+export declare const SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = "2.0.1";
 export declare enum Command {
     START = "start",
     STOP = "stop",
