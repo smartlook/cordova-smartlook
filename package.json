@@ -1,6 +1,6 @@
 {
 	"name": "cordova-plugin-smartlook",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"description": "Official Smartlook SDK plugin for Cordova Android and iOS applications.",
 	"platforms": [
 		"android",
@@ -15,7 +15,7 @@
 	},
 	"engines": {
 		"cordovaDependencies": {
-			"2.0.0": {
+			"2.0.1": {
 				"cordova": ">=10.0.0",
 				"cordova-android": ">=10.1.1"
 			}

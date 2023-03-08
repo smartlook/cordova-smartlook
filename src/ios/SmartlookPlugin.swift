@@ -394,20 +394,6 @@ public class SmartlookPlugin : CDVPlugin {
       }
     }
 
-    @objc(setSurfaceCaptureEnabled:)
-    func setSurfaceCaptureEnabled(command: CDVInvokedUrlCommand) {
-        let result = CDVPluginResult(status: .ok, messageAs: "setSurfaceCaptureEnabled is not supported on iOS")
-
-        self.commandDelegate.send(result, callbackId: command.callbackId)
-    }
-
-    @objc(getSurfaceCaptureEnabled:)
-    func getSurfaceCaptureEnabled (command: CDVInvokedUrlCommand) {
-        let result = CDVPluginResult(status: .ok, messageAs: "getSurfaceCaptureEnabled is not supported on iOS")
-
-        self.commandDelegate.send(result, callbackId: command.callbackId)
-    }
-
     @objc(eventTrackingEnableAll:)
     func eventTrackingEnableAll(command: CDVInvokedUrlCommand) {
       DispatchQueue.main.async {
