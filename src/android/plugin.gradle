@@ -5,5 +5,5 @@ repositories {
 }
 
 dependencies {
-    implementation "com.smartlook.android:smartlook-analytics:2.1.9"
+    implementation "com.smartlook.android:smartlook-analytics:2.2.0"
 }

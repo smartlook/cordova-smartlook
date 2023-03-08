@@ -265,6 +265,10 @@ final public class SetupConfiguration : Swift.Codable {
   }
   @discardableResult
   final public func relayProxyHost(_ relayProxyHost: Swift.String?) -> SmartlookAnalytics.SetupConfiguration
+  final public var crashReportsDisabled: Swift.Bool? {
+    get
+    set
+  }
   @discardableResult
   final public func disableCrashReports() -> SmartlookAnalytics.SetupConfiguration
   @objc deinit

@@ -13,7 +13,7 @@ import com.smartlook.android.core.api.model.Referrer
 import com.smartlook.android.core.bridge.BridgeInterface
 import com.smartlook.android.core.bridge.model.BridgeFrameworkInfo
 import com.smartlook.android.core.video.annotation.RenderingMode
-import com.smartlook.android.util.logging.annotation.LogAspect
+import com.smartlook.sdk.log.LogAspect
 import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaPlugin
 import org.apache.cordova.PluginResult
@@ -269,31 +269,10 @@ class SmartlookPlugin : CordovaPlugin() {
                 }
             }
             "setAdaptiveFrameRateEnabled" -> {
-                try {
-                    val isEnabled = args.getBoolean(0)
-                    smartlook.preferences.isAdaptiveFrameRateEnabled = isEnabled
-
-                    callbackContext.success()
-                } catch (e: Exception) {
-                    callbackContext.error(e.message)
-                }
+                callbackContext.success("Action $action is not implemented in the Cordova Smartlook Android bridge.")
             }
-
             "getAdaptiveFrameRateEnabled" -> {
-                callbackContext.sendPluginResult(PluginResult(PluginResult.Status.OK, state.isAdaptiveFrameRateEnabled))
-            }
-            "setSurfaceCaptureEnabled" -> {
-                try {
-                    val isEnabled = args.getBoolean(0)
-                    smartlook.preferences.isSurfaceRecordingEnabled = isEnabled
-
-                    callbackContext.success()
-                } catch (e: Exception) {
-                    callbackContext.error(e.message)
-                }
-            }
-            "getSurfaceCaptureEnabled" -> {
-                callbackContext.sendPluginResult(PluginResult(PluginResult.Status.OK, state.isSurfaceRecordingEnabled))
+                callbackContext.success("Action $action is not implemented in the Cordova Smartlook Android bridge.")
             }
             "setRecordingMask" -> {
                 try {
