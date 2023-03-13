@@ -85,7 +85,7 @@ describe('SmartlookPlugin', () => {
 	});
 
 	describe('reset', () => {
-		it('should be called with correct params', () => {
+		it('should be called with empty params', () => {
 			reset();
 
 			expect(execFn).toHaveBeenCalledWith(
