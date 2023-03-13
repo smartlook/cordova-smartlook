@@ -1,0 +1,14 @@
+changelog:
+  exclude:
+    labels:
+      - Release
+  categories:
+    - title: 🚀 Features
+      labels:
+        - Feature
+    - title: 🐛 Bug Fixes
+      labels:
+        - Bug
+    - title: Other Changes
+      labels:
+        - "*"
