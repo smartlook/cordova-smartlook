@@ -29,7 +29,7 @@
          </feature>
       </config-file>
       
-      <framework src="src/ios/SmartlookAnalytics.xcframework" custom="true"/>  
+      <framework src="src/ios/SmartlookAnalytics.xcframework" custom="true" embed="true"/>  
 
       <header-file src="src/ios/SmartlookPlugin-Bridging-Header.h" type="BridgingHeader" />
       <source-file src="src/ios/SmartlookPlugin+Extensions.swift" />

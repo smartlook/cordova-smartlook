@@ -6,51 +6,51 @@
 	<dict>
 		<key>Headers/SmartlookAnalytics-Swift.h</key>
 		<data>
-		koaxq/3qix7QXjhiGs7LYLStrNU=
+		6XT52UC/PVdPXoaHLWz3j0YcZmg=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		1XrwDv3GIoBBe7hzqSkgDPRNu90=
+		sTPNfV43Cs8l/aOCPxt2XOX0xXM=
 		</data>
 		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<data>
-		Hv7mktsx44hHvjRT+WnIJFrJsUE=
+		eevG87DwqSrtFhHWpKsaJg01e3A=
 		</data>
 		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
-		6SwHJSZuPnq2u+hSJzXM/y+1rqM=
+		6avxfiQ2o0G9V3NIjUvRgkTrVd4=
 		</data>
 		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
 		<data>
-		gvENd+k5tLkxvqflSXJn1BOKBgs=
+		EbZH0FDtPyUeDrvxFzpFtxP11Ww=
 		</data>
 		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios-simulator.swiftinterface</key>
 		<data>
-		6SwHJSZuPnq2u+hSJzXM/y+1rqM=
+		6avxfiQ2o0G9V3NIjUvRgkTrVd4=
 		</data>
 		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		ApmXeIykLv4gmihNAScaUUViOeM=
+		IB7SbWh2HCP8Ey1mmCB5fZvG204=
 		</data>
 		<key>Modules/SmartlookAnalytics.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<data>
-		Hv7mktsx44hHvjRT+WnIJFrJsUE=
+		eevG87DwqSrtFhHWpKsaJg01e3A=
 		</data>
 		<key>Modules/SmartlookAnalytics.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
-		ZVWpfzacfwt6ZUU+9v62jUHWnOE=
+		/EhAEiV/uqNCsYFQaRAID5aQqB8=
 		</data>
 		<key>Modules/SmartlookAnalytics.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<data>
-		EenlVC3uLfG76PNv0UL59wUINLs=
+		yS1qVrodv/e/7BuRmw0hpl81MPk=
 		</data>
 		<key>Modules/SmartlookAnalytics.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
 		<data>
-		ZVWpfzacfwt6ZUU+9v62jUHWnOE=
+		/EhAEiV/uqNCsYFQaRAID5aQqB8=
 		</data>
 		<key>Modules/SmartlookAnalytics.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		eV7fFuuBklEsPf6btjc/mz7FDAM=
+		jf8kbbKUEsKhG+Wtzu5sLR3G71s=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -63,77 +63,77 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			TRJIuXVxYgaqtK36oF3WTFXrqye2/5SCNsZJormYwXU=
+			QV9icKcq37cM2JOK2PfRevraKzfNOcqQAavaPOq5W5E=
 			</data>
 		</dict>
 		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			PePBS5wQFDGuVijuIxmCAQnXAt2dKyqFmMkwrp43KFQ=
+			6G4HRiTEiRpnVVULWmYTH5/OWqqxwdFN2eAkXHEQZ4Q=
 			</data>
 		</dict>
 		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			D1Ht/CW/d6h3rhyTW8Y6FGan12CZQj4ehFvy5aovYJA=
+			dF3BOd+QXv7yDcPWeeXy3AwfuRtFLw2iFC8rBfMtYss=
 			</data>
 		</dict>
 		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			ka8L0dIwlxya/SwOWCBfsbawMVt1wdVVYlAl5+CUtnw=
+			t5k6x6fdSlMlneWb22eZBHPYvIZA4SFTjFB9zgFVKS8=
 			</data>
 		</dict>
 		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios-simulator.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			D1Ht/CW/d6h3rhyTW8Y6FGan12CZQj4ehFvy5aovYJA=
+			dF3BOd+QXv7yDcPWeeXy3AwfuRtFLw2iFC8rBfMtYss=
 			</data>
 		</dict>
 		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			IvPDfhOPxwLpu/pt6Y7qUkKjpWf0ofAAfVZBsYOPZyI=
+			zXYBb8tjJhU5FFHJ6Fsgwj2z3epE21arzEzN7wnFumY=
 			</data>
 		</dict>
 		<key>Modules/SmartlookAnalytics.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			PePBS5wQFDGuVijuIxmCAQnXAt2dKyqFmMkwrp43KFQ=
+			6G4HRiTEiRpnVVULWmYTH5/OWqqxwdFN2eAkXHEQZ4Q=
 			</data>
 		</dict>
 		<key>Modules/SmartlookAnalytics.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			15u79RE09MNNOVmOtacGKfl2ZYDndCy9AacpXe0p5Qk=
+			u/MYVtXqifwkJ1CSiuImLLxkZG+ANIiiyMI1qG6Damk=
 			</data>
 		</dict>
 		<key>Modules/SmartlookAnalytics.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			yIwYIJn/YLsbPDFFdSNvoQQOMgDGR4QK/HmNt8IWDvU=
+			Mign2GfKfBg8QNQyFJVfbjSunJCE8k0XcKjVLG2l/Tc=
 			</data>
 		</dict>
 		<key>Modules/SmartlookAnalytics.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			15u79RE09MNNOVmOtacGKfl2ZYDndCy9AacpXe0p5Qk=
+			u/MYVtXqifwkJ1CSiuImLLxkZG+ANIiiyMI1qG6Damk=
 			</data>
 		</dict>
 		<key>Modules/SmartlookAnalytics.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			bYAUKvc39iSB9kCGRuvl8oD0b5TjR5FA3/owHhdArdM=
+			rFyx3BkfiwyTjY6ItwztY8vy3Shk8ZwbS+E3R/yYH64=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
