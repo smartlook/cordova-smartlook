@@ -345,8 +345,8 @@ export interface Smartlook {
 	): void;
 	/**
 	 * @description Sets whether or not the SDK should use the adaptive framerate feature to capture video.
-   * 
-   * @kind **iOS only**
+	 *
+	 * @kind **iOS only**
 	 */
 	setAdaptiveFrameRateEnabled(
 		options: { isEnabled: boolean },
@@ -355,8 +355,8 @@ export interface Smartlook {
 	): void;
 	/**
 	 * @description A boolean that determines whether the SDK uses the adaptive framerate functionality for video capture.
-   * 
-   * @kind **iOS only**
+	 *
+	 * @kind **iOS only**
 	 */
 	getAdaptiveFrameRateEnabled(successCallback: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void;
 	/**
