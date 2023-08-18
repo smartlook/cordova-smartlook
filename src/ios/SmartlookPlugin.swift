@@ -23,7 +23,7 @@ public class SmartlookPlugin : CDVPlugin {
         cdvFrameworkInfo.framework = "CORDOVA"
         cdvFrameworkInfo.frameworkPluginVersion = pluginVersion
         cdvFrameworkInfo.frameworkVersion = frameworkVersion
-
+          
         cdvBridgeInterface.frameworkInfo = cdvFrameworkInfo
 
         Smartlook.instance.register(bridgeInterface: cdvBridgeInterface) 

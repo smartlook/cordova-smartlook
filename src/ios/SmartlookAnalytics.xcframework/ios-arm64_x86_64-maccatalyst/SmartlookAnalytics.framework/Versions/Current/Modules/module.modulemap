@@ -1,4 +1,0 @@
-framework module SmartlookAnalytics {
-  header "SmartlookAnalytics-Swift.h"
-  requires objc
-}
