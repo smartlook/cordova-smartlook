@@ -9,6 +9,29 @@ import Foundation
 import SmartlookAnalytics
 import WebKit
 
+public class CordovaBridge : NSObject, BridgeInterface {
+
+   public var recordingAllowed: Bool
+   public var frameworkInfo: SmartlookAnalytics.FrameworkInfo?
+
+   init(frameworkInfo: SmartlookAnalytics.FrameworkInfo? = nil) {
+       self.frameworkInfo = frameworkInfo
+       self.recordingAllowed = true
+   }
+
+   public func obtainFrameworkInfo(completion: @escaping (FrameworkInfo?) -> Void) {
+       completion(self.frameworkInfo)
+   }
+
+   public func obtainWireframeRootClasses(completion: @escaping ([String]) -> Void) {
+       completion([])
+   }
+
+   public func obtainWireframeData(identifier: Any?, completion: @escaping (BridgeWireframe?) -> Void) {
+       completion(nil)
+   }
+}
+
 @objc(SmartlookPlugin)
 public class SmartlookPlugin : CDVPlugin {
     @objc(setPluginVersion:)
@@ -17,16 +40,15 @@ public class SmartlookPlugin : CDVPlugin {
         let pluginVersion = command.arguments[0] as? String
         let frameworkVersion = command.arguments[1] as? String 
 
-        let cdvBridgeInterface = BridgeInterface()
         let cdvFrameworkInfo = FrameworkInfo()
         
         cdvFrameworkInfo.framework = "CORDOVA"
         cdvFrameworkInfo.frameworkPluginVersion = pluginVersion
         cdvFrameworkInfo.frameworkVersion = frameworkVersion
           
-        cdvBridgeInterface.frameworkInfo = cdvFrameworkInfo
+        let cdvBridgeInterface = CordovaBridge(frameworkInfo: cdvFrameworkInfo)
 
-        Smartlook.instance.register(bridgeInterface: cdvBridgeInterface) 
+        Smartlook.instance.register(bridgeInterface: cdvBridgeInterface)
         Smartlook.instance.sensitivity[WKWebView.self] = false
 
         self.sendOkResultWithMessageForCallbackId(callbackId: command.callbackId)
