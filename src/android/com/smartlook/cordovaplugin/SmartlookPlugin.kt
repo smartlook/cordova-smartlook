@@ -1,6 +1,7 @@
 package com.smartlook.cordovaplugin
 
 import android.graphics.Rect
+import android.view.View
 import android.webkit.WebView
 import com.smartlook.android.core.api.Session
 import com.smartlook.android.core.api.Smartlook
@@ -9,10 +10,11 @@ import com.smartlook.android.core.api.enumeration.Status
 import com.smartlook.android.core.api.extension.isSensitive
 import com.smartlook.android.core.api.model.Properties
 import com.smartlook.android.core.api.model.RecordingMask
-import com.smartlook.android.core.api.model.Referrer
-import com.smartlook.android.core.bridge.BridgeInterface
-import com.smartlook.android.core.bridge.model.BridgeFrameworkInfo
+import com.smartlook.sdk.bridge.model.BridgeFrameworkInfo
+import com.smartlook.sdk.bridge.model.BridgeInterface
+import com.smartlook.sdk.bridge.model.BridgeWireframe
 import com.smartlook.android.core.video.annotation.RenderingMode
+import com.smartlook.sdk.bridge.BridgeManager
 import com.smartlook.sdk.log.LogAspect
 import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaPlugin
@@ -32,9 +34,9 @@ class SmartlookPlugin : CordovaPlugin() {
                 try {
                     val pluginVersion = args.getString(0)
                     val frameworkVersion = args.getString(1)
-                    val cdvBridgeInterface = CordovaBridgeInterface(pluginVersion, frameworkVersion)
+                    val cdvBridgeInterface = CordovaBridgeInterface(pluginVersion, frameworkVersion, true)
 
-                    smartlook.bridgeInterfaces.add(cdvBridgeInterface)
+                    BridgeManager.bridgeInterfaces.add(cdvBridgeInterface)
                     callbackContext.success()
                 } catch (e: Exception) {
                     callbackContext.error(e.message)
@@ -90,16 +92,7 @@ class SmartlookPlugin : CordovaPlugin() {
                 }
             }
             "setReferrer" -> {
-                try {
-                    val referrer = args.getString(0)
-                    val source = args.getString(1)
-                    val referrerObject = Referrer(referrer, source)
-
-                    smartlook.referrer = referrerObject
-                    callbackContext.success()
-                } catch (e: Exception) {
-                    callbackContext.error(e.message)
-                }
+                callbackContext.success("Action $action is not implemented in the Cordova Smartlook Android bridge.")
             }
             "putStringEventProperty" -> {
                 try {
@@ -259,14 +252,7 @@ class SmartlookPlugin : CordovaPlugin() {
                 }
             }
             "setJobUploadEnabled" -> {
-                try {
-                    val isEnabled = args.getBoolean(0)
-                    smartlook.preferences.isUploadUsingAndroidJobsEnabled = isEnabled
-
-                    callbackContext.success()
-                } catch (e: Exception) {
-                    callbackContext.error(e.message)
-                }
+                callbackContext.success("Action $action is not implemented in the Cordova Smartlook Android bridge.")
             }
             "setAdaptiveFrameRateEnabled" -> {
                 callbackContext.success("Action $action is not implemented in the Cordova Smartlook Android bridge.")
@@ -457,13 +443,26 @@ class SmartlookPlugin : CordovaPlugin() {
     }
 }
 
-class CordovaBridgeInterface(private val pluginVersion: String, private val frameworkVersion: String): BridgeInterface {
-    override fun obtainFrameworkInfo(callback: (frameworkInfo: BridgeFrameworkInfo) -> Unit) {
-        callback(BridgeFrameworkInfo(
-            "CORDOVA",
-            pluginVersion,
-            frameworkVersion
-            )
+class CordovaBridgeInterface(
+  private val frameworkVersion: String,
+  private val pluginVersion: String,
+  override val isRecordingAllowed: Boolean
+): BridgeInterface {
+    override fun obtainFrameworkInfo(callback: (BridgeFrameworkInfo?) -> Unit) {
+        val frameworkInfo = BridgeFrameworkInfo(
+            framework = "CORDOVA",
+            frameworkPluginVersion = this.pluginVersion,
+            frameworkVersion = this.frameworkVersion
         )
+
+        callback(frameworkInfo)
+    }
+
+    override fun obtainWireframeData(instance: View, callback: (BridgeWireframe?) -> Unit) {
+        callback(null)
+    }
+
+    override fun obtainWireframeRootClasses(): List<Class<out View>> {
+        return emptyList()
     }
 }
