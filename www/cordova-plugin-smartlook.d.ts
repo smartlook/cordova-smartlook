@@ -1,5 +1,5 @@
 export declare const SMARTLOOK_FRAMEWORK_VERSION = "-";
-export declare const SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = "2.0.1";
+export declare const SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = "2.0.3";
 export declare enum Command {
     START = "start",
     STOP = "stop",
@@ -292,16 +292,16 @@ export interface Smartlook {
     }, successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback): void;
     /**
      * @description Sets whether or not the SDK should use the adaptive framerate feature to capture video.
-   *
-   * @kind **iOS only**
+     *
+     * @kind **iOS only**
      */
     setAdaptiveFrameRateEnabled(options: {
         isEnabled: boolean;
     }, successCallback?: SuccessCallback<string>, errorCallback?: ErrorCallback): void;
     /**
      * @description A boolean that determines whether the SDK uses the adaptive framerate functionality for video capture.
-   *
-   * @kind **iOS only**
+     *
+     * @kind **iOS only**
      */
     getAdaptiveFrameRateEnabled(successCallback: SuccessCallback<boolean>, errorCallback?: ErrorCallback): void;
     /**
