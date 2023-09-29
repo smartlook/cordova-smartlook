@@ -3,7 +3,7 @@ const SMARTLOOK_PLUGIN = 'SmartlookPlugin';
 
 // Smartlook framework info
 export const SMARTLOOK_FRAMEWORK_VERSION = '-';
-export const SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = '2.0.2';
+export const SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = '2.0.3';
 
 // API methods names
 export enum Command {
