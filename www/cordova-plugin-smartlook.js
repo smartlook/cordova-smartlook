@@ -6,7 +6,7 @@ exports.enableLogs = exports.setRecordingMask = exports.removeRecordingStatusCha
 var SMARTLOOK_PLUGIN = 'SmartlookPlugin';
 // Smartlook framework info
 exports.SMARTLOOK_FRAMEWORK_VERSION = '-';
-exports.SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = '2.0.3';
+exports.SMARTLOOK_FRAMEWORK_PLUGIN_VERSION = '2.0.4';
 // API methods names
 var Command;
 (function (Command) {
