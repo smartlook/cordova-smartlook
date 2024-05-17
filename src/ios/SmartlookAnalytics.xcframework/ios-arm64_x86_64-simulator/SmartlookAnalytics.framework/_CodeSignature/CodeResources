@@ -10,11 +10,11 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		gsaNvLiS8MG6j1KN4lfqHbqQht0=
+		0zxjdcaLWsNucblpGoOdkE4TLMs=
 		</data>
 		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<data>
-		IxmDXwXK5G6+y1O0dE/aEVSBLq4=
+		DhV4A3WTUDokV58G5y2yZMv21V0=
 		</data>
 		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -30,11 +30,11 @@
 		</data>
 		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		k48IMRo2/mxBH6q2typ2RLuP4RM=
+		e3P8euZPfBNs6yqKyZ7NimdUUqI=
 		</data>
 		<key>Modules/SmartlookAnalytics.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<data>
-		IxmDXwXK5G6+y1O0dE/aEVSBLq4=
+		DhV4A3WTUDokV58G5y2yZMv21V0=
 		</data>
 		<key>Modules/SmartlookAnalytics.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -50,7 +50,7 @@
 		</data>
 		<key>Modules/SmartlookAnalytics.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		E/Eke8vSJ5ZqOA3US1OGONiGtw0=
+		Sxul+VEtfUQMimafqM+GIEmTfzs=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -58,7 +58,7 @@
 		</data>
 		<key>PrivacyInfo.xcprivacy</key>
 		<data>
-		NN+3HNwKiozLlPmXs4TfUtq4XFg=
+		MEco00Y5KLfoSXCxBqlGQ+Ld+i4=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -74,7 +74,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			GRApk5wofQI0eqxNgwMu2aJk5pFyLY0uGgeH7ElIWjQ=
+			5mnl11vXE06/XqdG/ZHSBE6N0Kn/IZU8pWO40k2qWWs=
 			</data>
 		</dict>
 		<key>Modules/SmartlookAnalytics.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
@@ -102,14 +102,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			mxrSdhoGvoP9lD00ByRC/CwTf+fmALU26illB3ozvC0=
+			JPZSptEas0dyyuIy4P5JSjx+tjJJFRCVpA0ZgqtGqLk=
 			</data>
 		</dict>
 		<key>Modules/SmartlookAnalytics.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			GRApk5wofQI0eqxNgwMu2aJk5pFyLY0uGgeH7ElIWjQ=
+			5mnl11vXE06/XqdG/ZHSBE6N0Kn/IZU8pWO40k2qWWs=
 			</data>
 		</dict>
 		<key>Modules/SmartlookAnalytics.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
@@ -137,7 +137,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			RgIoE4S1jWISX8HWQbRNGvlsQ8Kv0pt2cy15lMb0Ndk=
+			742pJuKZoWQroA9pbcCq/FOb/UKJdfBq83JySXdgqOA=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
@@ -151,7 +151,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			tsHc2Y6podNQBVyi9GQzeVGVsd3T8SM9KBRX2kFUcmw=
+			FEl7Jvf8QsSHIfIKWVUgquvZYuQ0M35qCkMg0gT0JXI=
 			</data>
 		</dict>
 	</dict>

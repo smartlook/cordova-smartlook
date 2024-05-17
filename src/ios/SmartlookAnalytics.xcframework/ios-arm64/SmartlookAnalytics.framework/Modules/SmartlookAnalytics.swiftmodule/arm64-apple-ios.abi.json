@@ -24939,14 +24939,14 @@
       "kind": "StringLiteral",
       "offset": 191,
       "length": 8,
-      "value": "\"2.2.10\""
+      "value": "\"2.2.11\""
     },
     {
       "filePath": "\/Users\/budim\/Work\/ios\/smartlook-ios-sdk-experimental\/smartlook-ios-sdk-private\/Smartlook\/SmartlookAnalytics\/Utils\/Info\/Smartlook+Version.swift",
       "kind": "StringLiteral",
       "offset": 208,
       "length": 5,
-      "value": "\"247\""
+      "value": "\"248\""
     },
     {
       "filePath": "\/Users\/budim\/Work\/ios\/smartlook-ios-sdk-experimental\/smartlook-ios-sdk-private\/Smartlook\/SmartlookAnalytics\/Network Interceptor\/Interceptors\/InterceptorMask.swift",
@@ -27164,8 +27164,8 @@
       "filePath": "\/Users\/budim\/Work\/ios\/smartlook-ios-sdk-experimental\/smartlook-ios-sdk-private\/Smartlook\/SmartlookAnalytics\/Wireframes\/Operations\/AsyncWebViewSnapshotOperation.swift",
       "kind": "StringLiteral",
       "offset": 5763,
-      "length": 1223,
-      "value": "\"var uniqueId = function (elem, prefix = '__smartlook_') {\n  var id = elem.getAttribute('id');\n  if (id) return id;\n  var c = 0;\n  do {\n    id = prefix + c++;\n  } while (document.getElementById(id) !== null);\n  elem.setAttribute('id', id);\n  return id;\n};\n\nvar getHiddenRects = function () {\n  var rectanglesToOverlay = [];\n  var elementsToHide = Array.apply(null, document.querySelectorAll('input:not([type=\"button\"]):not([type=\"submit\"]):not(.smartlook-show)'));\n  elementsToHide = elementsToHide.filter(function (elem) {return elem.closest('.smartlook-show') == null});\n  elementsToHide = elementsToHide.concat(Array.apply(null,document.querySelectorAll('.smartlook-hide')));\n  try {\n    [].forEach.call(elementsToHide, function (elem, index) {\n      var rect = elem.getBoundingClientRect();\n      var domElementZoom = elem.style.zoom;\n      domElementZoom || (domElementZoom = 1);\n      rectanglesToOverlay.push({\n        id: id,\n        rect: [rect.left*domElementZoom, rect.top*domElementZoom, rect.width*domElementZoom, rect.height*domElementZoom],\n      });\n    });\n  } catch (e) {\n    console.log(e);\n  }\n  return rectanglesToOverlay;\n};\n\nvar rectanglesToOverlay = getHiddenRects();\nrectanglesToOverlay;\""
+      "length": 1104,
+      "value": "\"var uniqueId = function (elem, prefix = '__smartlook_') {\n  var id = elem.getAttribute('id');\n  if (id) return id;\n  var c = 0;\n  do {\n    id = prefix + c++;\n  } while (document.getElementById(id) !== null);\n  elem.setAttribute('id', id);\n  return id;\n};\n\nvar getHiddenRects = function () {\n  var rectanglesToOverlay = [];\n  var elementsToHide = Array.apply(null, document.querySelectorAll('input:not([type=\"button\"]):not([type=\"submit\"]):not(.smartlook-show)'));\n  elementsToHide = elementsToHide.filter(function (elem) {return elem.closest('.smartlook-show') == null});\n  elementsToHide = elementsToHide.concat(Array.apply(null,document.querySelectorAll('.smartlook-hide')));\n  try {\n    [].forEach.call(elementsToHide, function (elem, index) {\n      var rect = elem.getBoundingClientRect();\n      var id = uniqueId(elem);\n      rectanglesToOverlay.push({\n        id: id,\n        rect: [rect.left, rect.top, rect.width, rect.height],\n      });\n    });\n  } catch (e) {\n    console.log(e);\n  }\n  return rectanglesToOverlay;\n};\n\nvar rectanglesToOverlay = getHiddenRects();\nrectanglesToOverlay;\""
     },
     {
       "filePath": "\/Users\/budim\/Work\/ios\/smartlook-ios-sdk-experimental\/smartlook-ios-sdk-private\/Smartlook\/SmartlookAnalytics\/Network Interceptor\/Interceptors\/LocalInterceptor.swift",
