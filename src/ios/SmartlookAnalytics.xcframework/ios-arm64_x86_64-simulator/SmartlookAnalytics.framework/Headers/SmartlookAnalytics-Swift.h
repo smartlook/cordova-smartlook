@@ -482,6 +482,7 @@ SWIFT_CLASS_NAMED("FrameworkInfo")
 
 
 
+
 /// A type of casted shadow.
 /// Describes the possible shadow types that the skeleton casts on its parent view.
 /// note:
@@ -1081,6 +1082,7 @@ SWIFT_CLASS_NAMED("FrameworkInfo")
 /// Returns an empty framework info object.
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
+
 
 
 

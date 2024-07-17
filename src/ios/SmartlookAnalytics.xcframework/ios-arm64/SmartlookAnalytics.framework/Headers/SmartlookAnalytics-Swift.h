@@ -482,6 +482,7 @@ SWIFT_CLASS_NAMED("FrameworkInfo")
 
 
 
+
 /// A type of casted shadow.
 /// Describes the possible shadow types that the skeleton casts on its parent view.
 /// note:
