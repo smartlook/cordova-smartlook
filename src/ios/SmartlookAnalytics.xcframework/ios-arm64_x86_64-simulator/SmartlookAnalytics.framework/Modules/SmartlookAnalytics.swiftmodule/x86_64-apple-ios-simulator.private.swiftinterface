@@ -19,6 +19,7 @@ import Swift
 import SwiftUI
 import UIKit
 import UIKit
+import UIKit
 import Vision
 import WebKit
 import _Concurrency
@@ -116,6 +117,18 @@ extension SmartlookAnalytics.Properties : Swift.CustomReflectable, Swift.CustomD
     get
   }
   final public var debugDescription: Swift.String {
+    get
+  }
+}
+extension SmartlookAnalytics.CrashReportsBridge {
+  public func crashes() -> [Foundation.Date : Foundation.URL]?
+  public func crashes(at folder: Foundation.URL? = nil, in range: Swift.Range<Foundation.Date>? = nil) -> [Foundation.Date : Foundation.URL]?
+}
+extension SmartlookAnalytics.RenderingMode : Swift.CustomStringConvertible, Swift.CustomDebugStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+  public var debugDescription: Swift.String {
     get
   }
 }
@@ -226,9 +239,6 @@ public enum Status : Swift.Equatable {
   @objc deinit
 }
 extension Dispatch.DispatchTimeInterval : Swift.Comparable {
-  public var rawValue: Swift.Int {
-    get
-  }
   public static func < (lhs: Dispatch.DispatchTimeInterval, rhs: Dispatch.DispatchTimeInterval) -> Swift.Bool
 }
 extension SmartlookAnalytics.Smartlook {
@@ -353,9 +363,6 @@ public class NonBinaryBodyInterceptor : SmartlookAnalytics.NetworkInterceptor {
   public init()
   public func onIntercept(task: Foundation.URLSessionTask, responseData: Foundation.Data?, intercepted: SmartlookAnalytics.InterceptedTaskData?) -> SmartlookAnalytics.InterceptedTaskData?
   @objc deinit
-}
-extension Dispatch.DispatchQueue {
-  public func debounceAsync(interval: Dispatch.DispatchTimeInterval, frontlineName: Swift.String, action: @escaping (() -> Swift.Void))
 }
 @_inheritsConvenienceInitializers @objc(SLFrameworkInfo) final public class FrameworkInfo : ObjectiveC.NSObject {
   @objc final public var framework: Swift.String?
@@ -493,14 +500,6 @@ extension SmartlookAnalytics.Smartlook {
   @discardableResult
   final public func preferences(_ preferences: SmartlookAnalytics.Preferences) -> SmartlookAnalytics.Smartlook
 }
-extension SmartlookAnalytics.RenderingMode : Swift.CustomStringConvertible, Swift.CustomDebugStringConvertible {
-  public var description: Swift.String {
-    get
-  }
-  public var debugDescription: Swift.String {
-    get
-  }
-}
 @objc(SLBridgeInterface) public protocol BridgeInterface : ObjectiveC.NSObjectProtocol {
   @objc var frameworkInfo: SmartlookAnalytics.FrameworkInfo? { get set }
   @objc func obtainFrameworkInfo(completion: @escaping (SmartlookAnalytics.FrameworkInfo?) -> Swift.Void)
@@ -512,7 +511,16 @@ extension SmartlookAnalytics.Smartlook {
   final public func register(bridgeInterface: any SmartlookAnalytics.BridgeInterface) -> Swift.Bool
   final public func unregister(bridgeInterface: any SmartlookAnalytics.BridgeInterface) -> Swift.Bool
 }
-public typealias PlatformColor = UIKit.UIColor
+extension Foundation.NSException : @unchecked Swift.Sendable {
+}
+public struct ExceptionError : Swift.Error {
+  public let exception: Foundation.NSException
+  public var localizedDescription: Swift.String {
+    get
+  }
+}
+public func executeNSExceptionRaising(block: @escaping () -> Swift.Void) throws
+public func executeNSExceptionRaising(block: @escaping () throws -> Swift.Void) throws
 @_hasMissingDesignatedInitializers final public class Session : Foundation.ObservableObject {
   @discardableResult
   final public func openNew() -> SmartlookAnalytics.Session
@@ -628,6 +636,22 @@ public protocol NonSensitiveData {
 public class MaskBodyInterceptor : SmartlookAnalytics.NonBinaryBodyInterceptor {
   required public init(masks: [SmartlookAnalytics.InterceptorMask])
   override public func onIntercept(task: Foundation.URLSessionTask, responseData: Foundation.Data?, intercepted: SmartlookAnalytics.InterceptedTaskData?) -> SmartlookAnalytics.InterceptedTaskData?
+  @objc deinit
+}
+public protocol CrashReports {
+  var cacheFolderUrl: Foundation.URL { get }
+  init?(cacheFolderUrl: Foundation.URL?)
+  var enabled: Swift.Bool { get set }
+  func crashes() -> [Foundation.Date : Foundation.URL]?
+  func crashes(at folder: Foundation.URL?, in range: Swift.Range<Foundation.Date>?) -> [Foundation.Date : Foundation.URL]?
+}
+public class CrashReportsBridge : SmartlookAnalytics.CrashReports {
+  final public let cacheFolderUrl: Foundation.URL
+  required public init?(cacheFolderUrl: Foundation.URL?)
+  public var enabled: Swift.Bool {
+    get
+    set
+  }
   @objc deinit
 }
 extension SmartlookAnalytics.Region : Swift.Hashable {}

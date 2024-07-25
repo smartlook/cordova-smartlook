@@ -10,12 +10,12 @@ import com.smartlook.android.core.api.enumeration.Status
 import com.smartlook.android.core.api.extension.isSensitive
 import com.smartlook.android.core.api.model.Properties
 import com.smartlook.android.core.api.model.RecordingMask
-import com.smartlook.sdk.bridge.model.BridgeFrameworkInfo
-import com.smartlook.sdk.bridge.model.BridgeInterface
-import com.smartlook.sdk.bridge.model.BridgeWireframe
+import com.cisco.android.bridge.model.BridgeFrameworkInfo
+import com.cisco.android.bridge.model.BridgeInterface
+import com.cisco.android.bridge.model.BridgeWireframe
 import com.smartlook.android.core.video.annotation.RenderingMode
-import com.smartlook.sdk.bridge.BridgeManager
-import com.smartlook.sdk.log.LogAspect
+import com.cisco.android.bridge.BridgeManager
+import com.cisco.android.api.log.LogAspect
 import org.apache.cordova.CallbackContext
 import org.apache.cordova.CordovaPlugin
 import org.apache.cordova.PluginResult
